@@ -1,74 +1,159 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import API from "../services/api";
+import logo from "../assets/image-removebg-preview.png";
 
 function Login() {
-  const [mobile, setMobile] = useState("");
+  const [role, setRole] = useState("student");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
   const handleLogin = async () => {
     try {
-      await API.post("/auth/send-otp", { mobile });
-      navigate("/verify", { state: { mobile } });
+      const res = await API.post("/auth/login", {
+        email,
+        password,
+        role,
+      });
+
+      // Save JWT token
+      localStorage.setItem("token", res.data.token);
+
+      alert("Login successful");
+
+      // Redirect based on role
+      if (role === "student") {
+        navigate("/student-dashboard");
+      } else if (role === "teacher") {
+        navigate("/teacher-dashboard");
+      } else {
+        navigate("/admin-dashboard");
+      }
     } catch (err) {
-      alert("Failed to send OTP");
+      alert("Invalid login credentials");
     }
   };
 
   return (
-    <div className="container-fluid vh-100 bg-light">
+    <div className="container-fluid vh-100">
       <div className="row h-100">
 
-        {/* LEFT IMAGE */}
-        <div className="col-md-7 d-none d-md-block p-3">
+        {/* LEFT SIDE */}
+        <div
+          className="col-md-6 d-none d-md-flex align-items-center justify-content-center"
+          style={{
+            background: "linear-gradient(135deg, #0d1b5e, #020c2e)",
+            color: "white",
+          }}
+        >
           <img
-            src="https://images.unsplash.com/photo-1738879348809-bbf70f1652e6?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-            alt="education"
-            className="img-fluid w-100 h-100"
-            style={{ objectFit: "cover", borderRadius: "20px" }}
+            src={logo}
+            alt="Logo"
+            className="img-fluid"
+            style={{ width: "500px" }}
           />
         </div>
 
-        {/* RIGHT FORM */}
-        <div className="col-md-5 d-flex align-items-center justify-content-center">
-          <div style={{ width: "350px" }}>
+        {/* RIGHT SIDE */}
+        <div className="col-md-6 d-flex align-items-center justify-content-center bg-light">
+          
+          <div
+            className="p-4 shadow"
+            style={{
+              width: "350px",
+              background: "#cfd3d7",
+              borderRadius: "25px",
+            }}
+          >
 
-            {/* LOGO */}
-            <div className="text-center mb-4">
-              <h5 className="fw-bold"> O'guru</h5>
+            {/* ROLE SWITCH */}
+            <div className="d-flex justify-content-between mb-3">
+              <button
+                className={`btn btn-sm ${
+                  role === "student" ? "btn-warning" : "btn-secondary"
+                }`}
+                onClick={() => setRole("student")}
+              >
+                Student
+              </button>
+
+              <button
+                className={`btn btn-sm ${
+                  role === "teacher" ? "btn-warning" : "btn-secondary"
+                }`}
+                onClick={() => setRole("teacher")}
+              >
+                Teacher
+              </button>
+
+              <button
+                className={`btn btn-sm ${
+                  role === "admin" ? "btn-warning" : "btn-secondary"
+                }`}
+                onClick={() => setRole("admin")}
+              >
+                Admin
+              </button>
             </div>
 
-            <h4 className="mb-2">Welcome to O'guru Online Education Center!</h4>
-            <p className="text-muted mb-4">
+            <p className="text-center small mb-3">
               Please sign-in to your account and start the adventure
             </p>
 
-            {/* INPUT */}
-            <label className="form-label">Mobile</label>
+            {/* EMAIL */}
+            <label>Email</label>
             <input
-              type="text"
+              type="email"
               className="form-control mb-3"
-              placeholder="0777123456"
-              value={mobile}
-              onChange={(e) => setMobile(e.target.value)}
+              placeholder="Enter email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
             />
+
+            {/* PASSWORD */}
+            <label>Password</label>
+            <input
+              type="password"
+              className="form-control mb-2"
+              placeholder="********"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+
+            {/* FORGOT PASSWORD */}
+            <div className="text-end mb-3">
+              <small
+                style={{ cursor: "pointer", color: "#0d6efd" }}
+                onClick={() => navigate("/forgot-password")}
+              >
+                Forgot password?
+              </small>
+            </div>
 
             {/* LOGIN BUTTON */}
             <button
-              className="btn btn-warning w-100 mb-2 fw-semibold"
+              className="btn btn-warning w-100 mb-2 fw-bold"
               onClick={handleLogin}
+              style={{ borderRadius: "20px" }}
             >
               Login
             </button>
 
             {/* REGISTER BUTTON */}
-            <button className="btn btn-secondary w-100">
+            <button
+              className="btn w-100 text-white"
+              style={{
+                background: "#3d3732",
+                borderRadius: "20px",
+              }}
+              onClick={() => navigate("/register")}
+            >
               Register
             </button>
 
           </div>
         </div>
-
       </div>
     </div>
   );
