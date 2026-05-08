@@ -1,6 +1,7 @@
 const express = require("express");
-const mongoose = require("mongoose");
 const cors = require("cors");
+require('dotenv').config();
+const connectDB = require("./config/db");
 
 const app = express();
 
@@ -12,12 +13,8 @@ app.use(express.json());
 const authRoutes = require("./routes/auth");
 app.use("/api/auth", authRoutes);
 
-// MongoDB connection
-mongoose.connect(
-  "mongodb+srv://oguru_admin:Oguru%40123%23%23@tuition-cluster.soxuxwi.mongodb.net/tuitionDB"
-)
-.then(() => console.log("MongoDB Connected ✅"))
-.catch((err) => console.log("DB Error:", err));
+// Connect to database
+connectDB();
 
 // Test route
 app.get("/", (req, res) => {
