@@ -8,113 +8,155 @@ function Home() {
     <div>
 
       {/* Navbar */}
-      <nav
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          padding: "20px 50px",
-          background: "#f2f2f2",
-        }}
-      >
-        <div>
-          <button style={{ marginRight: "10px" }}>Home</button>
-          <button style={{ marginRight: "10px" }}>Contact</button>
-          <button style={{ marginRight: "10px" }}>Our Lecturers</button>
-          <button>Timetable</button>
-        </div>
+      <nav className="navbar navbar-expand-lg navbar-light bg-light shadow-sm py-3">
+        <div className="container">
 
-        <div>
-          <button
-            onClick={() => navigate("/login")}
-            style={{
-              marginRight: "15px",
-              background: "black",
-              color: "white",
-              padding: "10px 25px",
-              border: "none",
-              borderRadius: "8px",
-            }}
-          >
-            Login
-          </button>
+          <div className="navbar-nav me-auto">
 
-          <button
-            onClick={() => navigate("/register")}
-            style={{
-              background: "black",
-              color: "white",
-              padding: "10px 25px",
-              border: "none",
-              borderRadius: "8px",
-            }}
-          >
-            Register
-          </button>
+            <button className="btn btn-link text-dark text-decoration-none">
+              Home
+            </button>
+
+            <button className="btn btn-link text-dark text-decoration-none">
+              Contact
+            </button>
+
+            <button className="btn btn-link text-dark text-decoration-none">
+              Our Lecturers
+            </button>
+
+            <button className="btn btn-link text-dark text-decoration-none">
+              Timetable
+            </button>
+
+          </div>
+
+          <div>
+
+            <button
+              className="btn btn-dark me-3 px-4"
+              onClick={() => navigate("/login")}
+            >
+              Login
+            </button>
+
+            <button
+              className="btn btn-dark px-4"
+              onClick={() => navigate("/register")}
+            >
+              Register
+            </button>
+
+          </div>
+
         </div>
       </nav>
 
       {/* Hero Section */}
+
       <div
+        className="w-100"
         style={{
-          height: "500px",
           backgroundImage:
             "url('https://images.unsplash.com/photo-1509062522246-3755977927d7?w=1600')",
           backgroundSize: "cover",
           backgroundPosition: "center",
+          height: "500px",
         }}
       ></div>
 
       {/* Work Process */}
-      <div style={{ textAlign: "center", padding: "60px" }}>
-        <h5 style={{ color: "blue" }}>Our Successful</h5>
-        <h1>Work Process</h1>
 
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-around",
-            marginTop: "50px",
-          }}
-        >
-          <div>
-            <h2>📚</h2>
-            <h4>Browse Courses</h4>
-            <p>Explore a wide range of courses.</p>
+      <div className="container text-center py-5">
+
+        <h5 className="text-primary">Our Successful</h5>
+
+        <h1 className="fw-bold mb-5">Work Process</h1>
+
+        <div className="row g-4">
+
+          <div className="col-md-3">
+
+            <div className="card border-0 shadow-sm p-3 h-100">
+
+              <h1>📚</h1>
+
+              <h4>Browse Courses</h4>
+
+              <p className="text-muted">
+                Explore a wide range of courses.
+              </p>
+
+            </div>
+
           </div>
 
-          <div>
-            <h2>📝</h2>
-            <h4>Choose & Enroll</h4>
-            <p>Select and enroll easily.</p>
+          <div className="col-md-3">
+
+            <div className="card border-0 shadow-sm p-3 h-100">
+
+              <h1>📝</h1>
+
+              <h4>Choose & Enroll</h4>
+
+              <p className="text-muted">
+                Select and enroll easily.
+              </p>
+
+            </div>
+
           </div>
 
-          <div>
-            <h2>📈</h2>
-            <h4>Learn & Track</h4>
-            <p>Study and monitor progress.</p>
+          <div className="col-md-3">
+
+            <div className="card border-0 shadow-sm p-3 h-100">
+
+              <h1>📈</h1>
+
+              <h4>Learn & Track</h4>
+
+              <p className="text-muted">
+                Study and monitor progress.
+              </p>
+
+            </div>
+
           </div>
 
-          <div>
-            <h2>🏆</h2>
-            <h4>Achieve</h4>
-            <p>Complete courses successfully.</p>
+          <div className="col-md-3">
+
+            <div className="card border-0 shadow-sm p-3 h-100">
+
+              <h1>🏆</h1>
+
+              <h4>Achieve</h4>
+
+              <p className="text-muted">
+                Complete courses successfully.
+              </p>
+
+            </div>
+
           </div>
+
         </div>
+
       </div>
 
       {/* Footer */}
-      <footer
-        style={{
-          background: "#0d2c87",
-          color: "white",
-          padding: "40px",
-          textAlign: "center",
-        }}
-      >
-        <h2>Oguru Online Institute</h2>
-        <p>📞 0112 820 095</p>
-        <p>✉️ rotary.rihe@gmail.com</p>
+
+      <footer className="bg-primary text-white text-center py-5">
+
+        <div className="container">
+
+          <h2 className="fw-bold">Oguru Online Institute</h2>
+
+          <p className="mb-1">📞 0112 820 095</p>
+
+          <p>✉️ rotary.rihe@gmail.com</p>
+
+        </div>
+
       </footer>
 
     </div>
