@@ -1,5 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import bannerImage from "../assets/banner.png";
+import logo from "../assets/image-removebg-preview.png";
 
 function Home() {
   const navigate = useNavigate();
@@ -25,20 +27,20 @@ function Home() {
               Our Lecturers
             </button>
 
-            <button className="btn btn-link text-dark text-decoration-none">
+          <button onClick={() => navigate("/timetable")}>
               Timetable
-            </button>
+          </button>
 
           </div>
 
           <div>
 
             <button
-              className="btn btn-dark me-3 px-4"
-              onClick={() => navigate("/login")}
-            >
-              Login
-            </button>
+  className="btn btn-dark me-3 px-4"
+  onClick={() => navigate("/login")}
+>
+  Login
+</button>
 
             <button
               className="btn btn-dark px-4"
@@ -57,8 +59,7 @@ function Home() {
       <div
         className="w-100"
         style={{
-          backgroundImage:
-            "url('https://images.unsplash.com/photo-1509062522246-3755977927d7?w=1600')",
+          backgroundImage: `url(${bannerImage})`,
           backgroundSize: "cover",
           backgroundPosition: "center",
           height: "500px",
@@ -84,7 +85,9 @@ function Home() {
               <h4>Browse Courses</h4>
 
               <p className="text-muted">
-                Explore a wide range of courses.
+                Explore a wide range of courses across various subjects tailored to your goals.
+
+
               </p>
 
             </div>
@@ -100,7 +103,9 @@ function Home() {
               <h4>Choose & Enroll</h4>
 
               <p className="text-muted">
-                Select and enroll easily.
+                Select your desired course and easily enroll with a few simple steps.
+
+
               </p>
 
             </div>
@@ -116,7 +121,9 @@ function Home() {
               <h4>Learn & Track</h4>
 
               <p className="text-muted">
-                Study and monitor progress.
+                Access engaging lessons, study at your own pace, and track your progress.
+
+
               </p>
 
             </div>
@@ -132,7 +139,9 @@ function Home() {
               <h4>Achieve</h4>
 
               <p className="text-muted">
-                Complete courses successfully.
+                Complete courses, earn certificates, and unlock new opportunities.
+
+
               </p>
 
             </div>
@@ -145,19 +154,49 @@ function Home() {
 
       {/* Footer */}
 
-      <footer className="bg-primary text-white text-center py-5">
+      <footer
+  style={{
+    backgroundColor: "#0b2478",
+    color: "white",
+    padding: "40px 0",
+  }}
+>
+  <div className="container">
+    <div className="row align-items-center">
 
-        <div className="container">
+      {/* Logo */}
+      <div className="col-md-4 text-center text-md-start mb-4 mb-md-0">
+        <img
+          src={logo}
+          alt="Oguru Logo"
+          style={{
+            width: "260px",
+            maxWidth: "100%",
+          }}
+        />     
+      </div>
 
-          <h2 className="fw-bold">Oguru Online Institute</h2>
+      {/* Contact Details */}
+      <div className="col-md-8">
+        <h3 className="fw-bold mb-3">
+          📞 0112 820 095
+        </h3>
 
-          <p className="mb-1">📞 0112 820 095</p>
+        <h3 className="fw-bold mb-4">
+          ✉️ rotary.rihe@gmail.com
+        </h3>
 
-          <p>✉️ rotary.rihe@gmail.com</p>
+        <hr
+          style={{
+            border: "1px solid white",
+            opacity: "1",
+          }}
+        />
+      </div>
 
-        </div>
-
-      </footer>
+    </div>
+  </div>
+</footer>
 
     </div>
   );
