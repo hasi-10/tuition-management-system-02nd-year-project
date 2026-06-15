@@ -9,8 +9,9 @@ import ForgotPassword from "./pages/ForgotPassword";
 import VerifyCode from "./pages/VerifyCode";
 import ResetPassword from "./pages/ResetPassword";
 import Contact from "./pages/Contact";  
-import StudentProfile from "./pages/StudentProfile";
+
 import StudentDashboard from "./pages/StudentDashboard";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 function App() {
   return (
@@ -26,8 +27,11 @@ function App() {
         <Route path="/verify-code" element={<VerifyCode />} />
         <Route path="/reset-password" element={<ResetPassword />} />
         <Route path="/contact" element={<Contact />} />
-        <Route path="/studentprofile" element={<StudentProfile />} />
-        <Route path="/studentdashboard" element={<StudentDashboard />} />  
+        <Route path="/studentdashboard" element={<StudentDashboard />} /> 
+        <Route path="/studentdashboard" element={ <ProtectedRoute> <StudentDashboard /></ProtectedRoute>}
+
+        
+/> 
       </Routes>
     </BrowserRouter>
   );

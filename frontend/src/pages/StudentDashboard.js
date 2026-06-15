@@ -1,211 +1,176 @@
 import React from "react";
-import {
-  House,
+import logo from "../assets/image-removebg-preview.png";import {
+  HouseDoorFill,
+  Book,
   Calendar3,
   CreditCard,
-  BarChart,
+  FileText,
   Folder,
-  Person,
   Gear,
   BoxArrowRight,
   Bell,
-  ChevronDown
+  PersonCircle,
 } from "react-bootstrap-icons";
 
 function StudentDashboard() {
   return (
-    <div className="container-fluid p-0">
+    <div className="container-fluid p-0 vh-100">
 
-      <div className="row g-0 vh-100">
+      <div className="row g-0 h-100">
 
         {/* ================= SIDEBAR ================= */}
 
         <div
-          className="col-md-2 d-flex flex-column justify-content-between p-4"
+          className="col-lg-3 col-xl-2 d-flex flex-column justify-content-between"
           style={{
-            background: "linear-gradient(to bottom,#021B79,#0b4bdb)",
-            color: "white"
+            background: "linear-gradient(180deg,#001a75,#0033cc)",
+            minHeight: "100vh",
           }}
         >
+
           <div>
 
-            <div className="text-center mb-5">
+            {/* Logo */}
+
+            <div className="text-center py-4">
 
               <img
-                src="/logo.png"
+                src={logo}
                 alt="logo"
-                width="90"
+                style={{
+                  width: "180px",
+                }}
               />
 
-              <h4 className="fw-bold mt-2">
-                O'Guru
-              </h4>
-
             </div>
 
-            <div
-  className="d-flex align-items-center mb-4 px-3 py-3"
-  style={{
-    background: "white",
-    color: "#021B79",
-    borderRadius: "15px",
-    cursor: "pointer",
-    fontWeight: "bold",
-    boxShadow: "0 5px 15px rgba(0,0,0,0.15)"
-  }}
->
-  <House size={22} />
+            {/* Menu */}
 
-  <span className="ms-3">
+            <div className="px-3">
 
-    Dashboard
+              <button className="btn btn-light w-100 text-start fw-bold rounded-4 mb-3 p-3">
 
-  </span>
+                <HouseDoorFill className="me-3" />
 
-</div>
+                Dashboard
 
-            <div className="d-flex align-items-center mb-4">
+              </button>
 
-              <Calendar3 size={20} />
+              <button className="btn btn-outline-light border-0 w-100 text-start rounded-4 mb-3 p-3">
 
-              <span className="ms-3">
+                <Book className="me-3" />
+
+                My Courses
+
+              </button>
+
+              <button className="btn btn-outline-light border-0 w-100 text-start rounded-4 mb-3 p-3">
+
+                <Calendar3 className="me-3" />
+
                 Timetable
-              </span>
 
-            </div>
+              </button>
 
-            <div className="d-flex align-items-center mb-4">
+              <button className="btn btn-outline-light border-0 w-100 text-start rounded-4 mb-3 p-3">
 
-              <CreditCard size={20} />
+                <CreditCard className="me-3" />
 
-              <span className="ms-3">
-                Payments
-              </span>
+                Payment
 
-            </div>
+              </button>
 
-            <div className="d-flex align-items-center mb-4">
+              <button className="btn btn-outline-light border-0 w-100 text-start rounded-4 mb-3 p-3">
 
-              <BarChart size={20} />
+                <FileText className="me-3" />
 
-              <span className="ms-3">
                 Results
-              </span>
 
-            </div>
+              </button>
 
-            <div className="d-flex align-items-center mb-4">
+              <button className="btn btn-outline-light border-0 w-100 text-start rounded-4 mb-3 p-3">
 
-              <Folder size={20} />
+                <Folder className="me-3" />
 
-              <span className="ms-3">
-                Materials
-              </span>
+                Material Tracking
 
-            </div>
+              </button>
 
-            <div className="d-flex align-items-center mb-4">
+              <button className="btn btn-outline-light border-0 w-100 text-start rounded-4 mb-3 p-3">
 
-              <Person size={20} />
+                <Gear className="me-3" />
 
-              <span className="ms-3">
-                Profile
-              </span>
-
-            </div>
-
-            <div className="d-flex align-items-center">
-
-              <Gear size={20} />
-
-              <span className="ms-3">
                 Settings
-              </span>
+
+              </button>
 
             </div>
 
           </div>
 
-          <div className="d-flex align-items-center">
+          {/* Logout */}
 
-            <BoxArrowRight size={20} />
+          <div className="p-3">
 
-            <span className="ms-3">
+            <button className="btn btn-light w-100 rounded-4 fw-bold p-3">
+
+              <BoxArrowRight className="me-2" />
+
               Logout
-            </span>
+
+            </button>
 
           </div>
 
         </div>
 
-        {/* ================= MAIN ================= */}
+        {/* ================= MAIN CONTENT ================= */}
 
         <div
-          className="col-md-10"
+          className="col-lg-9 col-xl-10"
           style={{
-            background: "#f5f7fb"
+            background: "#edf3fb",
+            minHeight: "100vh",
           }}
         >
 
-          {/* NAVBAR */}
+          {/* Navbar */}
 
           <div
-            className="d-flex justify-content-between align-items-center p-4"
+            className="bg-white shadow-sm px-5 py-3 d-flex justify-content-between align-items-center"
           >
 
-            <h2 className="fw-bold">
+            <h1 className="fw-bold">
+
               Dashboard
-            </h2>
+
+            </h1>
 
             <div className="d-flex align-items-center">
 
-              <div
-style={{
+              <div className="position-relative me-4">
 
-position:"relative"
+                <Bell size={28} />
 
-}}
->
+                <span
+                  className="badge bg-warning rounded-pill position-absolute top-0 start-100 translate-middle"
+                >
 
-<Bell size={24}/>
+                  3
 
-<span
+                </span>
 
-className="badge bg-danger"
+              </div>
 
-style={{
+            
 
-position:"absolute",
+              <div>
 
-top:"-8px",
-
-right:"-8px"
-
-}}
-
->
-
-3
-
-</span>
-
-</div>
-
-              <img
-                src="https://i.pravatar.cc/100"
-                alt=""
-                className="rounded-circle ms-4"
-                width="45"
-                height="45"
-              />
-
-              <div className="ms-3">
-
-                <div className="fw-bold">
+                <h5 className="mb-0 fw-bold">
 
                   Thusara Dilshan
 
-                </div>
+                </h5>
 
                 <small className="text-muted">
 
@@ -215,61 +180,252 @@ right:"-8px"
 
               </div>
 
-              <ChevronDown className="ms-2" />
-
             </div>
 
           </div>
 
-          {/* WELCOME CARD */}
+                    {/* ================= WELCOME SECTION ================= */}
 
-          <div className="container">
+          <div className="container-fluid p-4">
 
             <div
-              className="row rounded-5 shadow-lg p-5 align-items-center"
+              className="row rounded-4 overflow-hidden shadow"
               style={{
                 background:
-"linear-gradient(135deg,#021B79,#0d47ff,#3c7dff)"
-               
+                  "linear-gradient(135deg,#002c99 0%,#0047ff 100%)",
+                minHeight: "250px",
               }}
             >
 
-              <div className="col-md-7">
+              {/* Left Side */}
 
-                <h1 className="fw-bold">
+              <div className="col-lg-8 d-flex flex-column justify-content-center p-5 text-white">
 
-                  Welcome Back 👋
+                <h1 className="fw-bold mb-3">
+
+                  Welcome Back, Thusara! 👋
 
                 </h1>
 
-                <p
-                  className="mt-3"
+                <h4 className="fw-normal mb-4">
+
+                  Stay focused and keep learning.
+
+                </h4>
+
+                <div className="d-flex align-items-center mb-4">
+
+                  <Calendar3 size={24} className="me-3" />
+
+                  <h5 className="mb-0">
+
+                    You have 3 classes today
+
+                  </h5>
+
+                </div>
+
+                <button
+                  className="btn btn-light fw-bold px-5 py-3 rounded-4"
                   style={{
-                    fontSize: "20px"
+                    width: "250px",
                   }}
                 >
 
-                  Ready to continue your learning journey?
-
-                </p>
-
-                <button
-                  className="btn btn-warning mt-3 px-4 py-2 fw-bold rounded-pill"
-                >
-
-                  View Timetable
+                  View Timetable →
 
                 </button>
 
               </div>
 
-              <div className="col-md-5 text-end">
+              {/* Right Side */}
 
-                <img
-                  src="https://cdn-icons-png.flaticon.com/512/3135/3135789.png"
-                  width="250"
-                  alt=""
-                />
+              <div className="col-lg-4 d-flex justify-content-center align-items-end">
+
+                
+
+              </div>
+
+            </div>
+
+          </div>
+
+          {/* ================= CALENDAR CARD ================= */}
+
+          <div className="container-fluid px-4 pb-4">
+
+            <div className="card border-0 shadow rounded-4">
+
+              <div className="card-body p-4">
+
+                <div className="d-flex justify-content-between align-items-center mb-4">
+
+                  <h2 className="fw-bold">
+
+                    March 2026
+
+                  </h2>
+
+                  <button className="btn btn-outline-secondary rounded-4 px-4">
+
+                    Today ▼
+
+                  </button>
+
+                </div>
+
+                <table className="table table-bordered align-middle text-center">
+
+                  <thead className="table-light">
+
+                    <tr>
+
+                      <th>Sun</th>
+                      <th>Mon</th>
+                      <th>Tue</th>
+                      <th>Wed</th>
+                      <th>Thu</th>
+                      <th>Fri</th>
+                      <th>Sat</th>
+
+                    </tr>
+
+                  </thead>
+
+                  <tbody>
+
+                    <tr>
+                      <td></td>
+                      <td>1</td>
+                      <td>2</td>
+                      <td>
+                        3
+                        <div className="badge bg-success mt-2 w-100">
+                          G.C.E A/L Econ
+                        </div>
+                      </td>
+                      <td>4</td>
+                      <td>
+                        5
+                        <div className="badge bg-primary mt-2 w-100">
+                          G.C.E O/L Econ
+                        </div>
+                        <div className="badge bg-warning text-dark mt-1 w-100">
+                          A/L Econ
+                        </div>
+                      </td>
+                      <td>
+                        6
+                        <div className="badge bg-success mt-2 w-100">
+                          G.C.E O/L Physics
+                        </div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>7</td>
+                      <td>
+                        8
+                        <div className="badge bg-warning text-dark mt-2 w-100">
+                          G.C.E A/L Maths
+                        </div>
+                      </td>
+                      <td>9</td>
+                      <td>
+                        10
+                        <div
+                          className="badge mt-2 w-100"
+                          style={{ background: "#bf4ad8" }}
+                        >
+                          ICT
+                        </div>
+                      </td>
+                      <td>11</td>
+                      <td>12</td>
+                      <td>
+                        13
+                        <div
+                          className="badge mt-2 w-100"
+                          style={{ background: "#bf4ad8" }}
+                        >
+                          ICT
+                        </div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>14</td>
+                      <td>
+                        15
+                        <div className="badge bg-primary mt-2 w-100">
+                          English
+                        </div>
+                      </td>
+                      <td>16</td>
+                      <td>
+                        17
+                        <div className="badge bg-success mt-2 w-100">
+                          Physics
+                        </div>
+                      </td>
+                      <td>18</td>
+                      <td>
+                        19
+                        <div
+                          className="badge mt-2 w-100"
+                          style={{ background: "#bf4ad8" }}
+                        >
+                          ICT
+                        </div>
+                        <div className="badge bg-warning text-dark mt-1 w-100">
+                          A/L Maths
+                        </div>
+                      </td>
+                      <td>20</td>
+                    </tr>
+                    <tr>
+                      <td>21</td>
+                      <td>
+                        22
+                        <div className="badge bg-warning text-dark mt-2 w-100">
+                          A/L Maths
+                        </div>
+                      </td>
+                      <td>23</td>
+                      <td>
+                        24
+                        <div className="text-center fs-5 mt-2">
+                          📅
+                        </div>
+                      </td>
+                      <td>25</td>
+                      <td>26</td>
+                      <td>27</td>
+                    </tr>
+                    <tr>
+                      <td>
+                        28
+                        <div
+                          className="badge mt-2 w-100"
+                          style={{ background: "#bf4ad8" }}
+                        >
+                          ICT
+                        </div>
+                      </td>
+                      <td>29</td>
+                      <td>30</td>
+                      <td>
+                        31
+                        <div className="badge bg-success mt-2 w-100">
+                          Physics
+                        </div>
+                      </td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                    </tr>
+
+                  </tbody>
+
+                </table>
 
               </div>
 
@@ -286,201 +442,3 @@ right:"-8px"
 }
 
 export default StudentDashboard;
-{/* ================= CALENDAR ================= */}
-
-<div className="container mt-5">
-
-  <div
-    className="shadow-lg rounded-5 p-4 bg-white"
-  >
-
-    <div className="d-flex justify-content-between align-items-center mb-4">
-
-      <h3 className="fw-bold">
-
-        Academic Calendar
-
-      </h3>
-
-      <button className="btn btn-primary rounded-pill">
-
-        June 2026
-
-      </button>
-
-    </div>
-
-    <table className="table text-center align-middle">
-
-      <thead>
-
-        <tr>
-
-          <th>Sun</th>
-          <th>Mon</th>
-          <th>Tue</th>
-          <th>Wed</th>
-          <th>Thu</th>
-          <th>Fri</th>
-          <th>Sat</th>
-
-        </tr>
-
-      </thead>
-
-      <tbody>
-
-        <tr>
-
-          <td className="text-muted">31</td>
-
-          <td>
-            <div className="fw-bold">1</div>
-
-            <span className="badge bg-primary rounded-pill">
-              ICT
-            </span>
-
-          </td>
-
-          <td>
-
-            <div className="fw-bold">2</div>
-
-            <span className="badge bg-warning text-dark rounded-pill">
-              Maths
-            </span>
-
-          </td>
-
-          <td>
-
-            <div className="fw-bold">3</div>
-
-          </td>
-
-          <td>
-
-            <div className="fw-bold">4</div>
-
-            <span className="badge bg-success rounded-pill">
-              Physics
-            </span>
-
-          </td>
-
-          <td>
-
-            <div className="fw-bold">5</div>
-
-          </td>
-
-          <td>
-
-            <div className="fw-bold">6</div>
-
-          </td>
-
-        </tr>
-
-        <tr>
-
-          <td>
-
-            <div className="fw-bold">7</div>
-
-          </td>
-
-          <td>
-
-            <div className="fw-bold">8</div>
-
-            <span className="badge bg-danger rounded-pill">
-              Chemistry
-            </span>
-
-          </td>
-
-          <td>
-
-            <div className="fw-bold">9</div>
-
-          </td>
-
-          <td>
-
-            <div className="fw-bold">10</div>
-
-            <span className="badge bg-info rounded-pill">
-              English
-            </span>
-
-          </td>
-
-          <td>
-
-            <div className="fw-bold">11</div>
-
-          </td>
-
-          <td>
-
-            <div className="fw-bold">12</div>
-
-            <span className="badge bg-primary rounded-pill">
-              ICT
-            </span>
-
-          </td>
-
-          <td>
-
-            <div className="fw-bold">13</div>
-
-          </td>
-
-        </tr>
-
-        <tr>
-
-          <td><div className="fw-bold">14</div></td>
-          <td><div className="fw-bold">15</div></td>
-          <td><div className="fw-bold">16</div></td>
-          <td><div className="fw-bold">17</div></td>
-          <td><div className="fw-bold">18</div></td>
-          <td><div className="fw-bold">19</div></td>
-          <td><div className="fw-bold">20</div></td>
-
-        </tr>
-
-        <tr>
-
-          <td><div className="fw-bold">21</div></td>
-          <td><div className="fw-bold">22</div></td>
-          <td><div className="fw-bold">23</div></td>
-          <td><div className="fw-bold">24</div></td>
-          <td><div className="fw-bold">25</div></td>
-          <td><div className="fw-bold">26</div></td>
-          <td><div className="fw-bold">27</div></td>
-
-        </tr>
-
-        <tr>
-
-          <td><div className="fw-bold">28</div></td>
-          <td><div className="fw-bold">29</div></td>
-          <td><div className="fw-bold">30</div></td>
-          <td className="text-muted">1</td>
-          <td className="text-muted">2</td>
-          <td className="text-muted">3</td>
-          <td className="text-muted">4</td>
-
-        </tr>
-
-      </tbody>
-
-    </table>
-
-  </div>
-
-</div>
