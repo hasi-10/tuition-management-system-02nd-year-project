@@ -24,7 +24,7 @@ function Login() {
 
       // Redirect based on role
       if (role === "student") {
-        navigate("/student-dashboard");
+        navigate("/studentdashboard");
       } else if (role === "teacher") {
         navigate("/teacher-dashboard");
       } else {
