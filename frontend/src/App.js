@@ -8,8 +8,13 @@ import Register from "./pages/Register";
 import ForgotPassword from "./pages/ForgotPassword";
 import VerifyCode from "./pages/VerifyCode";
 import ResetPassword from "./pages/ResetPassword";
+<<<<<<< HEAD
 import Contact from "./pages/Contact";
 import ProtectedRoute from "./components/ProtectedRoute";
+=======
+import Contact from "./pages/Contact";  
+import StudentProfile from "./pages/StudentProfile";
+>>>>>>> faecd4e67610e04aec13a9c67ffd11a951797cbf
 import StudentDashboard from "./pages/StudentDashboard";
 
 function App() {
@@ -26,9 +31,14 @@ function App() {
         <Route path="/verify-code" element={<VerifyCode />} />
         <Route path="/reset-password" element={<ResetPassword />} />
         <Route path="/contact" element={<Contact />} />
+<<<<<<< HEAD
         <Route path="/student-dashboard" element={<ProtectedRoute> <StudentDashboard /></ProtectedRoute>}
 />
 
+=======
+        <Route path="/studentprofile" element={<StudentProfile />} />
+        <Route path="/studentdashboard" element={<StudentDashboard />} />  
+>>>>>>> faecd4e67610e04aec13a9c67ffd11a951797cbf
       </Routes>
     </BrowserRouter>
   );
