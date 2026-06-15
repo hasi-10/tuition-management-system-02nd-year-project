@@ -3,8 +3,10 @@ import { useNavigate } from "react-router-dom";
 import bannerImage from "../assets/banner.png";
 import logo from "../assets/image-removebg-preview.png";
 
+
 function Home() {
   const navigate = useNavigate();
+
 
   return (
     <div>
@@ -19,17 +21,25 @@ function Home() {
               Home
             </button>
 
-            <button className="btn btn-link text-dark text-decoration-none">
-              Contact
-            </button>
+         <button
+  className="btn btn-link text-dark text-decoration-none"
+  onClick={() => navigate("/contact")}
+>
+  Contact
+</button>
+           <button
+  className="btn btn-link text-dark text-decoration-none"
+  onClick={() => navigate("/ourlecturers")}
+>
+  Our Lecturers
+</button>
 
-            <button className="btn btn-link text-dark text-decoration-none">
-              Our Lecturers
-            </button>
-
-          <button onClick={() => navigate("/timetable")}>
-              Timetable
-          </button>
+         <button
+  className="btn btn-link text-dark text-decoration-none"
+  onClick={() => navigate("/timetable")}
+>
+  Timetable
+</button>
 
           </div>
 
