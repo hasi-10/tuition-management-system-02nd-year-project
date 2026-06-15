@@ -1,3 +1,5 @@
+import { useState } from "react";
+import API from "../services/api";
 import React from "react";
 import { useNavigate, NavLink } from "react-router-dom";
 import logo from "../assets/image-removebg-preview.png";
@@ -14,8 +16,49 @@ import {
 } from "react-icons/fa";
 
 function Contact() {
+
   const navigate = useNavigate();
 
+  const [formData, setFormData] = useState({
+    address: "",
+    email: "",
+    name: "",
+    subject: "",
+    teacherName: "",
+    telephone: "",
+    message: "",
+  });
+
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const handleSubmit = async () => {
+    try {
+
+      const res = await API.post("/contact", formData);
+
+      alert(res.data.message);
+
+      setFormData({
+        address: "",
+        email: "",
+        name: "",
+        subject: "",
+        teacherName: "",
+        telephone: "",
+        message: "",
+      });
+
+    } catch (err) {
+
+      alert("Failed to send message");
+
+    }
+  };
   return (
     <div
       style={{
@@ -255,10 +298,13 @@ function Contact() {
                     </label>
 
                     <input
-                      type="text"
-                      className="form-control form-control-lg"
-                      placeholder="Enter your Address"
-                    />
+  type="text"
+  name="address"
+  className="form-control form-control-lg"
+  placeholder="Enter your Address"
+  value={formData.address}
+  onChange={handleChange}
+/>
 
                   </div>
 
@@ -271,12 +317,14 @@ function Contact() {
                       Your Email *
                     </label>
 
-                    <input
-                      type="email"
-                      className="form-control form-control-lg"
-                      placeholder="Enter your Email"
-                    />
-
+                   <input
+  type="email"
+  name="email"
+  className="form-control form-control-lg"
+  placeholder="Enter your Email"
+  value={formData.email}
+  onChange={handleChange}
+/>
                   </div>
 
                   <div className="col-12 mb-4">
@@ -289,10 +337,13 @@ function Contact() {
                     </label>
 
                     <input
-                      type="text"
-                      className="form-control form-control-lg"
-                      placeholder="Enter your Name"
-                    />
+  type="text"
+  name="name"
+  className="form-control form-control-lg"
+  placeholder="Enter your Name"
+  value={formData.name}
+  onChange={handleChange}
+/>
 
                   </div>
 
@@ -305,12 +356,14 @@ function Contact() {
                       Subject *
                     </label>
 
-                    <input
-                      type="text"
-                      className="form-control form-control-lg"
-                      placeholder="Enter Subject"
-                    />
-
+                   <input
+  type="text"
+  name="subject"
+  className="form-control form-control-lg"
+  placeholder="Enter Subject"
+  value={formData.subject}
+  onChange={handleChange}
+/>
                   </div>
 
                   <div className="col-12 mb-4">
@@ -322,11 +375,14 @@ function Contact() {
                       Teacher Name
                     </label>
 
-                    <input
-                      type="text"
-                      className="form-control form-control-lg"
-                      placeholder="Enter Teacher Name"
-                    />
+                   <input
+  type="text"
+  name="teacherName"
+  className="form-control form-control-lg"
+  placeholder="Enter Teacher Name"
+  value={formData.teacherName}
+  onChange={handleChange}
+/>
 
                   </div>
 
@@ -339,11 +395,14 @@ function Contact() {
                       Telephone No
                     </label>
 
-                    <input
-                      type="text"
-                      className="form-control form-control-lg"
-                      placeholder="Enter Telephone No"
-                    />
+                 <input
+  type="text"
+  name="telephone"
+  className="form-control form-control-lg"
+  placeholder="Enter Telephone No"
+  value={formData.telephone}
+  onChange={handleChange}
+/>
 
                   </div>
 
@@ -356,11 +415,14 @@ function Contact() {
                       Message *
                     </label>
 
-                    <textarea
-                      rows="5"
-                      className="form-control"
-                      placeholder="Create a message here..."
-                    ></textarea>
+                   <textarea
+  rows="5"
+  name="message"
+  className="form-control"
+  placeholder="Create a message here..."
+  value={formData.message}
+  onChange={handleChange}
+></textarea>
 
                   </div>
 
@@ -369,12 +431,13 @@ function Contact() {
                 <div className="text-center mt-5">
 
                   <button
-                    className="btn btn-primary btn-lg px-5 rounded-3"
-                    style={{
-                      background: "#0026a3",
-                      minWidth: "320px",
-                    }}
-                  >
+  className="btn btn-primary btn-lg px-5 rounded-3"
+  style={{
+    background: "#0026a3",
+    minWidth: "320px",
+  }}
+  onClick={handleSubmit}
+>
                     <FaPaperPlane className="me-2" />
                     Send Message
                   </button>

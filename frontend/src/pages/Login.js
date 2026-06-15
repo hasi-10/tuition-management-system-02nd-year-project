@@ -19,8 +19,9 @@ function Login() {
 
       // Save JWT token
       localStorage.setItem("token", res.data.token);
+localStorage.setItem("role", res.data.role);
 
-      alert("Login successful");
+alert("Login successful");
 
       // Redirect based on role
       if (role === "student") {
