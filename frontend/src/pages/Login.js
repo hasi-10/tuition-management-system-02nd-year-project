@@ -21,7 +21,15 @@ function Login() {
       localStorage.setItem("token", res.data.token);
 localStorage.setItem("role", res.data.role);
 
+
 alert("Login successful");
+
+      localStorage.setItem("role",res.data.role);
+
+      navigate("/studentdashboard");
+
+      alert("Login successful");
+
 
       // Redirect based on role
       if (role === "student") {
