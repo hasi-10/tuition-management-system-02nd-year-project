@@ -1,8 +1,10 @@
 const contactRoutes = require("./routes/contact");
+const studentProfileRoutes = require("./routes/studentProfile");
 
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
+const path = require("path");
 
 const app = express();
 
@@ -10,7 +12,9 @@ const app = express();
 // Middleware
 app.use(cors());
 app.use(express.json());
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 app.use("/api/contact", contactRoutes);
+app.use("/api/profile", studentProfileRoutes);
 
 // Routes
 const authRoutes = require("./routes/auth");

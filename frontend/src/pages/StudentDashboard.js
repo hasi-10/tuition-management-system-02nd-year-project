@@ -1,3 +1,5 @@
+import { useNavigate } from "react-router-dom";
+
 import React from "react";
 import {
   HouseDoorFill,
@@ -9,12 +11,13 @@ import {
   Gear,
   BoxArrowRight,
   Bell,
-  PersonCircle,
+  PersonCircle
 } from "react-bootstrap-icons";
 
 
 import logo from "../assets/image-removebg-preview.png";
 function StudentDashboard() {
+  const navigate = useNavigate();
   return (
     <div className="container-fluid p-0 vh-100">
 
@@ -106,6 +109,8 @@ function StudentDashboard() {
 
               </button>
 
+
+
             </div>
 
           </div>
@@ -166,22 +171,24 @@ function StudentDashboard() {
 
               
 
-              <div>
+             <div
+  style={{ cursor: "pointer" }}
+  onClick={() => navigate("/studentprofile")}
+>
 
-                <h5 className="mb-0 fw-bold">
+  <h5 className="mb-0 fw-bold">
 
-                  Thusara Dilshan
+    Thusara Dilshan
 
-                </h5>
+  </h5>
 
-                <small className="text-muted">
+  <small className="text-muted">
 
-                  Student
+    Student
 
-                </small>
+  </small>
 
-              </div>
-
+</div>
             </div>
 
           </div>

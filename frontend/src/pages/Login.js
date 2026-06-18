@@ -20,6 +20,7 @@ function Login() {
       // Save JWT token
       localStorage.setItem("token", res.data.token);
 localStorage.setItem("role", res.data.role);
+localStorage.setItem("email", email);
 
 
 alert("Login successful");
