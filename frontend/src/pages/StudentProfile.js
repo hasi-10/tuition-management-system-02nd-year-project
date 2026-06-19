@@ -148,8 +148,11 @@ const [student, setStudent] = useState({
               </NavLink>
 
               <button className="btn btn-outline-light border-0 w-100 text-start rounded-4 mb-3 p-3">
+
                 <Book className="me-3" />
+
                 My Courses
+
               </button>
 
               <button className="btn btn-outline-light border-0 w-100 text-start rounded-4 mb-3 p-3">
@@ -158,8 +161,11 @@ const [student, setStudent] = useState({
               </button>
 
               <button className="btn btn-outline-light border-0 w-100 text-start rounded-4 mb-3 p-3">
+
                 <CreditCard className="me-3" />
+
                 Payment
+
               </button>
 
               <button className="btn btn-outline-light border-0 w-100 text-start rounded-4 mb-3 p-3">

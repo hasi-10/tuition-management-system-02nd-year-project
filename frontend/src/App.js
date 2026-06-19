@@ -11,6 +11,12 @@ import Contact from "./pages/Contact";
 import StudentDashboard from "./pages/StudentDashboard";
 import ProtectedRoute from "./components/ProtectedRoute";
 import StudentProfile from "./pages/StudentProfile";
+import Payment from "./pages/Payment";
+import PaymentSuccess from "./pages/PaymentSuccess";
+import MyCourses from "./pages/MyCourses";
+import PaymentOptions from "./pages/PaymentOptions";
+import BankSlipUpload from "./pages/BankSlipUpload";
+
 
 function App() {
   return (
@@ -26,8 +32,12 @@ function App() {
         <Route path="/reset-password" element={<ResetPassword />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/studentdashboard" element={<StudentDashboard />} />
-
-<Route path="/studentprofile" element={<StudentProfile />} />
+        <Route path="/studentprofile" element={<StudentProfile />} />
+        <Route path="/payment" element={<Payment />} />
+        <Route path="/paymentsuccess" element={<PaymentSuccess />} />
+        <Route path="/mycourses" element={<MyCourses />} />
+        <Route path="/payment-options" element={<PaymentOptions />} />
+        <Route path="/bank-slip-upload" element={<BankSlipUpload />} />
 
         <Route
           path="/studentdashboard"
