@@ -1,5 +1,6 @@
 const contactRoutes = require("./routes/contact");
 const studentProfileRoutes = require("./routes/studentProfile");
+const paymentRoutes = require("./routes/payment");
 
 const express = require("express");
 const mongoose = require("mongoose");
@@ -15,6 +16,7 @@ app.use(express.json());
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 app.use("/api/contact", contactRoutes);
 app.use("/api/profile", studentProfileRoutes);
+app.use("/api/payment", paymentRoutes);
 
 // Routes
 const authRoutes = require("./routes/auth");

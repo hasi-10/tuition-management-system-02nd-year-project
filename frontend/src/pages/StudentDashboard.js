@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate, NavLink } from "react-router-dom";
 
 import React from "react";
 import {
@@ -61,13 +61,16 @@ function StudentDashboard() {
 
               </button>
 
-              <button className="btn btn-outline-light border-0 w-100 text-start rounded-4 mb-3 p-3">
+             <button
+  className="btn btn-outline-light border-0 w-100 text-start rounded-4 mb-3 p-3"
+  onClick={() => navigate("/mycourses")}
+>
 
-                <Book className="me-3" />
+  <Book className="me-3" />
 
-                My Courses
+  My Courses
 
-              </button>
+</button>
 
               <button className="btn btn-outline-light border-0 w-100 text-start rounded-4 mb-3 p-3">
 
@@ -77,13 +80,13 @@ function StudentDashboard() {
 
               </button>
 
-              <button className="btn btn-outline-light border-0 w-100 text-start rounded-4 mb-3 p-3">
-
-                <CreditCard className="me-3" />
-
-                Payment
-
-              </button>
+<button
+  className="btn btn-outline-light border-0 w-100 text-start rounded-4 mb-3 p-3"
+  onClick={() => navigate("/payment-options")}
+>
+  <CreditCard className="me-3" />
+  Payment
+</button>
 
               <button className="btn btn-outline-light border-0 w-100 text-start rounded-4 mb-3 p-3">
 

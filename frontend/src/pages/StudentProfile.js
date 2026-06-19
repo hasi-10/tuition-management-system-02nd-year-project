@@ -141,27 +141,21 @@ const navigate = useNavigate();
 
             <div className="px-3">
 
-<NavLink
-  to="/studentdashboard"
-  className={({ isActive }) =>
-    isActive
-      ? "btn btn-light w-100 text-start fw-bold rounded-4 mb-3 p-3"
-      : "btn btn-outline-light border-0 w-100 text-start rounded-4 mb-3 p-3"
-  }
-  style={{ textDecoration: "none" }}
+<button
+  className="btn btn-outline-light border-0 w-100 text-start rounded-4 mb-3 p-3"
+  onClick={() => navigate("/studentdashboard")}
 >
   <HouseDoorFill className="me-3" />
   Dashboard
-</NavLink>
+</button>
 
-              <button className="btn btn-outline-light border-0 w-100 text-start rounded-4 mb-3 p-3">
-
-                <Book className="me-3" />
-
-                My Courses
-
-              </button>
-
+<button
+  className="btn btn-outline-light border-0 w-100 text-start rounded-4 mb-3 p-3"
+  onClick={() => navigate("/mycourses")}
+>
+  <Book className="me-3" />
+  My Courses
+</button>
               <button className="btn btn-outline-light border-0 w-100 text-start rounded-4 mb-3 p-3">
 
                 <Calendar3 className="me-3" />
@@ -170,13 +164,13 @@ const navigate = useNavigate();
 
               </button>
 
-              <button className="btn btn-outline-light border-0 w-100 text-start rounded-4 mb-3 p-3">
-
-                <CreditCard className="me-3" />
-
-                Payment
-
-              </button>
+<button
+  className="btn btn-outline-light border-0 w-100 text-start rounded-4 mb-3 p-3"
+  onClick={() => navigate("/payment-options")}
+>
+  <CreditCard className="me-3" />
+  Payment
+</button>
 
               <button className="btn btn-outline-light border-0 w-100 text-start rounded-4 mb-3 p-3">
 
