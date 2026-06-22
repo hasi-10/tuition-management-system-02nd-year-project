@@ -1,6 +1,8 @@
 const contactRoutes = require("./routes/contact");
 const studentProfileRoutes = require("./routes/studentProfile");
 const paymentRoutes = require("./routes/payment");
+const quizRoutes = require("./routes/quizRoutes");
+const submissionRoutes = require("./routes/submissionRoutes");
 
 const express = require("express");
 const mongoose = require("mongoose");
@@ -17,6 +19,8 @@ app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 app.use("/api/contact", contactRoutes);
 app.use("/api/profile", studentProfileRoutes);
 app.use("/api/payment", paymentRoutes);
+app.use("/api/quizzes", quizRoutes);
+app.use("/api/submissions", submissionRoutes);
 
 // Routes
 const authRoutes = require("./routes/auth");

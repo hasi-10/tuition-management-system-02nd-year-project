@@ -4,7 +4,7 @@ import API from "../services/api";
 import logo from "../assets/image-removebg-preview.png";
 
 function Login() {
-  const [role, setRole] = useState("student");
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
@@ -12,34 +12,29 @@ function Login() {
   const handleLogin = async () => {
     try {
       const res = await API.post("/auth/login", {
-        email,
-        password,
-        role,
-      });
+  email,
+  password,
+});
+      console.log(res.data);
 
-      // Save JWT token
-      localStorage.setItem("token", res.data.token);
+localStorage.setItem("token", res.data.token);
 localStorage.setItem("role", res.data.role);
-localStorage.setItem("email", email);
-
+localStorage.setItem("email", res.data.email);
+localStorage.setItem("name", res.data.name);
 
 alert("Login successful");
 
-      localStorage.setItem("role",res.data.role);
+const userRole = res.data.role;
 
-      navigate("/studentdashboard");
+if (userRole === "student") {
+  navigate("/studentdashboard");
+} else if (userRole === "teacher") {
+  navigate("/teacher-dashboard");
+} else if (userRole === "admin") {
+  navigate("/admin-dashboard");
+}
 
-      alert("Login successful");
 
-
-      // Redirect based on role
-      if (role === "student") {
-        navigate("/studentdashboard");
-      } else if (role === "teacher") {
-        navigate("/teacher-dashboard");
-      } else {
-        navigate("/admin-dashboard");
-      }
     } catch (err) {
       alert("Invalid login credentials");
     }
@@ -77,35 +72,7 @@ alert("Login successful");
             }}
           >
 
-            {/* ROLE SWITCH */}
-            <div className="d-flex justify-content-between mb-3">
-              <button
-                className={`btn btn-sm ${
-                  role === "student" ? "btn-warning" : "btn-secondary"
-                }`}
-                onClick={() => setRole("student")}
-              >
-                Student
-              </button>
 
-              <button
-                className={`btn btn-sm ${
-                  role === "teacher" ? "btn-warning" : "btn-secondary"
-                }`}
-                onClick={() => setRole("teacher")}
-              >
-                Teacher
-              </button>
-
-              <button
-                className={`btn btn-sm ${
-                  role === "admin" ? "btn-warning" : "btn-secondary"
-                }`}
-                onClick={() => setRole("admin")}
-              >
-                Admin
-              </button>
-            </div>
 
             <p className="text-center small mb-3">
               Please sign-in to your account and start the adventure

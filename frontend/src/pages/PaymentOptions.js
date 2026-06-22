@@ -12,6 +12,7 @@ import {
   BoxArrowRight,
   Bell,
   ChevronDown,
+  PersonVideo
 } from "react-bootstrap-icons";
 
 function PaymentOptions() {
@@ -92,6 +93,14 @@ function PaymentOptions() {
         Timetable
 
       </button>
+
+      <button
+  className="btn btn-outline-light border-0 w-100 text-start rounded-4 mb-3 p-3"
+onClick={() => navigate("/allteachers")}
+>
+  <PersonVideo className="me-3" />
+  Teachers
+</button>
 
       {/* Payment - ACTIVE */}
 

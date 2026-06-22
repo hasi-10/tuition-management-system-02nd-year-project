@@ -1,7 +1,10 @@
+
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import logo from "../assets/image-removebg-preview.png";
 import axios from "axios";
+import API from "../services/api";
+
 
 
 import {
@@ -21,14 +24,64 @@ import {
 function BankSlipUpload() {
 
   const navigate = useNavigate();
+  const location = useLocation();
+
+  // Data coming from Teacher Profile
+const classData = location.state || {};
+const fromTeacher = !!classData.teacher;
+
+  // Form Data
   const [formData, setFormData] = React.useState({
-  studentName: "",
-  email: "",
-  subject: "",
-  teacher: "",
-  grade: "",
-  month: "",
-});
+    studentName: "",
+    email: "",
+    subject: "",
+    teacher: "",
+    grade: "",
+    month: "",
+  });
+
+  // Selected File
+
+
+  // Auto Fill Details
+React.useEffect(() => {
+
+  const loadStudentDetails = async () => {
+
+    try {
+
+      const email = localStorage.getItem("email");
+
+      const res = await API.get(`/profile/${email}`);
+
+      const profile = res.data.data;
+
+setFormData((prev) => ({
+
+  ...prev,
+
+  studentName: profile.fullName,
+  email: profile.email,
+
+  teacher: classData?.teacher || prev.teacher,
+
+  subject: classData?.subject || prev.subject,
+
+  grade: classData?.grade || prev.grade,
+
+}));
+    } catch (error) {
+
+      console.log(error);
+
+    }
+
+  };
+
+  loadStudentDetails();
+
+}, [classData]);
+
 const handleUpload = async () => {
 
   if (!selectedFile) {
@@ -77,6 +130,7 @@ data.append("file", selectedFile);
 
 };
 const [selectedFile, setSelectedFile] = React.useState(null);
+
 
   return (
 
@@ -258,18 +312,12 @@ const [selectedFile, setSelectedFile] = React.useState(null);
           Student Name
         </label>
 
-        <input
-          type="text"
-          className="form-control form-control-lg"
-          placeholder="Enter Student Name"
-          value={formData.studentName}
-          onChange={(e) =>
-            setFormData({
-              ...formData,
-              studentName: e.target.value,
-            })
-          }
-        />
+<input
+  type="text"
+  className="form-control form-control-lg"
+  value={formData.studentName}
+  readOnly
+/>
 
       </div>
 
@@ -279,18 +327,12 @@ const [selectedFile, setSelectedFile] = React.useState(null);
           Email
         </label>
 
-        <input
-          type="email"
-          className="form-control form-control-lg"
-          placeholder="Enter Email"
-          value={formData.email}
-          onChange={(e) =>
-            setFormData({
-              ...formData,
-              email: e.target.value,
-            })
-          }
-        />
+<input
+  type="email"
+  className="form-control form-control-lg"
+  value={formData.email}
+  readOnly
+/>
 
       </div>
 
@@ -300,19 +342,18 @@ const [selectedFile, setSelectedFile] = React.useState(null);
           Subject
         </label>
 
-        <input
-          type="text"
-          className="form-control form-control-lg"
-          placeholder="Enter Subject"
-          value={formData.subject}
-          onChange={(e) =>
-            setFormData({
-              ...formData,
-              subject: e.target.value,
-            })
-          }
-        />
-
+<input
+  type="text"
+  className="form-control form-control-lg"
+  value={formData.subject}
+  readOnly={fromTeacher}
+  onChange={(e) =>
+    setFormData({
+      ...formData,
+      subject: e.target.value,
+    })
+  }
+/>
       </div>
 
       <div className="col-md-6">
@@ -321,18 +362,18 @@ const [selectedFile, setSelectedFile] = React.useState(null);
           Teacher Name
         </label>
 
-        <input
-          type="text"
-          className="form-control form-control-lg"
-          placeholder="Enter Teacher Name"
-          value={formData.teacher}
-          onChange={(e) =>
-            setFormData({
-              ...formData,
-              teacher: e.target.value,
-            })
-          }
-        />
+<input
+  type="text"
+  className="form-control form-control-lg"
+  value={formData.teacher}
+  readOnly={fromTeacher}
+  onChange={(e) =>
+    setFormData({
+      ...formData,
+      teacher: e.target.value,
+    })
+  }
+/>
 
       </div>
 
@@ -342,28 +383,39 @@ const [selectedFile, setSelectedFile] = React.useState(null);
           Grade
         </label>
 
-        <select
-          className="form-select form-select-lg"
-          value={formData.grade}
-          onChange={(e) =>
-            setFormData({
-              ...formData,
-              grade: e.target.value,
-            })
-          }
-        >
+{fromTeacher ? (
 
-          <option value="">Select Grade</option>
-          <option>Grade 6</option>
-          <option>Grade 7</option>
-          <option>Grade 8</option>
-          <option>Grade 9</option>
-          <option>Grade 10</option>
-          <option>Grade 11</option>
-          <option>Grade 12</option>
-          <option>Grade 13</option>
+  <input
+    type="text"
+    className="form-control form-control-lg"
+    value={formData.grade}
+    readOnly
+  />
 
-        </select>
+) : (
+
+  <select
+    className="form-select form-select-lg"
+    value={formData.grade}
+    onChange={(e) =>
+      setFormData({
+        ...formData,
+        grade: e.target.value,
+      })
+    }
+  >
+    <option value="">Select Grade</option>
+    <option>Grade 6</option>
+    <option>Grade 7</option>
+    <option>Grade 8</option>
+    <option>Grade 9</option>
+    <option>Grade 10</option>
+    <option>Grade 11</option>
+    <option>Grade 12</option>
+    <option>Grade 13</option>
+  </select>
+
+)}
 
       </div>
 

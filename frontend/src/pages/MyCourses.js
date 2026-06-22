@@ -17,6 +17,7 @@ import {
   PatchQuestion,
   CalendarEvent,
   Book,
+  PersonVideo
 } from "react-bootstrap-icons";
 
 import logo from "../assets/image-removebg-preview.png";
@@ -113,6 +114,14 @@ function MyCourses() {
 >
   <Calendar3 className="me-3" />
   Timetable
+</button>
+
+<button
+  className="btn btn-outline-light border-0 w-100 text-start rounded-4 mb-3 p-3"
+onClick={() => navigate("/allteachers")}
+>
+  <PersonVideo className="me-3" />
+  Teachers
 </button>
 
               <NavLink
@@ -346,14 +355,41 @@ function MyCourses() {
         Join Online Class
 
       </button>
+<button
+  className="btn btn-outline-success rounded-pill px-4"
+onClick={async () => {
 
-      <button className="btn btn-outline-success rounded-pill px-4">
+  try {
 
-        <PatchQuestion className="me-2" />
+    const res = await axios.get(
+      `http://localhost:5000/api/quizzes/course/${course.subject}/${course.grade}/${course.teacher}`
+    );
 
-        Quiz
+    if (!res.data) {
 
-      </button>
+      alert("No quiz available yet");
+
+      return;
+
+    }
+
+    navigate("/quiz-instructions", {
+      state: res.data,
+    });
+
+  } catch (err) {
+
+    console.log(err);
+
+    alert("No quiz available yet");
+
+  }
+
+}}
+>
+  <PatchQuestion className="me-2" />
+  Quiz
+</button>
 
     </div>
 
