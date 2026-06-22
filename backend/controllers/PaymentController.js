@@ -39,6 +39,8 @@ const savePayment = async (req, res) => {
 const uploadPaymentSlip = async (req, res) => {
 
   try {
+    console.log("BODY:", req.body);
+console.log("FILE:", req.file);
 
 const paymentSlip = new PaymentSlip({
 
@@ -88,12 +90,23 @@ const paymentSlip = new PaymentSlip({
 
 };
 
+const getStudentCourses = async (req, res) => {
+  try {
+    const email = req.params.email;
 
+    const courses = await Payment.find({ email });
+
+    res.json(courses);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      message: "Server Error",
+    });
+  }
+};
 
 module.exports = {
-
   savePayment,
-
   uploadPaymentSlip,
-
+  getStudentCourses,
 };

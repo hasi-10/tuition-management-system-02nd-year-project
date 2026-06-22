@@ -6,6 +6,7 @@ const router = express.Router();
 const {
   savePayment,
   uploadPaymentSlip,
+  getStudentCourses,
 } = require("../controllers/PaymentController");
 
 // Multer Storage
@@ -32,5 +33,6 @@ router.post(
   upload.single("file"),
   uploadPaymentSlip
 );
-
+// Get courses by student email
+router.get("/:email", getStudentCourses);
 module.exports = router;

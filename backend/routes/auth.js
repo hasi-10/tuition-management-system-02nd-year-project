@@ -53,13 +53,11 @@ router.post("/register", async (req, res) => {
 // LOGIN
 router.post("/login", async (req, res) => {
   try {
-    const { email, password, role } = req.body;
 
-    console.log(req.body);
+    const { email, password } = req.body;
 
     const user = await User.findOne({
-      email: email.trim(),
-      role
+      email: email.trim()
     });
 
     if (!user) {
@@ -87,17 +85,21 @@ router.post("/login", async (req, res) => {
       "secretkey"
     );
 
-    res.json({
-      token,
-      role: user.role
-    });
+res.json({
+  token,
+  role: user.role,
+  email: user.email,
+  name: user.name
+});
 
   } catch (err) {
+
     console.log(err);
 
     res.status(500).json({
       message: "Login failed"
     });
+
   }
 });
 

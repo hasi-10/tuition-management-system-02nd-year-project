@@ -16,6 +16,23 @@ import PaymentSuccess from "./pages/PaymentSuccess";
 import MyCourses from "./pages/MyCourses";
 import PaymentOptions from "./pages/PaymentOptions";
 import BankSlipUpload from "./pages/BankSlipUpload";
+import AllTeachers from "./pages/AllTeachers";
+import OLTeachers from "./pages/OLTeachers";
+import ALTeachers from "./pages/ALTeachers";
+import TeacherProfile from "./pages/TeacherProfile";
+import QuizInstructions from "./pages/QuizInstructions";
+import QuizStart from "./pages/QuizStart";
+import QuizQuestions from "./pages/QuizQuestions";
+import QuizResults from "./pages/QuizResults";
+import QuizReview from "./pages/QuizReview";
+import TeacherDashboard from "./pages/teacher/TeacherDashboard";
+import TeacherQuizzes from "./pages/teacher/TeacherQuizzes";
+import CreateQuiz from "./pages/teacher/CreateQuiz";
+import TeacherViewQuiz from "./pages/teacher/TeacherViewQuiz";
+import EditQuiz from "./pages/teacher/EditQuiz";
+import TeacherSubmissions from "./pages/teacher/TeacherSubmissions";
+import SubmissionDetails from "./pages/teacher/SubmissionDetails";
+
 
 
 function App() {
@@ -38,6 +55,25 @@ function App() {
         <Route path="/mycourses" element={<MyCourses />} />
         <Route path="/payment-options" element={<PaymentOptions />} />
         <Route path="/bank-slip-upload" element={<BankSlipUpload />} />
+        <Route path="/allteachers" element={<AllTeachers />} />
+        <Route path="/olteachers" element={<OLTeachers />} />
+        <Route path="/alteachers" element={<ALTeachers />} />
+        <Route path="/teacherprofile" element={<TeacherProfile />} />
+        <Route path="/quiz-instructions" element={<QuizInstructions />} />
+        <Route path="/quiz-start" element={<QuizStart />} />
+        <Route path="/quiz-questions" element={<QuizQuestions />} />
+        <Route path="/quiz-results" element={<QuizResults />} />
+        <Route path="/quiz-review" element={<QuizReview />} />
+        <Route path="/teacher-dashboard" element={<TeacherDashboard />} />
+        <Route path="/teacher-quizzes" element={<TeacherQuizzes />} />
+        <Route path="/teacher/create-quiz" element={<CreateQuiz />} />
+        <Route path="/teacher/view-quiz/:id" element={<TeacherViewQuiz />} />
+        <Route path="/teacher/edit-quiz/:id" element={<EditQuiz />} />
+        <Route path="/teacher/submissions/:quizId" element={<TeacherSubmissions />} />
+        <Route path="/teacher/submission/:id" element={<SubmissionDetails />} />
+
+
+        
 
         <Route
           path="/studentdashboard"

@@ -15,6 +15,7 @@ import {
   Bell,
   ChevronDown,
   PersonCircle,
+  PersonVideo
 } from "react-bootstrap-icons";
 
 import logo from "../assets/image-removebg-preview.png";
@@ -147,26 +148,34 @@ const [student, setStudent] = useState({
                 Dashboard
               </NavLink>
 
-              <button className="btn btn-outline-light border-0 w-100 text-start rounded-4 mb-3 p-3">
-
-                <Book className="me-3" />
-
-                My Courses
-
-              </button>
+<button
+  className="btn btn-outline-light border-0 w-100 text-start rounded-4 mb-3 p-3"
+  onClick={() => navigate("/mycourses")}
+>
+  <Book className="me-3" />
+  My Courses
+</button>
 
               <button className="btn btn-outline-light border-0 w-100 text-start rounded-4 mb-3 p-3">
                 <Calendar3 className="me-3" />
                 Timetable
               </button>
 
-              <button className="btn btn-outline-light border-0 w-100 text-start rounded-4 mb-3 p-3">
+              <button
+  className="btn btn-outline-light border-0 w-100 text-start rounded-4 mb-3 p-3"
+onClick={() => navigate("/allteachers")}
+>
+  <PersonVideo className="me-3" />
+  Teachers
+</button>
 
-                <CreditCard className="me-3" />
-
-                Payment
-
-              </button>
+<button
+  className="btn btn-outline-light border-0 w-100 text-start rounded-4 mb-3 p-3"
+  onClick={() => navigate("/payment-options")}
+>
+  <CreditCard className="me-3" />
+  Payment
+</button>
 
               <button className="btn btn-outline-light border-0 w-100 text-start rounded-4 mb-3 p-3">
                 <FileText className="me-3" />
