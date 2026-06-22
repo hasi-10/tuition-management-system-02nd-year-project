@@ -118,8 +118,10 @@ data.append("file", selectedFile);
 
     );
 
-    alert(response.data.message);
+alert(response.data.message);
 
+// Go to Dashboard after successful upload
+navigate("/studentdashboard");
   } catch (error) {
 
     console.log(error);

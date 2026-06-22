@@ -106,19 +106,13 @@ const loadProfile = async () => {
   My Courses
 </button>
 
-              <button className="btn btn-outline-light border-0 w-100 text-start rounded-4 mb-3 p-3">
-                <Calendar3 className="me-3" />
-                Timetable
-              </button>
-
-<button
+              <button
   className="btn btn-outline-light border-0 w-100 text-start rounded-4 mb-3 p-3"
-  onClick={() => navigate("/allteachers")}
+  onClick={() => navigate("/mycourses")}
 >
-  <PersonVideo className="me-3" />
-  Teachers
+  <Book className="me-3" />
+  My Courses
 </button>
-
 <button
   className="btn btn-outline-light border-0 w-100 text-start rounded-4 mb-3 p-3"
   onClick={() => navigate("/payment-options")}
