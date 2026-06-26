@@ -256,7 +256,15 @@ function OLTeachers() {
 
                 <div className="col-lg-6 mb-4" key={index}>
 
-                  <div className="card border-0 rounded-4">
+                 <div
+  className="card border-0 rounded-4"
+  style={{ cursor: "pointer" }}
+ onClick={() =>
+  navigate("/teacherprofile", {
+    state: teacher,
+  })
+}
+>
 
                     <div className="card-body">
 

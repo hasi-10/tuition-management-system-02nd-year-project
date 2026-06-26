@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import API from "../services/api";
+import { olTeachers, alTeachers } from "../data/teachers";
 
 import {
   Person,
@@ -26,9 +27,10 @@ function Payment() {
     lastName: "",
     email: "",
     phone: "",
+    classType: "",
     teacher: "",
     subject: "",
-    grade: "",
+    grade: "", 
 
     paymentMethod: "",
     cardNumber: "",
@@ -37,11 +39,10 @@ function Payment() {
     amount: "",
 
   });
-  useEffect(() => {
 
-  loadStudentDetails();
-
-}, []);
+  const [teacherList, setTeacherList] = useState([]);
+  const [selectedTeachers, setSelectedTeachers] = useState([]);
+ 
 
   const handleChange = (e) => {
 
@@ -54,6 +55,7 @@ function Payment() {
     });
 
   };
+  
   const handlePayment = async () => {
 
   try {
@@ -93,41 +95,6 @@ function Payment() {
   }
 
 };
-
-  const loadStudentDetails = async () => {
-
-  try {
-
-    const email = localStorage.getItem("email");
-
-    const res = await API.get(`/profile/${email}`);
-
-    const profile = res.data.data;
-
-    const names = profile.fullName.split(" ");
-
-    setFormData((prev) => ({
-
-      ...prev,
-
-      firstName: names[0] || "",
-
-      lastName: names.slice(1).join(" "),
-
-      email: profile.email,
-
-      phone: profile.phone,
-
-    }));
-
-  } catch (error) {
-
-    console.log(error);
-
-  }
-
-};
-
 
   return (
 
@@ -218,20 +185,14 @@ function Payment() {
 
                     </span>
 
-                   <input
-
-type="text"
-
-className="form-control"
-
-name="firstName"
-
-value={formData.firstName}
-
-readOnly
-
+ <input
+  type="text"
+  className="form-control"
+  placeholder="First Name"
+  name="firstName"
+  value={formData.firstName}
+  onChange={handleChange}
 />
-
                   </div>
 
                 </div>
@@ -258,7 +219,7 @@ readOnly
 
                       value={formData.lastName}
 
-                      readOnly
+                        onChange={handleChange}
 
                     />
 
@@ -288,7 +249,7 @@ readOnly
 
                   value={formData.email}
 
-                  readOnly
+                    onChange={handleChange}
 
                 />
 
@@ -314,7 +275,7 @@ readOnly
 
                   value={formData.phone}
 
-                  readOnly
+                    onChange={handleChange}
 
                 />
 
@@ -323,52 +284,88 @@ readOnly
               <div className="input-group mb-3">
 
                 <span className="input-group-text">
-
-                  <Person />
-
-                </span>
-
-                <input
-
-                  type="text"
-
-                  className="form-control"
-
-                  placeholder="Teacher Name"
-
-                  name="teacher"
-
-                  value={formData.teacher}
-
-                  onChange={handleChange}
-
-                />
-
-              </div>
-
-              <div className="input-group mb-3">
-
-                <span className="input-group-text">
-
                   <Book />
-
                 </span>
 
-                <input
+                <select
+                  className="form-select"
+                  value={formData.classType}
+                  onChange={(e) => {
 
-                  type="text"
+                    const type = e.target.value;
 
-                  className="form-control"
+                    setFormData({
+                      ...formData,
+                      classType: type,
+                      teacher: "",
+                      subject: ""
+                    });
 
-                  placeholder="Subject Name"
+                    setSelectedTeachers([]);
 
-                  name="subject"
+                    if (type === "OL") {
+                      setTeacherList(olTeachers);
+                    } else {
+                      setTeacherList(alTeachers);
+                    }
 
-                  value={formData.subject}
+                  }}
+                >
+                  <option value="">Select Class Type</option>
+                  <option value="OL">O/L</option>
+                  <option value="AL">A/L</option>
+                </select>
 
-                  onChange={handleChange}
+              </div>
 
-                />
+              <div className="mb-3">
+
+                <label className="form-label text-white fw-bold">
+                  Select Teachers and Subjects
+                </label>
+
+                {teacherList.map((teacher, index) => (
+
+                  <div
+                    key={index}
+                    className="form-check bg-white rounded p-2 mb-2"
+                  >
+
+                    <input
+                      className="form-check-input"
+                      type="checkbox"
+                      value={teacher.name}
+                      onChange={(e) => {
+
+                        if (e.target.checked) {
+
+                          setSelectedTeachers([
+                            ...selectedTeachers,
+                            teacher
+                          ]);
+
+                        } else {
+
+                          setSelectedTeachers(
+                            selectedTeachers.filter(
+                              (t) => t.name !== teacher.name
+                            )
+                          );
+
+                        }
+
+                      }}
+                    />
+
+                    <label className="form-check-label ms-2">
+
+                      {teacher.name} - {teacher.subject}
+
+                    </label>
+
+                  </div>
+
+                ))}
 
               </div>
 
@@ -506,20 +503,26 @@ readOnly
                 </span>
 
                 <input
+  type="text"
+  className="form-control"
+  placeholder="**** **** **** ****"
+  value={formData.cardNumber}
+  onChange={(e) => {
 
-                  type="text"
+    let value = e.target.value
+      .replace(/\s/g, "")
+      .replace(/[^0-9]/gi, "")
+      .substring(0, 16);
 
-                  className="form-control"
+    let formatted = value.match(/.{1,4}/g)?.join(" ") || "";
 
-                  placeholder="Card Number"
+    setFormData({
+      ...formData,
+      cardNumber: formatted,
+    });
 
-                  name="cardNumber"
-
-                  value={formData.cardNumber}
-
-                  onChange={handleChange}
-
-                />
+  }}
+/>
 
               </div>
 
@@ -535,21 +538,30 @@ readOnly
 
                     </span>
 
-                    <input
+                   <input
+  type="text"
+  className="form-control"
+  placeholder="MM/YY"
+  name="expiry"
+  value={formData.expiry}
+  onChange={(e) => {
 
-                      type="text"
+    let value = e.target.value
+      .replace(/\D/g, "")
+      .substring(0, 4);
 
-                      className="form-control"
+    if (value.length > 2) {
+      value = value.substring(0, 2) + "/" + value.substring(2);
+    }
 
-                      placeholder="MM/YYYY"
+    setFormData({
+      ...formData,
+      expiry: value,
+    });
 
-                      name="expiry"
-
-                      value={formData.expiry}
-
-                      onChange={handleChange}
-
-                    />
+  }}
+  maxLength="5"
+/>
 
                   </div>
 

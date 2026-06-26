@@ -1,5 +1,6 @@
 import React from "react";
 import { NavLink, useNavigate, useLocation } from "react-router-dom";
+import { olTeachers, alTeachers } from "../data/teachers";
 
 import {
   Bell,
@@ -23,11 +24,22 @@ function Teachers() {
   const navigate = useNavigate();
   const location = useLocation();
 
-const teacherData = location.state || {
-  name: "Teacher Name",
-  subject: "Subject",
-  image: teacher,
-};
+  const teacherData = location.state || {
+    name: "Teacher Name",
+    subject: "Subject",
+    image: teacher,
+  };
+
+  // Combine all teachers from data file
+  const allTeachers = [...olTeachers, ...alTeachers];
+  
+  // Find the full teacher data based on name
+  const selectedTeacher = allTeachers.find(
+    (teacher) => teacher.name === teacherData?.name
+  );
+
+  // Use selectedTeacher data or fallback to teacherData
+  const displayTeacher = selectedTeacher || teacherData;
 
   const schedules = [
     {
@@ -195,32 +207,30 @@ const teacherData = location.state || {
             <div className="card border-0 shadow rounded-4">
               <div className="card-body">
                 <div className="d-flex align-items-center mb-4">
-<img
-  src={teacherData.image}
-  alt="teacher"
-  style={{
-    width: "100px",
-    height: "100px",
-    borderRadius: "50%",
-  }}
-/>
-<div className="ms-4">
+                  <img
+                    src={displayTeacher.image || teacher}
+                    alt="teacher"
+                    style={{
+                      width: "100px",
+                      height: "100px",
+                      borderRadius: "50%",
+                    }}
+                  />
+                  <div className="ms-4">
+                    <h2 className="fw-bold mb-1">
+                      {displayTeacher.name}
+                    </h2>
 
-  <h2 className="fw-bold mb-1">
-    {teacherData.name}
-  </h2>
+                    <h5 className="text-primary mb-2">
+                      {displayTeacher.subject}
+                    </h5>
 
-  <h5 className="text-primary mb-2">
-    {teacherData.subject}
-  </h5>
+                    <h4 className="text-decoration-underline">
+                      {displayTeacher.email}
+                    </h4>
 
-  <h4 className="text-decoration-underline">
-    nimal.perera@oguru.lk
-  </h4>
-
-  <h3>+94 77 123 4567</h3>
-
-</div>
+                    <h3>{displayTeacher.phone}</h3>
+                  </div>
                 </div>
 
                 {/* Grade Buttons */}
@@ -278,21 +288,21 @@ const teacherData = location.state || {
                           <button className="btn btn-outline-primary rounded-pill px-4">
                             Payment
                           </button>
-<button
-  className="btn btn-primary rounded-pill px-4"
-  onClick={() =>
-    navigate("/bank-slip-upload", {
-      state: {
-        teacher: teacherData.name,
-        subject: teacherData.subject,
-        grade: item.grade,
-        amount: item.amount,
-      },
-    })
-  }
->
-  Upload Slip
-</button>
+                          <button
+                            className="btn btn-primary rounded-pill px-4"
+                            onClick={() =>
+                              navigate("/bank-slip-upload", {
+                                state: {
+                                  teacher: displayTeacher.name,
+                                  subject: displayTeacher.subject,
+                                  grade: item.grade,
+                                  amount: item.amount,
+                                },
+                              })
+                            }
+                          >
+                            Upload Slip
+                          </button>
                         </div>
                       </div>
                     </div>
@@ -301,14 +311,14 @@ const teacherData = location.state || {
 
                 {/* Back Button */}
 
-<div className="text-end mt-4">
-  <button
-    className="btn btn-outline-secondary rounded-pill px-5"
-    onClick={() => navigate(-1)}
-  >
-    ← Back
-  </button>
-</div>
+                <div className="text-end mt-4">
+                  <button
+                    className="btn btn-outline-secondary rounded-pill px-5"
+                    onClick={() => navigate(-1)}
+                  >
+                    ← Back
+                  </button>
+                </div>
               </div>
             </div>
           </div>

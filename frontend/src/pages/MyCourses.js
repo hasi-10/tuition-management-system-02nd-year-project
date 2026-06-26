@@ -340,21 +340,20 @@ onClick={() => navigate("/allteachers")}
 
     <div className="d-flex justify-content-center gap-3 flex-wrap">
 
-      <button className="btn btn-outline-primary rounded-pill px-4">
+      <button
+  className="btn btn-primary"
+  onClick={() => navigate("/recordings")}
+>
+  Recording
+</button>
 
-        <PlayCircle className="me-2" />
-
-        Recording
-
-      </button>
-
-      <button className="btn btn-primary rounded-pill px-4">
-
-        <CameraVideo className="me-2" />
-
-        Join Online Class
-
-      </button>
+      <button
+  className="btn btn-primary rounded-pill px-4"
+  onClick={() => navigate("/student-online-class")}
+>
+  <CameraVideo className="me-2" />
+  Join Online Class
+</button>
 <button
   className="btn btn-outline-success rounded-pill px-4"
 onClick={async () => {

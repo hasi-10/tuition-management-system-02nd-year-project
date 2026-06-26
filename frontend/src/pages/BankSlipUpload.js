@@ -1,11 +1,9 @@
-
 import React from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import logo from "../assets/image-removebg-preview.png";
 import axios from "axios";
 import API from "../services/api";
-
-
+import { olTeachers, alTeachers } from "../data/teachers";
 
 import {
   HouseDoorFill,
@@ -27,110 +25,106 @@ function BankSlipUpload() {
   const location = useLocation();
 
   // Data coming from Teacher Profile
-const classData = location.state || {};
-const fromTeacher = !!classData.teacher;
+  const classData = location.state || {};
+  const fromTeacher = !!classData.teacher;
 
   // Form Data
   const [formData, setFormData] = React.useState({
     studentName: "",
     email: "",
+    classType: "",
     subject: "",
     teacher: "",
     grade: "",
     month: "",
   });
 
-  // Selected File
-
+  const [teacherList, setTeacherList] = React.useState([]);
+  const [selectedTeachers, setSelectedTeachers] = React.useState([]);
+  const [selectedFile, setSelectedFile] = React.useState(null);
 
   // Auto Fill Details
-React.useEffect(() => {
+  React.useEffect(() => {
 
-  const loadStudentDetails = async () => {
+    const loadStudentDetails = async () => {
+
+      try {
+
+        const email = localStorage.getItem("email");
+
+        const res = await API.get(`/profile/${email}`);
+
+        const profile = res.data.data;
+
+        setFormData((prev) => ({
+
+          ...prev,
+
+          studentName: profile.fullName,
+          email: profile.email,
+
+          teacher: classData?.teacher || prev.teacher,
+
+          subject: classData?.subject || prev.subject,
+
+          grade: classData?.grade || prev.grade,
+
+        }));
+      } catch (error) {
+
+        console.log(error);
+
+      }
+
+    };
+
+    loadStudentDetails();
+
+  }, [classData]);
+
+  const handleUpload = async () => {
+
+    if (!selectedFile) {
+      alert("Please select a file.");
+      return;
+    }
 
     try {
 
-      const email = localStorage.getItem("email");
+      const data = new FormData();
 
-      const res = await API.get(`/profile/${email}`);
+      data.append("studentName", formData.studentName);
+      data.append("email", formData.email);
+      data.append("subject", formData.subject);
+      data.append("teacher", formData.teacher);
+      data.append("grade", formData.grade);
+      data.append("month", formData.month);
+      data.append("file", selectedFile);
 
-      const profile = res.data.data;
+      const response = await axios.post(
 
-setFormData((prev) => ({
+        "http://localhost:5000/api/payment/upload-slip",
 
-  ...prev,
+        data,
 
-  studentName: profile.fullName,
-  email: profile.email,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
 
-  teacher: classData?.teacher || prev.teacher,
+      );
 
-  subject: classData?.subject || prev.subject,
-
-  grade: classData?.grade || prev.grade,
-
-}));
+      alert(response.data.message);
+      navigate("/studentdashboard");
     } catch (error) {
 
       console.log(error);
+      alert("Upload Failed");
 
     }
 
   };
-
-  loadStudentDetails();
-
-}, [classData]);
-
-const handleUpload = async () => {
-
-  if (!selectedFile) {
-    alert("Please select a file.");
-    return;
-  }
-
-  try {
-
-    const data = new FormData();
-
-data.append("studentName", formData.studentName);
-data.append("email", formData.email);
-data.append("subject", formData.subject);
-data.append("teacher", formData.teacher);
-data.append("grade", formData.grade);
-data.append("month", formData.month);
-data.append("file", selectedFile);
-
-    // MUST MATCH upload.single("file")
-    
-
-    const response = await axios.post(
-
-      "http://localhost:5000/api/payment/upload-slip",
-
-      data,
-
-      {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      }
-
-    );
-
-    alert(response.data.message);
-
-  } catch (error) {
-
-    console.log(error);
-
-    alert("Upload Failed");
-
-  }
-
-};
-const [selectedFile, setSelectedFile] = React.useState(null);
-
 
   return (
 
@@ -276,7 +270,8 @@ const [selectedFile, setSelectedFile] = React.useState(null);
             <ChevronDown className="ms-3" />
 
           </div>
-                    {/* ================= PAGE CONTENT ================= */}
+          
+          {/* ================= PAGE CONTENT ================= */}
 
           <div className="container py-5">
 
@@ -284,279 +279,343 @@ const [selectedFile, setSelectedFile] = React.useState(null);
 
             <div className="text-center mb-5">
 
-<div className="text-center mb-5">
+              <div className="text-center mb-5">
 
-  <h1 className="fw-bold display-5 text-primary">
-    Upload Payment Slip
-  </h1>
+                <h1 className="fw-bold display-5 text-primary">
+                  Upload Payment Slip
+                </h1>
 
-  <p className="text-muted fs-5">
-    Upload your bank payment slip for verification
-  </p>
+                <p className="text-muted fs-5">
+                  Upload your bank payment slip for verification
+                </p>
 
-</div>
+              </div>
 
             </div>
 
-{/* ================= FORM CARD ================= */}
+            {/* ================= FORM CARD ================= */}
 
-<div className="card border-0 shadow rounded-5">
+            <div className="card border-0 shadow rounded-5">
 
-  <div className="card-body p-5">
+              <div className="card-body p-5">
 
-    <div className="row g-4">
+                <div className="row g-4">
 
-      <div className="col-md-6">
+                  <div className="col-md-6">
 
-        <label className="form-label fw-bold">
-          Student Name
-        </label>
+                    <label className="form-label fw-bold">
+                      Student Name
+                    </label>
 
-<input
-  type="text"
-  className="form-control form-control-lg"
-  value={formData.studentName}
-  readOnly
-/>
+                    <input
+                      type="text"
+                      className="form-control form-control-lg"
+                      value={formData.studentName}
+                      readOnly
+                    />
 
-      </div>
+                  </div>
 
-      <div className="col-md-6">
+                  <div className="col-md-6">
 
-        <label className="form-label fw-bold">
-          Email
-        </label>
+                    <label className="form-label fw-bold">
+                      Email
+                    </label>
 
-<input
-  type="email"
-  className="form-control form-control-lg"
-  value={formData.email}
-  readOnly
-/>
+                    <input
+                      type="email"
+                      className="form-control form-control-lg"
+                      value={formData.email}
+                      readOnly
+                    />
 
-      </div>
+                  </div>
 
-      <div className="col-md-6">
+                  <div className="col-md-6">
 
-        <label className="form-label fw-bold">
-          Subject
-        </label>
+                    <label className="form-label fw-bold">
+                      Class Type
+                    </label>
 
-<input
-  type="text"
-  className="form-control form-control-lg"
-  value={formData.subject}
-  readOnly={fromTeacher}
-  onChange={(e) =>
-    setFormData({
-      ...formData,
-      subject: e.target.value,
-    })
-  }
-/>
-      </div>
+                    <select
+                      className="form-select form-select-lg"
+                      value={formData.classType}
+                      onChange={(e) => {
 
-      <div className="col-md-6">
+                        const type = e.target.value;
 
-        <label className="form-label fw-bold">
-          Teacher Name
-        </label>
+                        setFormData({
+                          ...formData,
+                          classType: type
+                        });
 
-<input
-  type="text"
-  className="form-control form-control-lg"
-  value={formData.teacher}
-  readOnly={fromTeacher}
-  onChange={(e) =>
-    setFormData({
-      ...formData,
-      teacher: e.target.value,
-    })
-  }
-/>
+                        if (type === "OL") {
+                          setTeacherList(olTeachers);
+                        } else {
+                          setTeacherList(alTeachers);
+                        }
 
-      </div>
+                      }}
+                    >
 
-      <div className="col-md-6">
+                      <option value="">
+                        Select Class Type
+                      </option>
 
-        <label className="form-label fw-bold">
-          Grade
-        </label>
+                      <option value="OL">
+                        O/L
+                      </option>
 
-{fromTeacher ? (
+                      <option value="AL">
+                        A/L
+                      </option>
 
-  <input
-    type="text"
-    className="form-control form-control-lg"
-    value={formData.grade}
-    readOnly
-  />
+                    </select>
 
-) : (
+                  </div>
 
-  <select
-    className="form-select form-select-lg"
-    value={formData.grade}
-    onChange={(e) =>
-      setFormData({
-        ...formData,
-        grade: e.target.value,
-      })
-    }
-  >
-    <option value="">Select Grade</option>
-    <option>Grade 6</option>
-    <option>Grade 7</option>
-    <option>Grade 8</option>
-    <option>Grade 9</option>
-    <option>Grade 10</option>
-    <option>Grade 11</option>
-    <option>Grade 12</option>
-    <option>Grade 13</option>
-  </select>
+                  <div className="col-md-6">
 
-)}
+                    <label className="form-label fw-bold">
+                      Select Teachers
+                    </label>
 
-      </div>
+                    <div
+                      className="border rounded p-3"
+                      style={{
+                        maxHeight: "220px",
+                        overflowY: "auto"
+                      }}
+                    >
 
-      <div className="col-md-6">
+                      {teacherList.map((teacher, index) => (
 
-        <label className="form-label fw-bold">
-          Month
-        </label>
+                        <div
+                          key={index}
+                          className="form-check mb-2"
+                        >
 
-        <select
-          className="form-select form-select-lg"
-          value={formData.month}
-          onChange={(e) =>
-            setFormData({
-              ...formData,
-              month: e.target.value,
-            })
-          }
-        >
+                          <input
+                            className="form-check-input"
+                            type="checkbox"
+                            value={teacher.name}
+                            onChange={(e) => {
 
-          <option value="">Select Month</option>
+                              if (e.target.checked) {
 
-          <option>January</option>
-          <option>February</option>
-          <option>March</option>
-          <option>April</option>
-          <option>May</option>
-          <option>June</option>
-          <option>July</option>
-          <option>August</option>
-          <option>September</option>
-          <option>October</option>
-          <option>November</option>
-          <option>December</option>
+                                setSelectedTeachers([
+                                  ...selectedTeachers,
+                                  teacher
+                                ]);
 
-        </select>
+                              } else {
 
-      </div>
+                                setSelectedTeachers(
+                                  selectedTeachers.filter(
+                                    (t) => t.name !== teacher.name
+                                  )
+                                );
 
-    </div>
+                              }
 
-  </div>
+                            }}
+                          />
 
-</div>
-{/* ================= UPLOAD CARD ================= */}
+                          <label className="form-check-label">
 
-<div className="card border-0 shadow rounded-5 mt-4">
+                            {teacher.name} - {teacher.subject}
 
-  <div className="card-body p-5">
+                          </label>
 
-    <div
-      className="border border-2 rounded-5 text-center p-5"
-      style={{
-        borderStyle: "dashed",
-      }}
-    >
+                        </div>
 
-      <div
-        className="bg-primary rounded-circle d-inline-flex justify-content-center align-items-center mb-4"
-        style={{
-          width: "90px",
-          height: "90px",
-        }}
-      >
+                      ))}
 
-        <Upload size={45} color="white" />
+                    </div>
 
-      </div>
+                  </div>
 
-      <h3 className="fw-bold">
+                  <div className="col-md-6">
 
-        Upload Payment Slip
+                    <label className="form-label fw-bold">
+                      Grade
+                    </label>
 
-      </h3>
+                    {fromTeacher ? (
 
-      <p className="text-muted fs-5">
+                      <input
+                        type="text"
+                        className="form-control form-control-lg"
+                        value={formData.grade}
+                        readOnly
+                      />
 
-        Drop files here or click to browse
+                    ) : (
 
-      </p>
+                      <select
+                        className="form-select form-select-lg"
+                        value={formData.grade}
+                        onChange={(e) =>
+                          setFormData({
+                            ...formData,
+                            grade: e.target.value,
+                          })
+                        }
+                      >
+                        <option value="">Select Grade</option>
+                        <option>Grade 6</option>
+                        <option>Grade 7</option>
+                        <option>Grade 8</option>
+                        <option>Grade 9</option>
+                        <option>Grade 10</option>
+                        <option>Grade 11</option>
+                        <option>Grade 12</option>
+                        <option>Grade 13</option>
+                      </select>
 
-      <input
-        type="file"
-        id="paymentSlip"
-        className="d-none"
-        onChange={(e) =>
-          setSelectedFile(e.target.files[0])
-        }
-      />
+                    )}
 
-      <label
-        htmlFor="paymentSlip"
-        className="btn btn-primary btn-lg px-5 rounded-pill"
-      >
+                  </div>
 
-        Select File
+                  <div className="col-md-6">
 
-      </label>
+                    <label className="form-label fw-bold">
+                      Month
+                    </label>
 
-      {selectedFile && (
+                    <select
+                      className="form-select form-select-lg"
+                      value={formData.month}
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          month: e.target.value,
+                        })
+                      }
+                    >
 
-        <div className="alert alert-success mt-4 mb-0">
+                      <option value="">Select Month</option>
 
-          <strong>Selected File:</strong>
+                      <option>January</option>
+                      <option>February</option>
+                      <option>March</option>
+                      <option>April</option>
+                      <option>May</option>
+                      <option>June</option>
+                      <option>July</option>
+                      <option>August</option>
+                      <option>September</option>
+                      <option>October</option>
+                      <option>November</option>
+                      <option>December</option>
 
-          <br />
+                    </select>
 
-          {selectedFile.name}
+                  </div>
 
-        </div>
+                </div>
 
-      )}
+              </div>
 
-    </div>
+            </div>
 
-  </div>
+            {/* ================= UPLOAD CARD ================= */}
 
-</div>
+            <div className="card border-0 shadow rounded-5 mt-4">
+
+              <div className="card-body p-5">
+
+                <div
+                  className="border border-2 rounded-5 text-center p-5"
+                  style={{
+                    borderStyle: "dashed",
+                  }}
+                >
+
+                  <div
+                    className="bg-primary rounded-circle d-inline-flex justify-content-center align-items-center mb-4"
+                    style={{
+                      width: "90px",
+                      height: "90px",
+                    }}
+                  >
+
+                    <Upload size={45} color="white" />
+
+                  </div>
+
+                  <h3 className="fw-bold">
+
+                    Upload Payment Slip
+
+                  </h3>
+
+                  <p className="text-muted fs-5">
+
+                    Drop files here or click to browse
+
+                  </p>
+
+                  <input
+                    type="file"
+                    id="paymentSlip"
+                    className="d-none"
+                    onChange={(e) =>
+                      setSelectedFile(e.target.files[0])
+                    }
+                  />
+
+                  <label
+                    htmlFor="paymentSlip"
+                    className="btn btn-primary btn-lg px-5 rounded-pill"
+                  >
+
+                    Select File
+
+                  </label>
+
+                  {selectedFile && (
+
+                    <div className="alert alert-success mt-4 mb-0">
+
+                      <strong>Selected File:</strong>
+
+                      <br />
+
+                      {selectedFile.name}
+
+                    </div>
+
+                  )}
+
+                </div>
+
+              </div>
+
+            </div>
 
             {/* Back Button */}
 
-       <div className="d-flex justify-content-between mt-4">
+            <div className="d-flex justify-content-between mt-4">
 
-  <button
-    className="btn btn-outline-secondary btn-lg rounded-pill px-5"
-    onClick={() => navigate("/payment-options")}
-  >
+              <button
+                className="btn btn-outline-secondary btn-lg rounded-pill px-5"
+                onClick={() => navigate("/payment-options")}
+              >
 
-    ← Back
+                ← Back
 
-  </button>
+              </button>
 
- <button
-  type="button"
-  className="btn btn-primary btn-lg rounded-pill px-5"
-  onClick={handleUpload}
->
-  Submit Payment Slip
-</button>
+              <button
+                type="button"
+                className="btn btn-primary btn-lg rounded-pill px-5"
+                onClick={handleUpload}
+              >
+                Submit Payment Slip
+              </button>
 
-</div>
+            </div>
 
           </div>
 

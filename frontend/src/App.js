@@ -32,6 +32,15 @@ import TeacherViewQuiz from "./pages/teacher/TeacherViewQuiz";
 import EditQuiz from "./pages/teacher/EditQuiz";
 import TeacherSubmissions from "./pages/teacher/TeacherSubmissions";
 import SubmissionDetails from "./pages/teacher/SubmissionDetails";
+import EditProfile from "./pages/teacher/EditProfile";
+import TeacherClasses from "./pages/teacher/TeacherClasses";
+import TeacherUploadRecording from "./pages/teacher/TeacherUploadRecording";
+import ClassRecordings from "./pages/ClassRecordings";
+import TeacherStartClass from "./pages/teacher/TeacherStartClass";
+import StudentOnlineClass from "./pages/StudentOnlineClass";
+import TeacherMyProfile from "./pages/teacher/TeacherMyProfile";
+
+
 
 
 
@@ -71,9 +80,16 @@ function App() {
         <Route path="/teacher/edit-quiz/:id" element={<EditQuiz />} />
         <Route path="/teacher/submissions/:quizId" element={<TeacherSubmissions />} />
         <Route path="/teacher/submission/:id" element={<SubmissionDetails />} />
-
-
         
+        <Route path="/teacher-edit-profile" element={<EditProfile />} />
+        <Route path="/teacher-classes" element={<TeacherClasses />}/>
+        <Route path="/teacher-upload-recording" element={<TeacherUploadRecording />}/>
+        <Route path="/recordings" element={<ClassRecordings />}/>
+        <Route path="/teacher-start-class"  element={<TeacherStartClass />}/>
+        <Route path="/student-online-class"element={<StudentOnlineClass />}/>
+        <Route path="/teacher-my-profile"element={<TeacherMyProfile />}/>
+
+
 
         <Route
           path="/studentdashboard"

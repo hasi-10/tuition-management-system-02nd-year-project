@@ -4,12 +4,19 @@ const paymentRoutes = require("./routes/payment");
 const quizRoutes = require("./routes/quizRoutes");
 const submissionRoutes = require("./routes/submissionRoutes");
 
+const teacherRoutes = require("./routes/Teacher/teacher");
+
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const path = require("path");
 
 const app = express();
+
+
+
+
+
 
 
 // Middleware
@@ -21,6 +28,12 @@ app.use("/api/profile", studentProfileRoutes);
 app.use("/api/payment", paymentRoutes);
 app.use("/api/quizzes", quizRoutes);
 app.use("/api/submissions", submissionRoutes);
+app.use("/api/teachers", teacherRoutes);
+
+
+
+
+
 
 // Routes
 const authRoutes = require("./routes/auth");

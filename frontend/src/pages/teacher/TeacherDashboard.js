@@ -20,6 +20,7 @@ import {
   PersonPlus,
   Upload,
   Clock,
+  Pencil,
 } from "react-bootstrap-icons";
 import {
   LineChart,
@@ -78,15 +79,17 @@ function TeacherDashboard() {
         >
           <div>
 
-            <div className="text-center py-4">
-              <img
-                src={logo}
-                alt=""
-                style={{
-                  width: "180px",
-                }}
-              />
-            </div>
+           <div className="text-center py-4">
+  <img
+    src={logo}
+    alt="logo"
+    onClick={() => navigate("/")}
+    style={{
+      width: "180px",
+      cursor: "pointer",
+    }}
+  />
+</div>
 
             <div className="px-3">
 
@@ -98,11 +101,11 @@ function TeacherDashboard() {
               </button>
 
               <button
-                className="btn btn-outline-light border-0 w-100 text-start rounded-4 mb-3 p-3"
-              >
-                <Book className="me-3" />
-                My Classes
-              </button>
+  className="btn btn-warning w-100 fw-bold"
+  onClick={() => navigate("/teacher-classes")}
+>
+  My Classes
+</button>
 
               <button
                 className="btn btn-outline-light border-0 w-100 text-start rounded-4 mb-3 p-3"
@@ -111,13 +114,13 @@ function TeacherDashboard() {
                 Students
               </button>
 
-<NavLink
-  to="/teacher-quizzes"
-  className="btn btn-outline-light border-0 w-100 text-start rounded-4 mb-3 p-3"
->
-  <PatchQuestion className="me-3" />
-  Quizzes
-</NavLink>
+              <NavLink
+                to="/teacher-quizzes"
+                className="btn btn-outline-light border-0 w-100 text-start rounded-4 mb-3 p-3"
+              >
+                <PatchQuestion className="me-3" />
+                Quizzes
+              </NavLink>
 
               <button
                 className="btn btn-outline-light border-0 w-100 text-start rounded-4 mb-3 p-3"
@@ -140,12 +143,13 @@ function TeacherDashboard() {
                 Results
               </button>
 
-              <button
-                className="btn btn-outline-light border-0 w-100 text-start rounded-4 mb-3 p-3"
-              >
-                <PersonCircle className="me-3" />
-                My Profile
-              </button>
+ <button
+  className="btn btn-outline-light border-0 w-100 text-start rounded-4 mb-3 p-3"
+  onClick={() => navigate("/teacher-my-profile")}
+>
+  <PersonCircle className="me-3" />
+  My Profile
+</button>
 
               <button
                 className="btn btn-outline-light border-0 w-100 text-start rounded-4 mb-3 p-3"
@@ -224,12 +228,12 @@ function TeacherDashboard() {
 
           <div
 
-  className="container-fluid p-4"
-  style={{
-    background: "#eef2f7",
-    minHeight: "calc(100vh - 80px)",
-  }}
->
+            className="container-fluid p-4"
+            style={{
+              background: "#eef2f7",
+              minHeight: "calc(100vh - 80px)",
+            }}
+          >
 
             {/* Cards */}
 
@@ -237,12 +241,11 @@ function TeacherDashboard() {
 
               <div className="col-md-6 mb-4">
                 <div
-  className="card border-0 rounded-4 p-4"
-  style={{
-    background: "#f5f5f5",
-  }}
->
-    
+                  className="card border-0 rounded-4 p-4"
+                  style={{
+                    background: "#f5f5f5",
+                  }}
+                >
 
                   <div className="d-flex justify-content-between">
 
@@ -254,20 +257,20 @@ function TeacherDashboard() {
                       </span>
                     </div>
 
-                   <div
-  style={{
-    background: "#3b82f6",
-    width: "60px",
-    height: "60px",
-    borderRadius: "15px",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    color: "white",
-  }}
->
-  <People size={28} />
-</div>
+                    <div
+                      style={{
+                        background: "#3b82f6",
+                        width: "60px",
+                        height: "60px",
+                        borderRadius: "15px",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        color: "white",
+                      }}
+                    >
+                      <People size={28} />
+                    </div>
 
                   </div>
 
@@ -289,19 +292,19 @@ function TeacherDashboard() {
                     </div>
 
                     <div
-  style={{
-    background: "#22c55e",
-    width: "60px",
-    height: "60px",
-    borderRadius: "15px",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    color: "white",
-  }}
->
-  <CalendarEvent size={28} />
-</div>
+                      style={{
+                        background: "#22c55e",
+                        width: "60px",
+                        height: "60px",
+                        borderRadius: "15px",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        color: "white",
+                      }}
+                    >
+                      <CalendarEvent size={28} />
+                    </div>
 
                   </div>
 
@@ -323,20 +326,20 @@ function TeacherDashboard() {
                       </span>
                     </div>
 
-                   <div
-  style={{
-    background: "#a855f7",
-    width: "60px",
-    height: "60px",
-    borderRadius: "15px",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    color: "white",
-  }}
->
-  <Cash size={28} />
-</div>
+                    <div
+                      style={{
+                        background: "#a855f7",
+                        width: "60px",
+                        height: "60px",
+                        borderRadius: "15px",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        color: "white",
+                      }}
+                    >
+                      <Cash size={28} />
+                    </div>
 
                   </div>
 
@@ -358,20 +361,20 @@ function TeacherDashboard() {
                       </span>
                     </div>
 
-                   <div
-  style={{
-    background: "#ef4444",
-    width: "60px",
-    height: "60px",
-    borderRadius: "15px",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    color: "white",
-  }}
->
-  <GraphUp size={28} />
-</div>
+                    <div
+                      style={{
+                        background: "#ef4444",
+                        width: "60px",
+                        height: "60px",
+                        borderRadius: "15px",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        color: "white",
+                      }}
+                    >
+                      <GraphUp size={28} />
+                    </div>
 
                   </div>
 
@@ -393,20 +396,20 @@ function TeacherDashboard() {
                     Attendance Trends
                   </h5>
 
-<ResponsiveContainer width="100%" height={220}>
-  <LineChart data={attendanceData}>
-    <CartesianGrid strokeDasharray="3 3" />
-    <XAxis dataKey="month" />
-    <YAxis />
-    <Tooltip />
-    <Line
-      type="monotone"
-      dataKey="attendance"
-      stroke="#3b82f6"
-      strokeWidth={3}
-    />
-  </LineChart>
-</ResponsiveContainer>
+                  <ResponsiveContainer width="100%" height={220}>
+                    <LineChart data={attendanceData}>
+                      <CartesianGrid strokeDasharray="3 3" />
+                      <XAxis dataKey="month" />
+                      <YAxis />
+                      <Tooltip />
+                      <Line
+                        type="monotone"
+                        dataKey="attendance"
+                        stroke="#3b82f6"
+                        strokeWidth={3}
+                      />
+                    </LineChart>
+                  </ResponsiveContainer>
 
                 </div>
 
@@ -420,19 +423,19 @@ function TeacherDashboard() {
                     Monthly Revenue
                   </h5>
 
-<ResponsiveContainer width="100%" height={220}>
-  <BarChart data={revenueData}>
-    <CartesianGrid strokeDasharray="3 3" />
-    <XAxis dataKey="month" />
-    <YAxis />
-    <Tooltip />
-    <Bar
-      dataKey="revenue"
-      fill="#8b5cf6"
-      radius={[5, 5, 0, 0]}
-    />
-  </BarChart>
-</ResponsiveContainer>
+                  <ResponsiveContainer width="100%" height={220}>
+                    <BarChart data={revenueData}>
+                      <CartesianGrid strokeDasharray="3 3" />
+                      <XAxis dataKey="month" />
+                      <YAxis />
+                      <Tooltip />
+                      <Bar
+                        dataKey="revenue"
+                        fill="#8b5cf6"
+                        radius={[5, 5, 0, 0]}
+                      />
+                    </BarChart>
+                  </ResponsiveContainer>
 
                 </div>
 
@@ -482,9 +485,19 @@ function TeacherDashboard() {
 
             <div className="card border-0 shadow rounded-4 p-4">
 
-              <h4 className="fw-bold mb-4">
-                Quick Actions
-              </h4>
+              <div className="d-flex justify-content-between align-items-center mb-4">
+                <h4 className="fw-bold mb-0">
+                  Quick Actions
+                </h4>
+                
+                <button
+                  className="btn btn-primary rounded-pill px-4"
+                  onClick={() => navigate("/teacher-edit-profile")}
+                >
+                  <Pencil className="me-2" />
+                  Edit Profile
+                </button>
+              </div>
 
               <div className="row text-center">
 

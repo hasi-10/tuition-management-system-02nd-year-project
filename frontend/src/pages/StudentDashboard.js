@@ -81,15 +81,19 @@ const loadProfile = async () => {
         >
           <div>
             {/* Logo */}
-            <div className="text-center py-4">
-              <img
-                src={logo}
-                alt="logo"
-                style={{
-                  width: "180px",
-                }}
-              />
-            </div>
+            <div
+  className="text-center py-4"
+  style={{ cursor: "pointer" }}
+  onClick={() => navigate("/")}
+>
+  <img
+    src={logo}
+    alt="logo"
+    style={{
+      width: "180px",
+    }}
+  />
+</div>
 
             {/* Menu */}
             <div className="px-3">
@@ -191,7 +195,7 @@ const loadProfile = async () => {
               className="row rounded-4 overflow-hidden shadow"
               style={{
                 background: "linear-gradient(135deg,#002c99 0%,#0047ff 100%)",
-                minHeight: "250px",
+                minHeight: "180px",
               }}
             >
               {/* Left Side */}
