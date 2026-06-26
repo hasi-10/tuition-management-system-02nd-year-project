@@ -32,7 +32,18 @@ import TeacherViewQuiz from "./pages/teacher/TeacherViewQuiz";
 import EditQuiz from "./pages/teacher/EditQuiz";
 import TeacherSubmissions from "./pages/teacher/TeacherSubmissions";
 import SubmissionDetails from "./pages/teacher/SubmissionDetails";
-
+import Settings from "./pages/Settings";
+import AdminDashboard from "./pages/admin/AdminDashboard";
+import AdminTeachers from "./pages/admin/AdminTeachers";
+import AdminAddTeacher from "./pages/admin/AdminAddTeacher";
+import AdminTeacherProfile from "./pages/admin/AdminTeacherProfile";
+import AdminEditTeacher from "./pages/admin/AdminEditTeacher";
+import AdminStudents from "./pages/admin/AdminStudents";
+import AdminStudentProfile from "./pages/admin/AdminStudentProfile";
+import AdminPayments from "./pages/admin/AdminPayments";
+import PaymentDetails from "./pages/admin/PaymentDetails";
+import AdminQuizzes from "./pages/admin/AdminQuizzes";
+import AdminQuizDetails from "./pages/admin/AdminQuizDetails";
 
 
 function App() {
@@ -71,7 +82,18 @@ function App() {
         <Route path="/teacher/edit-quiz/:id" element={<EditQuiz />} />
         <Route path="/teacher/submissions/:quizId" element={<TeacherSubmissions />} />
         <Route path="/teacher/submission/:id" element={<SubmissionDetails />} />
-
+        <Route path="/settings" element={<Settings />} />
+        <Route path="/admindashboard" element={<AdminDashboard />} />
+        <Route path="/adminteachers" element={<AdminTeachers />} />
+        <Route path="/admin-add-teacher" element={<AdminAddTeacher />} />
+        <Route path="/admin-teacher-profile" element={<AdminTeacherProfile />} />
+        <Route path="/admin-edit-teacher" element={<AdminEditTeacher />} />
+        <Route path="/adminstudents" element={<AdminStudents />} />
+        <Route path="/admin-student-profile" element={<AdminStudentProfile />} />
+        <Route path="/adminpayments" element={<AdminPayments />} />
+        <Route path="/payment-details" element={<PaymentDetails />} />
+        <Route path="/adminquizzes" element={<AdminQuizzes />} />
+        <Route path="/admin-quiz-details" element={<AdminQuizDetails />} />
 
         
 

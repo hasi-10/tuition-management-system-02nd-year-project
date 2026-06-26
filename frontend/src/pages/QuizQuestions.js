@@ -9,10 +9,24 @@ import {
 
 import logo from "../assets/image-removebg-preview.png";
 import API from "../services/api";
+import StudentProfileDropdown from "../components/StudentProfileDropdown";
 
 function QuizQuestions() {
 
+  const [formData, setFormData] = useState({
+    fullName: "",
+    profileImage: "",
+  });
+  
+
 const navigate = useNavigate();
+
+  const [darkMode, setDarkMode] = useState(false);
+
+  useEffect(() => {
+    const savedTheme = localStorage.getItem("theme");
+    setDarkMode(savedTheme === "dark");
+  }, []);
 
 const location = useLocation();
 
@@ -27,6 +41,25 @@ console.log("QUESTIONS:", questions);
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [answers, setAnswers] = useState({});
   const [timeLeft, setTimeLeft] = useState(30 * 60);
+
+   const loadProfile = async () => {
+  try {
+    const email = localStorage.getItem("email");
+
+    const res = await API.get(`/profile/${email}`);
+
+    setFormData(res.data.data);
+  } catch (error) {
+    console.log(error);
+  }
+};
+useEffect(() => {
+  const email = localStorage.getItem("email");
+
+  if (email) {
+    loadProfile();
+  }
+}, []);
 
   useEffect(() => {
 
@@ -67,32 +100,37 @@ console.log("QUESTIONS:", questions);
   );
 }
 
+
+
   const minutes = Math.floor(timeLeft / 60);
   const seconds = timeLeft % 60;
 
   const progress =
     ((currentQuestion + 1) / questions.length) * 100;
 
+    
+
   return (
 
-    <div
-      className="container-fluid p-0"
-      style={{
-        minHeight: "100vh",
-        background: "#f4f6fb",
-      }}
-    >
+<div
+  className="container-fluid p-0"
+  style={{
+    background: darkMode ? "#2f343a" : "#eef2f7",
+    minHeight: "100vh",
+  }}
+>
 
       {/* ================= NAVBAR ================= */}
 
-      <div
-        className="d-flex justify-content-between align-items-center px-5"
-        style={{
-          height: "95px",
-          background:
-            "linear-gradient(90deg,#001a75,#0033cc)",
-        }}
-      >
+<div
+  className="shadow-sm px-5 py-3 d-flex justify-content-between align-items-center"
+  style={{
+    background: darkMode
+      ? "#3a4047"
+      : "linear-gradient(90deg,#001a75,#0033cc)",
+    color: "#ffffff",
+  }}
+>
 
         <img
           src={logo}
@@ -104,31 +142,14 @@ console.log("QUESTIONS:", questions);
 
         <div className="d-flex align-items-center">
 
-          <Bell
-            size={24}
-            color="white"
-            className="me-4"
-          />
+  <Bell size={28} className="me-4" />
 
-          <PersonCircle
-            size={48}
-            color="white"
-          />
+  <StudentProfileDropdown
+    fullName={formData.fullName}
+    profileImage={formData.profileImage}
+  />
 
-          <div className="ms-3">
-
-            <h5 className="text-white fw-bold mb-0">
-              Thusara Dilshan
-            </h5>
-
-            <small className="text-white">
-              Student
-            </small>
-
-          </div>
-
-        </div>
-
+</div>
       </div>
 
       {/* ================= BODY ================= */}
@@ -138,7 +159,8 @@ console.log("QUESTIONS:", questions);
         <h1
           className="text-center fw-bold"
           style={{
-            color: "#0033cc",
+               
+    color: darkMode ? "#ffffff" : "#001a70",
             fontSize: "46px",
             letterSpacing: "2px",
           }}
@@ -149,7 +171,7 @@ console.log("QUESTIONS:", questions);
         <h3
           className="text-center mb-4"
           style={{
-            color: "#001a70",
+            color: darkMode ? "#ffffff" : "#000000",
           }}
         >
           {quizData?.subject || "Quiz"}
@@ -157,11 +179,14 @@ console.log("QUESTIONS:", questions);
 
         <div className="d-flex justify-content-between align-items-center mb-3">
 
-          <h5 className="fw-bold">
-
-            Question {currentQuestion + 1} of {questions.length}
-
-          </h5>
+<h5
+  className="fw-bold"
+  style={{
+    color: darkMode ? "#ffffff" : "#001a70",
+  }}
+>
+  Question {currentQuestion + 1} of {questions.length}
+</h5>
 
           <div
             className="px-4 py-2 rounded-pill d-flex align-items-center"
@@ -172,7 +197,7 @@ console.log("QUESTIONS:", questions);
 
             <ClockHistory
               className="me-2"
-              color="#0033cc"
+              color="#01030a"
             />
 
             <span className="fw-bold">
@@ -195,13 +220,13 @@ console.log("QUESTIONS:", questions);
           }}
         >
 
-          <div
-            className="progress-bar"
-            style={{
-              width: `${progress}%`,
-              background: "#0033cc",
-            }}
-          ></div>
+<div
+  className="progress-bar"
+  style={{
+    width: `${progress}%`,
+    background: darkMode ? "#6ea8fe" : "#0033cc",
+  }}
+></div>
 
         </div>
                 {/* ================= QUESTION CARD ================= */}
@@ -209,6 +234,8 @@ console.log("QUESTIONS:", questions);
         <div
           className="card border-0 rounded-5 mx-auto"
           style={{
+                background: darkMode ? "#3a4047" : "#ffffff",
+    color: darkMode ? "#ffffff" : "#000000",
             maxWidth: "900px",
             boxShadow: "0 10px 30px rgba(0,0,0,0.12)",
           }}
@@ -219,7 +246,8 @@ console.log("QUESTIONS:", questions);
             <h3
               className="fw-bold mb-4"
               style={{
-                color: "#001a70",
+                
+                color: darkMode ? "#ffffff" : "#000000",
               }}
             >
               {questions[currentQuestion].question}
@@ -237,15 +265,17 @@ console.log("QUESTIONS:", questions);
                 <label
                   key={index}
                   className="d-flex align-items-center p-3 rounded-4 mb-3"
-                  style={{
-                    border: "2px solid #dee2e6",
-                    cursor: "pointer",
-                    background:
-                      answers[currentQuestion] === option
-                        ? "#eef3ff"
-                        : "#fff",
-                    transition: "0.3s",
-                  }}
+style={{
+  border: "2px solid #dee2e6",
+  cursor: "pointer",
+  background:
+    answers[currentQuestion] === option
+      ? "#eef3ff"
+      : darkMode
+      ? "#495057"
+      : "#fff",
+  transition: "0.3s",
+}}
                 >
 
                   <input
@@ -263,14 +293,20 @@ console.log("QUESTIONS:", questions);
                     }
                   />
 
-                  <span
-                    style={{
-                      fontSize: "18px",
-                      fontWeight: "500",
-                    }}
-                  >
-                    {option}
-                  </span>
+<span
+  style={{
+    fontSize: "18px",
+    fontWeight: "500",
+    color:
+      answers[currentQuestion] === option
+        ? "#000000"
+        : darkMode
+        ? "#ffffff"
+        : "#000000",
+  }}
+>
+  {option}
+</span>
 
                 </label>
 
@@ -403,12 +439,19 @@ answers: questions.map((item, index) => ({
           }}
         >
 
-          <button
-            className="btn btn-outline-secondary rounded-pill px-4 fw-bold"
-            onClick={() => navigate("/quiz-start")}
-          >
-            ← Back
-          </button>
+<button
+  className="fw-bold rounded-pill border-0"
+  style={{
+    fontSize: "16px",
+    padding: "8px 28px",
+    minWidth: "120px",
+    background: darkMode ? "#6c757d" : "#212529",
+    color: "#ffffff",
+  }}
+  onClick={() => navigate("/quiz-start")}
+>
+  ← Back
+</button>
 
         </div>
 

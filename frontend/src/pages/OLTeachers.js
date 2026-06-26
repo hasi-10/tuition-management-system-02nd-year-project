@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import {
   Bell,
@@ -18,10 +18,24 @@ import logo from "../assets/image-removebg-preview.png";
 import profile from "../assets/profile.png";
 import maleTeacher from "../assets/maleTeacher.png";
 import femaleTeacher from "../assets/femaleTeacher.png";
+import StudentProfileDropdown from "../components/StudentProfileDropdown";
+import API from "../services/api";
 
 function OLTeachers() {
 
+  const [formData, setFormData] = useState({
+  fullName: "",
+  profileImage: "",
+});
+
   const navigate = useNavigate();
+
+  const [darkMode, setDarkMode] = useState(false);
+
+useEffect(() => {
+  const savedTheme = localStorage.getItem("theme");
+  setDarkMode(savedTheme === "dark");
+}, []);
 
   const teachers = [
     {
@@ -51,14 +65,33 @@ function OLTeachers() {
     }
   ];
 
+  const loadProfile = async () => {
+  try {
+    const email = localStorage.getItem("email");
+
+    const res = await API.get(`/profile/${email}`);
+
+    setFormData(res.data.data);
+  } catch (error) {
+    console.log(error);
+  }
+};
+useEffect(() => {
+  const email = localStorage.getItem("email");
+
+  if (email) {
+    loadProfile();
+  }
+}, []);
+
   return (
-    <div
-      className="container-fluid p-0"
-      style={{
-        background: "#eef2f7",
-        minHeight: "100vh"
-      }}
-    >
+<div
+  className="container-fluid p-0"
+  style={{
+    background: darkMode ? "#2f343a" : "#eef2f7",
+    minHeight: "100vh",
+  }}
+>
       <div className="row g-0">
 
         {/* Sidebar */}
@@ -137,13 +170,13 @@ function OLTeachers() {
                 Material Tracking
               </NavLink>
 
-              <NavLink
-                to="/settings"
-                className="btn btn-outline-light border-0 w-100 text-start rounded-4 mb-3 p-3"
-              >
-                <Gear className="me-3" />
-                Settings
-              </NavLink>
+<button
+  className="btn btn-outline-light border-0 w-100 text-start rounded-4 mb-3 p-3"
+  onClick={() => navigate("/settings")}
+>
+  <Gear className="me-3" />
+  Settings
+</button>
 
             </div>
           </div>
@@ -162,44 +195,29 @@ function OLTeachers() {
 
           {/* Navbar */}
 
-          <div className="bg-white shadow-sm px-5 py-3 d-flex justify-content-between align-items-center">
+          <div
+  className="shadow-sm px-5 py-3 d-flex justify-content-between align-items-center"
+  style={{
+    background: darkMode ? "#3a4047" : "#ffffff",
+    color: darkMode ? "#ffffff" : "#000000",
+  }}
+>
 
             <h2 className="fw-bold mb-0">
               O/L Teachers
             </h2>
 
-            <div className="d-flex align-items-center">
+<div className="d-flex align-items-center">
+  <div className="position-relative me-4">
+    <Bell size={28} />
 
-              <Bell size={22} className="me-4" />
+  </div>
 
-              <img
-                src={profile}
-                alt="profile"
-                style={{
-                  width: "55px",
-                  height: "55px",
-                  borderRadius: "50%",
-                  objectFit: "cover"
-                }}
-              />
-
-              <div
-                className="ms-3"
-                style={{ cursor: "pointer" }}
-                onClick={() => navigate("/studentprofile")}
-              >
-                <h5 className="mb-0 fw-bold">
-                  Thusara Dilshan
-                </h5>
-
-                <small className="text-muted">
-                  Student
-                </small>
-              </div>
-
-              <ChevronDown className="ms-3" />
-
-            </div>
+<StudentProfileDropdown
+  fullName={formData.fullName}
+  profileImage={formData.profileImage}
+/>
+</div>
           </div>
 
           {/* Buttons */}

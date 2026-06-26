@@ -1,5 +1,4 @@
-
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import logo from "../assets/image-removebg-preview.png";
 import axios from "axios";
@@ -24,6 +23,13 @@ import {
 function BankSlipUpload() {
 
   const navigate = useNavigate();
+  const [darkMode, setDarkMode] = useState(false);
+
+  useEffect(() => {
+    const savedTheme = localStorage.getItem("theme");
+    setDarkMode(savedTheme === "dark");
+  }, []);
+
   const location = useLocation();
 
   // Data coming from Teacher Profile
@@ -237,17 +243,23 @@ const [selectedFile, setSelectedFile] = React.useState(null);
 
         {/* ================= MAIN CONTENT ================= */}
 
-        <div
-          className="col-lg-9 col-xl-10"
-          style={{
-            background: "#f8f9fc",
-            minHeight: "100vh",
-          }}
-        >
+<div
+  className="col-lg-9 col-xl-10"
+  style={{
+    background: darkMode ? "#343a40" : "#eef2f7",
+    minHeight: "100vh",
+  }}
+>
 
           {/* TOP BAR */}
 
-          <div className="d-flex justify-content-end align-items-center p-4 border-bottom">
+<div
+  className="d-flex justify-content-end align-items-center p-4 border-bottom"
+  style={{
+    background: darkMode ? "#3a4047" : "#ffffff",
+    color: darkMode ? "#ffffff" : "#000000",
+  }}
+>
 
             <Bell size={24} className="me-4" />
 
@@ -287,14 +299,23 @@ const [selectedFile, setSelectedFile] = React.useState(null);
             <div className="text-center mb-5">
 
 <div className="text-center mb-5">
+<h1
+  className="fw-bold display-5"
+  style={{
+    color: darkMode ? "#ffffff" : "#0d6efd",
+  }}
+>
+  Upload Payment Slip
+</h1>
 
-  <h1 className="fw-bold display-5 text-primary">
-    Upload Payment Slip
-  </h1>
-
-  <p className="text-muted fs-5">
-    Upload your bank payment slip for verification
-  </p>
+<p
+  className="fs-5"
+  style={{
+    color: darkMode ? "#d1d5db" : "#6c757d",
+  }}
+>
+  Upload your bank payment slip for verification
+</p>
 
 </div>
 
@@ -302,7 +323,13 @@ const [selectedFile, setSelectedFile] = React.useState(null);
 
 {/* ================= FORM CARD ================= */}
 
-<div className="card border-0 shadow rounded-5">
+      <div
+  className="card border-0 shadow rounded-4 mb-4"
+  style={{
+    background: darkMode ? "#3a4047" : "#ffffff",
+    color: darkMode ? "#ffffff" : "#000000",
+  }}
+>
 
   <div className="card-body p-5">
 
@@ -464,7 +491,13 @@ const [selectedFile, setSelectedFile] = React.useState(null);
 </div>
 {/* ================= UPLOAD CARD ================= */}
 
-<div className="card border-0 shadow rounded-5 mt-4">
+      <div
+  className="card border-0 shadow rounded-4"
+  style={{
+    background: darkMode ? "#3a4047" : "#ffffff",
+    color: darkMode ? "#ffffff" : "#000000",
+  }}
+>
 
   <div className="card-body p-5">
 
@@ -493,7 +526,7 @@ const [selectedFile, setSelectedFile] = React.useState(null);
 
       </h3>
 
-      <p className="text-muted fs-5">
+      <p className=" fs-5">
 
         Drop files here or click to browse
 

@@ -20,6 +20,7 @@ import {
 
 import logo from "../assets/image-removebg-preview.png";
 import profile from "../assets/profile.png";
+import StudentProfileDropdown from "../components/StudentProfileDropdown";
 
 function StudentProfile() {
   const [formData, setFormData] = useState({
@@ -221,28 +222,10 @@ onClick={() => navigate("/allteachers")}
             <div className="d-flex align-items-center">
               <Bell size={24} className="me-4" />
 
-              <img
-                src={
-                  formData.profileImage
-                    ? `http://localhost:5000/uploads/${formData.profileImage}`
-                    : profile
-                }
-                alt="profile"
-                style={{
-                  width: "55px",
-                  height: "55px",
-                  borderRadius: "50%",
-                  objectFit: "cover",
-                  border: "2px solid #e5e5e5",
-                }}
-              />
-
-              <div className="ms-3">
-                <h6 className="mb-0 fw-bold">{formData.fullName}</h6>
-                <small className="text-muted">Student</small>
-              </div>
-
-              <ChevronDown className="ms-3" size={20} />
+<StudentProfileDropdown
+  fullName={formData.fullName}
+  profileImage={formData.profileImage}
+/>
             </div>
           </div>
 
@@ -255,7 +238,7 @@ onClick={() => navigate("/allteachers")}
           >
             <div className="row">
               {/* ================= Profile Card ================= */}
-              <div className="col-lg-4 mb-4">
+<div className="col-12 mb-4">
                 <div className="card border-0 shadow rounded-4">
                   <div className="card-body text-center p-4">
                     <img
@@ -277,128 +260,61 @@ onClick={() => navigate("/allteachers")}
                     <p className="text-muted mb-4">Student</p>
 
                     <>
-                      <input
-                        type="file"
-                        className="form-control mb-3"
-                        accept="image/*"
-                        onChange={(e) => setSelectedImage(e.target.files[0])}
-                      />
-
-                      <button
-                        className="btn btn-dark w-100 fw-bold"
-                        onClick={handleImageUpload}
-                      >
-                        Upload Photo
-                      </button>
+<button
+  className="btn btn-dark rounded-pill px-4"
+  onClick={() => navigate("/settings")}
+>
+  Add Image
+</button>
                     </>
                   </div>
                 </div>
               </div>
 
               {/* ================= Personal Information ================= */}
-              <div className="col-lg-8 mb-4">
+<div className="col-12 mb-4">
                 <div className="card border-0 shadow rounded-4">
                   <div className="card-body p-4">
                     <h3 className="fw-bold mb-4">Personal Information</h3>
 
-                    <div className="row">
-                      <div className="col-md-6 mb-4">
-                        <label className="fw-bold mb-2">Full Name</label>
-                        <input
-                          type="text"
-                          name="fullName"
-                          value={formData.fullName}
-                          onChange={handleChange}
-                          className="form-control rounded-pill"
-                        />
-                      </div>
+<div>
 
-                      <div className="col-md-6 mb-4">
-                        <label className="fw-bold mb-2">Email Address</label>
-                        <input
-                          type="email"
-                          name="email"
-                          value={formData.email}
-                          onChange={handleChange}
-                          className="form-control rounded-pill"
-                        />
-                      </div>
+  <div className="mb-4">
+    <label className="fw-bold mb-2">Full Name</label>
+    <p className="fs-5">{formData.fullName}</p>
+  </div>
 
-                      <div className="col-md-6 mb-4">
-                        <label className="fw-bold mb-2">Phone Number</label>
-                        <input
-                          type="text"
-                          name="phone"
-                          value={formData.phone}
-                          onChange={handleChange}
-                          className="form-control rounded-pill"
-                        />
-                      </div>
+  <div className="mb-4">
+    <label className="fw-bold mb-2">Email Address</label>
+    <p className="fs-5">{formData.email}</p>
+  </div>
 
-                      <div className="col-md-6 mb-4">
-                        <label className="fw-bold mb-2">Grade</label>
-                        <input
-                          type="text"
-                          name="grade"
-                          value={formData.grade}
-                          onChange={handleChange}
-                          className="form-control rounded-pill"
-                        />
-                      </div>
-                    </div>
+  <div className="mb-4">
+    <label className="fw-bold mb-2">Phone Number</label>
+    <p className="fs-5">{formData.phone}</p>
+  </div>
+
+  <div className="mb-4">
+    <label className="fw-bold mb-2">Grade</label>
+    <p className="fs-5">{formData.grade}</p>
+  </div>
+
+</div>
 
                     <div className="mt-3">
-                      <button
-                        className="btn btn-dark rounded-pill"
-                        onClick={handleSave}
-                      >
-                        Save Changes
-                      </button>
-
-                      <button className="btn btn-outline-dark px-4 fw-bold rounded-pill">
-                        Cancel
-                      </button>
+<button
+  className="btn btn-dark rounded-pill px-4"
+  onClick={() => navigate("/settings")}
+>
+  Edit Details
+</button>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
 
-            {/* ================= Academic Summary ================= */}
-            <div className="card border-0 shadow rounded-4 mb-4">
-              <div className="card-body p-4">
-                <h3 className="fw-bold mb-4">Academic Summary</h3>
 
-                <div className="row text-center">
-                  <div className="col-md-4 mb-3">
-                    <div className="card bg-primary text-white border-0 rounded-4">
-                      <div className="card-body">
-                        <h1 className="fw-bold">12</h1>
-                        <p className="mb-0">Registered Classes</p>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="col-md-4 mb-3">
-                    <div className="card bg-success text-white border-0 rounded-4">
-                      <div className="card-body">
-                        <h1 className="fw-bold">96%</h1>
-                        <p className="mb-0">Attendance</p>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="col-md-4 mb-3">
-                    <div className="card bg-warning border-0 rounded-4">
-                      <div className="card-body">
-                        <h1 className="fw-bold">28</h1>
-                        <p className="mb-0">Quizzes Completed</p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
           </div>
         </div>
       </div>

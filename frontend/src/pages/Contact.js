@@ -14,6 +14,7 @@ import {
   FaGlobe,
   FaUser
 } from "react-icons/fa";
+import StudentProfileDropdown from "../components/StudentProfileDropdown";
 
 function Contact() {
 

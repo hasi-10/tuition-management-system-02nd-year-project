@@ -1,12 +1,47 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Bell, PersonCircle } from "react-bootstrap-icons";
 
 import logo from "../assets/image-removebg-preview.png";
+import API from "../services/api";
+import StudentProfileDropdown from "../components/StudentProfileDropdown";
 
 function QuizReview() {
 
+  const [formData, setFormData] = useState({
+    fullName: "",
+    profileImage: "",
+  });
+  
+
   const navigate = useNavigate();
+  const [darkMode, setDarkMode] = useState(false);
+
+  useEffect(() => {
+    const savedTheme = localStorage.getItem("theme");
+    setDarkMode(savedTheme === "dark");
+  }, []);
+
+
+    const loadProfile = async () => {
+  try {
+    const email = localStorage.getItem("email");
+
+    const res = await API.get(`/profile/${email}`);
+
+    setFormData(res.data.data);
+  } catch (error) {
+    console.log(error);
+  }
+};
+useEffect(() => {
+  const email = localStorage.getItem("email");
+
+  if (email) {
+    loadProfile();
+  }
+}, []);
+
   const location = useLocation();
 
 const reviewData = location.state || {
@@ -45,24 +80,25 @@ console.log("Questions:", reviewData.questions);
 
   return (
 
-    <div
-      className="container-fluid p-0"
-      style={{
-        minHeight: "100vh",
-        background: "#f4f6fb",
-      }}
-    >
-
+<div
+  className="container-fluid p-0"
+  style={{
+    background: darkMode ? "#2f343a" : "#eef2f7",
+    minHeight: "100vh",
+  }}
+>
+   
       {/* NAVBAR */}
 
-      <div
-        className="d-flex justify-content-between align-items-center px-5"
-        style={{
-          height: "95px",
-          background:
-            "linear-gradient(90deg,#001a75,#0033cc)",
-        }}
-      >
+<div
+  className="shadow-sm px-5 py-3 d-flex justify-content-between align-items-center"
+  style={{
+    background: darkMode
+      ? "#3a4047"
+      : "linear-gradient(90deg,#001a75,#0033cc)",
+    color: "#ffffff",
+  }}
+>
 
         <img
           src={logo}
@@ -72,32 +108,16 @@ console.log("Questions:", reviewData.questions);
           }}
         />
 
-        <div className="d-flex align-items-center">
+       <div className="d-flex align-items-center">
 
-          <Bell
-            size={24}
-            color="white"
-            className="me-4"
-          />
+  <Bell size={28} className="me-4" />
 
-          <PersonCircle
-            size={48}
-            color="white"
-          />
+  <StudentProfileDropdown
+    fullName={formData.fullName}
+    profileImage={formData.profileImage}
+  />
 
-          <div className="ms-3">
-
-            <h5 className="text-white fw-bold mb-0">
-              Thusara Dilshan
-            </h5>
-
-            <small className="text-white">
-              Student
-            </small>
-
-          </div>
-
-        </div>
+</div>
 
       </div>
 
@@ -108,7 +128,8 @@ console.log("Questions:", reviewData.questions);
         <h1
           className="text-center fw-bold"
           style={{
-            color: "#0033cc",
+            
+    color: darkMode ? "#ffffff" : "#0d6efd",
             fontSize: "46px",
           }}
         >
@@ -118,7 +139,8 @@ console.log("Questions:", reviewData.questions);
         <h2
           className="text-center fw-bold mb-4"
           style={{
-            color: "#001a70",
+            
+    color: darkMode ? "#ffffff" : "#0d6efd",
           }}
         >
           Review Answers
@@ -424,6 +446,13 @@ console.log(reviewData.questions);
 
           <button
             className="btn btn-outline-secondary rounded-pill px-4 fw-bold"
+              style={{
+    fontSize: "16px",
+    padding: "8px 28px",
+    minWidth: "120px",
+    background: darkMode ? "#6c757d" : "#212529",
+    color: "#ffffff",
+  }}
             onClick={() => navigate(-1)}
           >
             ← Back

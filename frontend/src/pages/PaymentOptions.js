@@ -1,4 +1,5 @@
-import React from "react";
+
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import logo from "../assets/image-removebg-preview.png";
 import {
@@ -14,9 +15,42 @@ import {
   ChevronDown,
   PersonVideo
 } from "react-bootstrap-icons";
+import StudentProfileDropdown from "../components/StudentProfileDropdown";
+import API from "../services/api";
 
 function PaymentOptions() {
+const [formData, setFormData] = useState({
+  fullName: "",
+  profileImage: "",
+});
+
   const navigate = useNavigate();
+
+  const [darkMode, setDarkMode] = useState(false);
+
+useEffect(() => {
+  const savedTheme = localStorage.getItem("theme");
+  setDarkMode(savedTheme === "dark");
+}, []);
+ const loadProfile = async () => {
+  try {
+    const email = localStorage.getItem("email");
+
+    const res = await API.get(`/profile/${email}`);
+
+    setFormData(res.data.data);
+  } catch (error) {
+    console.log(error);
+  }
+};
+useEffect(() => {
+  const email = localStorage.getItem("email");
+
+  if (email) {
+    loadProfile();
+  }
+}, []);
+
 
   return (
     <div className="container-fluid p-0">
@@ -140,15 +174,13 @@ onClick={() => navigate("/allteachers")}
 
       {/* Settings */}
 
-      <button
-        className="btn btn-outline-light border-0 w-100 text-start rounded-4 mb-3 p-3"
-      >
-
-        <Gear className="me-3" />
-
-        Settings
-
-      </button>
+<button
+  className="btn btn-outline-light border-0 w-100 text-start rounded-4 mb-3 p-3"
+  onClick={() => navigate("/settings")}
+>
+  <Gear className="me-3" />
+  Settings
+</button>
 
     </div>
 
@@ -177,70 +209,70 @@ onClick={() => navigate("/allteachers")}
         <div
           className="col-md-10"
           style={{
-            background: "#f5f7fb",
-            minHeight: "100vh",
+            background: darkMode ? "#2f343a" : "#eef2f7",
+    minHeight: "100vh",
           }}
         >
 
-          {/* NAVBAR */}
-
-          <div className="d-flex justify-content-between align-items-center p-4">
-
-            <h2 className="fw-bold">
-              Payment
-            </h2>
-
-            <div className="d-flex align-items-center">
-
-              <Bell size={22} />
-
-              <img
-                src="https://i.pravatar.cc/100"
-                alt=""
-                className="rounded-circle ms-4"
-                width="45"
-                height="45"
-              />
-
-              
 <div
-  className="ms-3"
-  style={{ cursor: "pointer" }}
-  onClick={() => navigate("/studentprofile")}
+  className="shadow-sm px-5 py-3 d-flex justify-content-between align-items-center"
+  style={{
+    background: darkMode ? "#3a4047" : "#ffffff",
+    color: darkMode ? "#ffffff" : "#000000",
+  }}
 >
+  <div>
+    <h2
+      className="fw-bold mb-0"
+      style={{
+        color: darkMode ? "#ffffff" : "#000000",
+      }}
+    >
+      Payment
+    </h2>
 
-  <h5 className="mb-0 fw-bold">
+    <small
+      style={{
+        color: darkMode ? "#d1d5db" : "#6c757d",
+      }}
+    >
+      Choose your preferred payment method
+    </small>
+  </div>
 
-    Thusara Dilshan
+  <div className="d-flex align-items-center">
+    <div className="position-relative me-4">
+      <Bell size={28} />
 
-  </h5>
+    </div>
 
-  <small className="text-muted">
-
-    Student
-
-  </small>
-
+<StudentProfileDropdown
+  fullName={formData.fullName}
+  profileImage={formData.profileImage}
+/>
+  </div>
 </div>
-
-              <ChevronDown className="ms-2" />
-
-            </div>
-
-          </div>
           {/* ================= PAYMENT OPTIONS ================= */}
 
 <div className="container mt-4">
 
   <div className="text-center mb-5">
 
-    <h1 className="fw-bold display-5 text-primary">
-      Payment Options
-    </h1>
+<h1
+  style={{
+    color: darkMode ? "#ffffff" : "#0d6efd"
+  }}
+>
+  Payment Options
+</h1>
 
-    <p className="text-muted fs-5">
-      Choose your preferred payment method
-    </p>
+<p
+  style={{
+    color: darkMode ? "#d1d5db" : "#6c757d"
+  }}
+>
+  Choose your preferred payment method
+</p>
 
   </div>
 
@@ -250,7 +282,13 @@ onClick={() => navigate("/allteachers")}
 
     <div className="col-lg-6">
 
-      <div className="card border-0 shadow-lg rounded-5 h-100">
+      <div
+  className="card border-0 shadow rounded-4"
+  style={{
+    background: darkMode ? "#3a4047" : "#ffffff",
+    color: darkMode ? "#ffffff" : "#000000",
+  }}
+>
 
         <div className="card-body text-center p-5">
 
@@ -275,7 +313,7 @@ onClick={() => navigate("/allteachers")}
 
           </h2>
 
-          <p className="text-muted fs-5">
+          <p className=" fs-5">
 
             Pay your class fees securely using
             Debit Card, Credit Card or Online Banking.
@@ -303,7 +341,13 @@ onClick={() => navigate("/allteachers")}
 
     <div className="col-lg-6">
 
-      <div className="card border-0 shadow-lg rounded-5 h-100">
+<div
+  className="card border-0 shadow rounded-4"
+  style={{
+    background: darkMode ? "#3a4047" : "#ffffff",
+    color: darkMode ? "#ffffff" : "#000000",
+  }}
+>
 
         <div className="card-body text-center p-5">
 
@@ -328,7 +372,7 @@ onClick={() => navigate("/allteachers")}
 
           </h2>
 
-          <p className="text-muted fs-5">
+          <p className=" fs-5">
 
             Deposit the payment to our bank account
             and upload your payment slip.
