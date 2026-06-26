@@ -22,6 +22,7 @@ import {
 
 import logo from "../assets/image-removebg-preview.png";
 import StudentProfileDropdown from "../components/StudentProfileDropdown";
+import StudentProfileDropdown from "../components/StudentProfileDropdown";
 
 function StudentDashboard() {
 
@@ -224,7 +225,7 @@ onClick={() => navigate("/allteachers")}
               className="row rounded-4 overflow-hidden shadow"
               style={{
                 background: "linear-gradient(135deg,#002c99 0%,#0047ff 100%)",
-                minHeight: "180px",
+                minHeight: "250px",
               }}
             >
               {/* Left Side */}

@@ -24,6 +24,8 @@ import logo from "../assets/image-removebg-preview.png";
 import profile from "../assets/profile.png";
 import StudentProfileDropdown from "../components/StudentProfileDropdown";
 import API from "../services/api";
+import StudentProfileDropdown from "../components/StudentProfileDropdown";
+import API from "../services/api";
 
 function MyCourses() {
 
@@ -374,12 +376,13 @@ onClick={() => navigate("/allteachers")}
 
     <div className="d-flex justify-content-center gap-3 flex-wrap">
 
-      <button
-  className="btn btn-primary"
-  onClick={() => navigate("/recordings")}
->
-  Recording
-</button>
+      <button className="btn btn-outline-primary rounded-pill px-4">
+
+        <PlayCircle className="me-2" />
+
+        Recording
+
+      </button>
 
       <button
   className="btn btn-primary rounded-pill px-4"

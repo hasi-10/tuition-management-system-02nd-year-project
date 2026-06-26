@@ -80,7 +80,18 @@ function App() {
         <Route path="/teacher/edit-quiz/:id" element={<EditQuiz />} />
         <Route path="/teacher/submissions/:quizId" element={<TeacherSubmissions />} />
         <Route path="/teacher/submission/:id" element={<SubmissionDetails />} />
-
+        <Route path="/settings" element={<Settings />} />
+        <Route path="/admindashboard" element={<AdminDashboard />} />
+        <Route path="/adminteachers" element={<AdminTeachers />} />
+        <Route path="/admin-add-teacher" element={<AdminAddTeacher />} />
+        <Route path="/admin-teacher-profile" element={<AdminTeacherProfile />} />
+        <Route path="/admin-edit-teacher" element={<AdminEditTeacher />} />
+        <Route path="/adminstudents" element={<AdminStudents />} />
+        <Route path="/admin-student-profile" element={<AdminStudentProfile />} />
+        <Route path="/adminpayments" element={<AdminPayments />} />
+        <Route path="/payment-details" element={<PaymentDetails />} />
+        <Route path="/adminquizzes" element={<AdminQuizzes />} />
+        <Route path="/admin-quiz-details" element={<AdminQuizDetails />} />
 
 
 
