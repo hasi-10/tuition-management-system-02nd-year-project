@@ -77,7 +77,7 @@ function Timetable() {
         <div className="text-end mt-4">
           <button
             className="btn btn-dark"
-            onClick={() => navigate("/")}
+            onClick={() => navigate(-1)}
           >
             Back
           </button>

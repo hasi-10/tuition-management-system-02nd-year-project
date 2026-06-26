@@ -18,6 +18,7 @@ import {
 import logo from "../assets/image-removebg-preview.png";
 import profile from "../assets/profile.png";
 import teacher from "../assets/profile.png";
+import StudentProfileDropdown from "../components/StudentProfileDropdown";
 
 function Teachers() {
   const navigate = useNavigate();
