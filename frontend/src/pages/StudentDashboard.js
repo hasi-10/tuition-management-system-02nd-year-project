@@ -21,6 +21,7 @@ import {
 } from "react-bootstrap-icons";
 
 import logo from "../assets/image-removebg-preview.png";
+import StudentProfileDropdown from "../components/StudentProfileDropdown";
 
 function StudentDashboard() {
 
@@ -32,6 +33,13 @@ function StudentDashboard() {
 
   // ✅ FIXED: Added navigate hook
   const navigate = useNavigate();
+const [darkMode, setDarkMode] = useState(false);
+
+useEffect(() => {
+  const savedTheme = localStorage.getItem("theme");
+  setDarkMode(savedTheme === "dark");
+}, []);
+
   const [student, setStudent] = useState({
   fullName: "",
   profileImage: "",
@@ -110,14 +118,17 @@ const loadProfile = async () => {
   My Courses
 </button>
 
-              <button className="btn btn-outline-light border-0 w-100 text-start rounded-4 mb-3 p-3">
-                <Calendar3 className="me-3" />
-                Timetable
-              </button>
+<button
+  className="btn btn-outline-light border-0 w-100 text-start rounded-4 mb-3 p-3"
+  onClick={() => navigate("/timetable")}
+>
+  <Calendar3 className="me-3" />
+  Timetable
+</button>
 
 <button
   className="btn btn-outline-light border-0 w-100 text-start rounded-4 mb-3 p-3"
-  onClick={() => navigate("/allteachers")}
+onClick={() => navigate("/allteachers")}
 >
   <PersonVideo className="me-3" />
   Teachers
@@ -141,10 +152,13 @@ const loadProfile = async () => {
                 Material Tracking
               </button>
 
-              <button className="btn btn-outline-light border-0 w-100 text-start rounded-4 mb-3 p-3">
-                <Gear className="me-3" />
-                Settings
-              </button>
+<button
+  className="btn btn-outline-light border-0 w-100 text-start rounded-4 mb-3 p-3"
+  onClick={() => navigate("/settings")}
+>
+  <Gear className="me-3" />
+  Settings
+</button>
             </div>
           </div>
 
@@ -161,33 +175,48 @@ const loadProfile = async () => {
         <div
           className="col-lg-9 col-xl-10"
           style={{
-            background: "#edf3fb",
+            background: darkMode ? "#2f343a" : "#eef2f7",
             minHeight: "100vh",
           }}
         >
-          {/* Navbar */}
-          <div className="bg-white shadow-sm px-5 py-3 d-flex justify-content-between align-items-center">
-            <h1 className="fw-bold">Dashboard</h1>
+<div
+  className="shadow-sm px-5 py-3 d-flex justify-content-between align-items-center"
+  style={{
+    background: darkMode ? "#3a4047" : "#ffffff",
+    color: darkMode ? "#ffffff" : "#000000",
+  }}
+>
+  <div>
+    <h2
+      className="fw-bold mb-0"
+      style={{
+        color: darkMode ? "#ffffff" : "#000000",
+      }}
+    >
+      Dashboard
+    </h2>
 
-            <div className="d-flex align-items-center">
-              <div className="position-relative me-4">
-                <Bell size={28} />
-                <span className="badge bg-warning rounded-pill position-absolute top-0 start-100 translate-middle">
-                  3
-                </span>
-              </div>
+    <small
+      style={{
+        color: darkMode ? "#d1d5db" : "#6c757d",
+      }}
+    >
+      Welcome back to your learning dashboard
+    </small>
+  </div>
 
-              <div
-                style={{ cursor: "pointer" }}
-                onClick={() => navigate("/studentprofile")}
-              >
-                <h5 className="mb-0 fw-bold">
-  {student.fullName || "Student"}
-</h5>
-                <small className="text-muted">Student</small>
-              </div>
-            </div>
-          </div>
+  <div className="d-flex align-items-center">
+    <div className="position-relative me-4">
+      <Bell size={28} />
+     
+    </div>
+
+    <StudentProfileDropdown
+      fullName={student.fullName || "Student"}
+      profileImage={student.profileImage}
+    />
+  </div>
+</div>
 
           {/* ================= WELCOME SECTION ================= */}
           <div className="container-fluid p-4">
@@ -225,14 +254,27 @@ const loadProfile = async () => {
 
           {/* ================= CALENDAR CARD ================= */}
           <div className="container-fluid px-4 pb-4">
-            <div className="card border-0 shadow rounded-4">
+                 <div
+  className="card border-0 shadow rounded-4"
+  style={{
+    background: darkMode ? "#3a4047" : "#ffffff",
+    color: darkMode ? "#ffffff" : "#000000",
+  }}
+>
               <div className="card-body p-4">
                 <div className="d-flex justify-content-between align-items-center mb-4">
                   <h2 className="fw-bold">{monthYear}</h2>
                   {/* ✅ Professional date display */}
-                  <button className="btn btn-outline-secondary rounded-4 px-4">
-                    📅 Today: {todayDate}
-                  </button>
+<button
+  className="rounded-4 px-4"
+  style={{
+    background: darkMode ? "#495057" : "#ffffff",
+    color: darkMode ? "#ffffff" : "#000000",
+    border: darkMode ? "1px solid #6c757d" : "1px solid #ced4da",
+  }}
+>
+  📅 Today: {todayDate}
+</button>
                 </div>
 
                 <div className="d-flex justify-content-center">

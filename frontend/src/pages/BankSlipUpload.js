@@ -22,6 +22,13 @@ import {
 function BankSlipUpload() {
 
   const navigate = useNavigate();
+  const [darkMode, setDarkMode] = useState(false);
+
+  useEffect(() => {
+    const savedTheme = localStorage.getItem("theme");
+    setDarkMode(savedTheme === "dark");
+  }, []);
+
   const location = useLocation();
 
   // Data coming from Teacher Profile
@@ -115,9 +122,9 @@ function BankSlipUpload() {
 
       );
 
-      alert(response.data.message);
-      navigate("/studentdashboard");
-    } catch (error) {
+    alert(response.data.message);
+
+  } catch (error) {
 
       console.log(error);
       alert("Upload Failed");
@@ -229,17 +236,23 @@ function BankSlipUpload() {
 
         {/* ================= MAIN CONTENT ================= */}
 
-        <div
-          className="col-lg-9 col-xl-10"
-          style={{
-            background: "#f8f9fc",
-            minHeight: "100vh",
-          }}
-        >
+<div
+  className="col-lg-9 col-xl-10"
+  style={{
+    background: darkMode ? "#343a40" : "#eef2f7",
+    minHeight: "100vh",
+  }}
+>
 
           {/* TOP BAR */}
 
-          <div className="d-flex justify-content-end align-items-center p-4 border-bottom">
+<div
+  className="d-flex justify-content-end align-items-center p-4 border-bottom"
+  style={{
+    background: darkMode ? "#3a4047" : "#ffffff",
+    color: darkMode ? "#ffffff" : "#000000",
+  }}
+>
 
             <Bell size={24} className="me-4" />
 
@@ -279,15 +292,15 @@ function BankSlipUpload() {
 
             <div className="text-center mb-5">
 
-              <div className="text-center mb-5">
+<div className="text-center mb-5">
 
-                <h1 className="fw-bold display-5 text-primary">
-                  Upload Payment Slip
-                </h1>
+  <h1 className="fw-bold display-5 text-primary">
+    Upload Payment Slip
+  </h1>
 
-                <p className="text-muted fs-5">
-                  Upload your bank payment slip for verification
-                </p>
+  <p className="text-muted fs-5">
+    Upload your bank payment slip for verification
+  </p>
 
               </div>
 
@@ -295,7 +308,7 @@ function BankSlipUpload() {
 
             {/* ================= FORM CARD ================= */}
 
-            <div className="card border-0 shadow rounded-5">
+<div className="card border-0 shadow rounded-5">
 
               <div className="card-body p-5">
 
@@ -521,7 +534,7 @@ function BankSlipUpload() {
 
             {/* ================= UPLOAD CARD ================= */}
 
-            <div className="card border-0 shadow rounded-5 mt-4">
+<div className="card border-0 shadow rounded-5 mt-4">
 
               <div className="card-body p-5">
 
@@ -550,7 +563,7 @@ function BankSlipUpload() {
 
                   </h3>
 
-                  <p className="text-muted fs-5">
+      <p className="text-muted fs-5">
 
                     Drop files here or click to browse
 

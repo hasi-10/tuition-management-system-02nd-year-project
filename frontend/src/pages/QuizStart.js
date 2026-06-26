@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 
 import {
@@ -8,9 +8,44 @@ import {
 } from "react-bootstrap-icons";
 
 import logo from "../assets/image-removebg-preview.png";
+import API from "../services/api";
+import StudentProfileDropdown from "../components/StudentProfileDropdown";
 
 function QuizStart() {
+
+const [formData, setFormData] = useState({
+  fullName: "",
+  profileImage: "",
+});
+
+
+  const loadProfile = async () => {
+  try {
+    const email = localStorage.getItem("email");
+
+    const res = await API.get(`/profile/${email}`);
+
+    setFormData(res.data.data);
+  } catch (error) {
+    console.log(error);
+  }
+};
+useEffect(() => {
+  const email = localStorage.getItem("email");
+
+  if (email) {
+    loadProfile();
+  }
+}, []);
+
   const navigate = useNavigate();
+  const [darkMode, setDarkMode] = useState(false);
+
+  useEffect(() => {
+    const savedTheme = localStorage.getItem("theme");
+    setDarkMode(savedTheme === "dark");
+  }, []);
+
   const location = useLocation();
 
   const quizData = location.state || {
@@ -19,22 +54,24 @@ function QuizStart() {
   };
 
   return (
-    <div
-      className="container-fluid p-0"
-      style={{
-        minHeight: "100vh",
-        background: "#f4f6fb",
-      }}
-    >
+<div
+  className="container-fluid p-0"
+  style={{
+    background: darkMode ? "#2f343a" : "#eef2f7",
+    minHeight: "100vh",
+  }}
+>
       {/* ================= NAVBAR ================= */}
 
-      <div
-        className="d-flex justify-content-between align-items-center px-5"
-        style={{
-          height: "95px",
-          background: "linear-gradient(90deg,#001a75,#0033cc)",
-        }}
-      >
+<div
+  className="shadow-sm px-5 py-3 d-flex justify-content-between align-items-center"
+  style={{
+    background: darkMode
+      ? "#3a4047"
+      : "linear-gradient(90deg,#001a75,#0033cc)",
+    color: "#ffffff",
+  }}
+>
         {/* Logo */}
 
         <img
@@ -48,27 +85,15 @@ function QuizStart() {
         {/* User */}
 
         <div className="d-flex align-items-center">
-          <Bell
-            size={24}
-            color="white"
-            className="me-4"
-          />
 
-          <PersonCircle
-            size={48}
-            color="white"
-          />
+  <Bell size={28} className="me-4" />
 
-          <div className="ms-3">
-            <h5 className="text-white fw-bold mb-0">
-              Thusara Dilshan
-            </h5>
+  <StudentProfileDropdown
+    fullName={formData.fullName}
+    profileImage={formData.profileImage}
+  />
 
-            <small className="text-white">
-              Student
-            </small>
-          </div>
-        </div>
+</div>
       </div>
 
       {/* ================= BODY ================= */}
@@ -78,7 +103,7 @@ function QuizStart() {
         <h1
           className="text-center fw-bold mb-4"
           style={{
-            color: "#0033cc",
+            color: darkMode ? "#ffffff" : "#001a70",
             fontSize: "46px",
             letterSpacing: "2px",
           }}
@@ -89,6 +114,8 @@ function QuizStart() {
         <div
           className="card border-0 rounded-5 mx-auto"
           style={{
+            background: darkMode ? "#3a4047" : "#ffffff",
+    color: darkMode ? "#ffffff" : "#000000",
             maxWidth: "700px",
             boxShadow: "0 10px 30px rgba(0,0,0,0.12)",
           }}
@@ -102,14 +129,14 @@ function QuizStart() {
               <h2
                 className="fw-bold mb-3"
                 style={{
-                  color: "#001a70",
+                  color: darkMode ? "#ffffff" : "#000000",
                 }}
               >
                 {quizData.subject} Quiz
               </h2>
 
               <p
-                className="text-muted mb-5"
+                className=" mb-5"
                 style={{
                   fontSize: "18px",
                 }}
@@ -123,14 +150,16 @@ function QuizStart() {
               <div
                 className="rounded-4 text-center py-4 px-5"
                 style={{
-                  background: "#eef3ff",
-                  minWidth: "250px",
+                background: darkMode ? "#3a4047" : "#ffffff",
+    color: darkMode ? "#ffffff" : "#000000",
+                border: "1px solid #e9ecef",
                 }}
               >
 
                 <h6
-                  className="text-muted fw-bold mb-2"
+                  className=" fw-bold mb-2"
                   style={{
+                    
                     letterSpacing: "1px",
                   }}
                 >
@@ -148,7 +177,7 @@ function QuizStart() {
                 </h1>
 
                 <h5
-                  className="text-muted mb-0"
+                  className=" mb-0"
                 >
                   Minutes
                 </h5>
@@ -163,7 +192,8 @@ function QuizStart() {
             <div
               className="rounded-4 p-4 mb-4"
               style={{
-                background: "#f8f9fc",
+                background: darkMode ? "#3a4047" : "#ffffff",
+    color: darkMode ? "#ffffff" : "#000000",
                 border: "1px solid #e9ecef",
               }}
             >
@@ -172,7 +202,7 @@ function QuizStart() {
 
                 <div className="col-6">
 
-                  <h6 className="text-muted fw-bold mb-2">
+                  <h6 className=" fw-bold mb-2">
                     SUBJECT
                   </h6>
 
@@ -189,7 +219,7 @@ function QuizStart() {
 
                 <div className="col-6">
 
-                  <h6 className="text-muted fw-bold mb-2">
+                  <h6 className=" fw-bold mb-2">
                     STATUS
                   </h6>
 
@@ -230,17 +260,19 @@ function QuizStart() {
                 ▶ Start Quiz
               </button>
 
-              <button
-                className="btn btn-outline-secondary fw-bold rounded-pill"
-                style={{
-                  fontSize: "20px",
-                  padding: "12px 45px",
-                  minWidth: "180px",
-                }}
-                onClick={() => navigate("/mycourses")}
-              >
-                Cancel
-              </button>
+<button
+  className="fw-bold rounded-pill border-0"
+  style={{
+    fontSize: "20px",
+    padding: "12px 45px",
+    minWidth: "180px",
+    background: darkMode ? "#6c757d" : "#212529",
+    color: "#ffffff",
+  }}
+  onClick={() => navigate("/mycourses")}
+>
+  Cancel
+</button>
 
             </div>
 
@@ -257,12 +289,15 @@ function QuizStart() {
         >
 
           <button
-            className="btn btn-outline-secondary rounded-pill fw-bold"
-            style={{
-              padding: "8px 28px",
-              fontSize: "16px",
-              minWidth: "120px",
-            }}
+           
+  className="fw-bold rounded-pill border-0"
+  style={{
+    fontSize: "16px",
+    padding: "8px 28px",
+    minWidth: "120px",
+    background: darkMode ? "#6c757d" : "#212529",
+    color: "#ffffff",
+  }}
             onClick={() => navigate("/quiz-instructions")}
           >
             ← Back

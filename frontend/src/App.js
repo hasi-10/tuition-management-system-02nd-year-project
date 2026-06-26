@@ -80,14 +80,7 @@ function App() {
         <Route path="/teacher/edit-quiz/:id" element={<EditQuiz />} />
         <Route path="/teacher/submissions/:quizId" element={<TeacherSubmissions />} />
         <Route path="/teacher/submission/:id" element={<SubmissionDetails />} />
-        
-        <Route path="/teacher-edit-profile" element={<EditProfile />} />
-        <Route path="/teacher-classes" element={<TeacherClasses />}/>
-        <Route path="/teacher-upload-recording" element={<TeacherUploadRecording />}/>
-        <Route path="/recordings" element={<ClassRecordings />}/>
-        <Route path="/teacher-start-class"  element={<TeacherStartClass />}/>
-        <Route path="/student-online-class"element={<StudentOnlineClass />}/>
-        <Route path="/teacher-my-profile"element={<TeacherMyProfile />}/>
+
 
 
 

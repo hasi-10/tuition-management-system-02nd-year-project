@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 
 import {
@@ -8,10 +8,26 @@ import {
 } from "react-bootstrap-icons";
 
 import logo from "../assets/image-removebg-preview.png";
+import API from "../services/api";
+import StudentProfileDropdown from "../components/StudentProfileDropdown";
 
 function QuizResults() {
 
+  const [formData, setFormData] = useState({
+    fullName: "",
+    profileImage: "",
+  });
+  
+
   const navigate = useNavigate();
+  const [darkMode, setDarkMode] = useState(false);
+
+  useEffect(() => {
+    const savedTheme = localStorage.getItem("theme");
+    setDarkMode(savedTheme === "dark");
+  }, []);
+
+
   const location = useLocation();
 
   const result = location.state || {
@@ -24,6 +40,25 @@ function QuizResults() {
     timeTaken: "18:45",
 
   };
+
+    const loadProfile = async () => {
+  try {
+    const email = localStorage.getItem("email");
+
+    const res = await API.get(`/profile/${email}`);
+
+    setFormData(res.data.data);
+  } catch (error) {
+    console.log(error);
+  }
+};
+useEffect(() => {
+  const email = localStorage.getItem("email");
+
+  if (email) {
+    loadProfile();
+  }
+}, []);
 
   const percentage = Math.round(
     (result.score / result.total) * 100
@@ -56,24 +91,24 @@ function QuizResults() {
 
   return (
 
-    <div
-      className="container-fluid p-0"
-      style={{
-        minHeight: "100vh",
-        background: "#f4f6fb",
-      }}
-    >
-
+<div
+  className="container-fluid p-0"
+  style={{
+    background: darkMode ? "#2f343a" : "#eef2f7",
+    minHeight: "100vh",
+  }}
+>
       {/* ================= NAVBAR ================= */}
 
-      <div
-        className="d-flex justify-content-between align-items-center px-5"
-        style={{
-          height: "95px",
-          background:
-            "linear-gradient(90deg,#001a75,#0033cc)",
-        }}
-      >
+<div
+  className="shadow-sm px-5 py-3 d-flex justify-content-between align-items-center"
+  style={{
+    background: darkMode
+      ? "#3a4047"
+      : "linear-gradient(90deg,#001a75,#0033cc)",
+    color: "#ffffff",
+  }}
+>
 
         <img
           src={logo}
@@ -85,30 +120,14 @@ function QuizResults() {
 
         <div className="d-flex align-items-center">
 
-          <Bell
-            size={24}
-            color="white"
-            className="me-4"
-          />
+  <Bell size={28} className="me-4" />
 
-          <PersonCircle
-            size={48}
-            color="white"
-          />
+  <StudentProfileDropdown
+    fullName={formData.fullName}
+    profileImage={formData.profileImage}
+  />
 
-          <div className="ms-3">
-
-            <h5 className="text-white fw-bold mb-0">
-              Thusara Dilshan
-            </h5>
-
-            <small className="text-white">
-              Student
-            </small>
-
-          </div>
-
-        </div>
+</div>
 
       </div>
 
@@ -119,7 +138,7 @@ function QuizResults() {
         <h1
           className="text-center fw-bold"
           style={{
-            color: "#0033cc",
+            color: darkMode ? "#ffffff" : "#000000",
             fontSize: "46px",
             letterSpacing: "2px",
           }}
@@ -130,6 +149,8 @@ function QuizResults() {
         <div
           className="card border-0 rounded-5 mx-auto mt-4"
           style={{
+            background: darkMode ? "#3a4047" : "#ffffff",
+    color: darkMode ? "#ffffff" : "#000000",
             maxWidth: "800px",
             boxShadow: "0 10px 30px rgba(0,0,0,0.12)",
           }}
@@ -146,7 +167,7 @@ function QuizResults() {
             <h2
               className="fw-bold"
               style={{
-                color: "#001a70",
+                color: darkMode ? "#ffffff" : "#000000",
               }}
             >
               Quiz Completed
@@ -189,7 +210,7 @@ function QuizResults() {
 
             </h3>
 
-            <p className="text-muted">
+            <p>
 
               You have successfully completed the quiz.
 
@@ -202,13 +223,14 @@ function QuizResults() {
 
               <div className="col-md-6">
 
-                <div
-                  className="card border-0 rounded-4 h-100"
-                  style={{
-                    background: "#f8fff8",
-                    boxShadow: "0 5px 15px rgba(0,0,0,0.08)",
-                  }}
-                >
+      <div
+  className="card border-0 shadow rounded-4"
+  style={{
+    background: darkMode ? "#3a4047" : "#ffffff",
+    color: darkMode ? "#ffffff" : "#000000",
+  }}
+>
+
 
                   <div className="card-body text-center py-4">
 
@@ -242,13 +264,14 @@ function QuizResults() {
 
               <div className="col-md-6">
 
-                <div
-                  className="card border-0 rounded-4 h-100"
-                  style={{
-                    background: "#fff8f8",
-                    boxShadow: "0 5px 15px rgba(0,0,0,0.08)",
-                  }}
-                >
+      <div
+  className="card border-0 shadow rounded-4"
+  style={{
+    background: darkMode ? "#3a4047" : "#ffffff",
+    color: darkMode ? "#ffffff" : "#000000",
+  }}
+>
+
 
                   <div className="card-body text-center py-4">
 
@@ -282,13 +305,14 @@ function QuizResults() {
 
               <div className="col-md-6">
 
-                <div
-                  className="card border-0 rounded-4 h-100"
-                  style={{
-                    background: "#f5f9ff",
-                    boxShadow: "0 5px 15px rgba(0,0,0,0.08)",
-                  }}
-                >
+      <div
+  className="card border-0 shadow rounded-4"
+  style={{
+    background: darkMode ? "#3a4047" : "#ffffff",
+    color: darkMode ? "#ffffff" : "#000000",
+  }}
+>
+
 
                   <div className="card-body text-center py-4">
 
@@ -309,7 +333,7 @@ function QuizResults() {
                     <h4
                       className="fw-bold"
                       style={{
-                        color: "#0033cc",
+                        color: darkMode ? "#1285cc" : "#001a70",
                       }}
                     >
                       {result.subject}
@@ -325,13 +349,14 @@ function QuizResults() {
 
               <div className="col-md-6">
 
-                <div
-                  className="card border-0 rounded-4 h-100"
-                  style={{
-                    background: "#fffdf5",
-                    boxShadow: "0 5px 15px rgba(0,0,0,0.08)",
-                  }}
-                >
+      <div
+  className="card border-0 shadow rounded-4"
+  style={{
+    background: darkMode ? "#3a4047" : "#ffffff",
+    color: darkMode ? "#ffffff" : "#000000",
+  }}
+>
+
 
                   <div className="card-body text-center py-4">
 
@@ -352,7 +377,7 @@ function QuizResults() {
                     <h4
                       className="fw-bold"
                       style={{
-                        color: "#0033cc",
+                        color: "#19845d",
                       }}
                     >
                       {result.timeTaken}
@@ -416,12 +441,19 @@ onClick={() =>
           }}
         >
 
-          <button
-            className="btn btn-outline-secondary rounded-pill px-4 fw-bold"
-            onClick={() => navigate("/quiz-questions")}
-          >
-            ← Back
-          </button>
+<button
+  className="fw-bold rounded-pill border-0"
+  style={{
+    fontSize: "16px",
+    padding: "8px 28px",
+    minWidth: "120px",
+    background: darkMode ? "#6c757d" : "#212529",
+    color: "#ffffff",
+  }}
+  onClick={() => navigate("/mycourses")}
+>
+  ← Back
+</button>
 
         </div>
 

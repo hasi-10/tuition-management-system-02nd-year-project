@@ -22,10 +22,25 @@ import {
 
 import logo from "../assets/image-removebg-preview.png";
 import profile from "../assets/profile.png";
+import StudentProfileDropdown from "../components/StudentProfileDropdown";
+import API from "../services/api";
 
 function MyCourses() {
 
+  
+  const [formData, setFormData] = useState({
+  fullName: "",
+  profileImage: "",
+});
+
+
   const navigate = useNavigate();
+    const [darkMode, setDarkMode] = useState(false);
+  
+    useEffect(() => {
+      const savedTheme = localStorage.getItem("theme");
+      setDarkMode(savedTheme === "dark");
+    }, []);
 
   const [courses, setCourses] = useState([]);
 
@@ -54,16 +69,35 @@ function MyCourses() {
     }
 
   };
+  const loadProfile = async () => {
+  try {
+    const email = localStorage.getItem("email");
+
+    const res = await API.get(`/profile/${email}`);
+
+    setFormData(res.data.data);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+useEffect(() => {
+  const email = localStorage.getItem("email");
+
+  if (email) {
+    loadProfile();
+  }
+}, []);
 
   return (
 
-    <div
-      className="container-fluid p-0"
-      style={{
-        background: "#eef2f7",
-        minHeight: "100vh",
-      }}
-    >
+<div
+  className="container-fluid p-0"
+  style={{
+    background: darkMode ? "#2f343a" : "#eef2f7",
+    minHeight: "100vh",
+  }}
+>
 
       <div className="row g-0">
 
@@ -148,13 +182,13 @@ onClick={() => navigate("/allteachers")}
                 Material Tracking
               </NavLink>
 
-              <NavLink
-                to="/settings"
-                className="btn btn-outline-light border-0 w-100 text-start rounded-4 mb-3 p-3"
-              >
-                <Gear className="me-3" />
-                Settings
-              </NavLink>
+<button
+  className="btn btn-outline-light border-0 w-100 text-start rounded-4 mb-3 p-3"
+  onClick={() => navigate("/settings")}
+>
+  <Gear className="me-3" />
+  Settings
+</button>
 
             </div>
 
@@ -182,50 +216,41 @@ onClick={() => navigate("/allteachers")}
 
           {/* Top Navbar */}
 
-          <div className="bg-white shadow-sm px-5 py-3 d-flex justify-content-between align-items-center">
-
-            <h2 className="fw-bold mb-0">
-
-              My Courses
-
-            </h2>
-
-            <div className="d-flex align-items-center">
-
-              <Bell size={22} className="me-4" />
-
-              <img
-                src={profile}
-                alt="profile"
-                style={{
-                  width: "55px",
-                  height: "55px",
-                  borderRadius: "50%",
-                  objectFit: "cover",
-                }}
-              />
-
 <div
-  className="ms-3"
-  style={{ cursor: "pointer" }}
-  onClick={() => navigate("/studentprofile")}
+  className="shadow-sm px-5 py-3 d-flex justify-content-between align-items-center"
+  style={{
+    background: darkMode ? "#3a4047" : "#ffffff",
+    color: darkMode ? "#ffffff" : "#000000",
+  }}
 >
+  <div>
+    <h2
+      className="fw-bold mb-0"
+      style={{
+        color: darkMode ? "#ffffff" : "#000000",
+      }}
+    >
+      My Courses
+    </h2>
 
-  <h5 className="mb-0 fw-bold">
-    Thusara Dilshan
-  </h5>
+    <small
+      style={{
+        color: darkMode ? "#d1d5db" : "#6c757d",
+      }}
+    >
+      Access your enrolled courses and learning materials
+    </small>
+  </div>
 
-  <small className="text-muted">
-    Student
-  </small>
+  <div className="d-flex align-items-center">
+    <Bell size={28} className="me-4" />
 
+<StudentProfileDropdown
+  fullName={formData.fullName}
+  profileImage={formData.profileImage}
+/>
+  </div>
 </div>
-
-              <ChevronDown className="ms-3" />
-
-            </div>
-
-          </div>
 
           <div className="text-end p-4">
 
@@ -257,9 +282,13 @@ onClick={() => navigate("/allteachers")}
 
               courses.map((course, index) => (
 
-            <div
+<div
   key={index}
   className="card border-0 shadow-lg rounded-4 mb-4 overflow-hidden"
+  style={{
+    background: darkMode ? "#495057" : "#ffffff",
+    color: darkMode ? "#ffffff" : "#000000",
+  }}
 >
 
   {/* Header */}
@@ -267,7 +296,9 @@ onClick={() => navigate("/allteachers")}
   <div
     className="d-flex justify-content-between align-items-center px-4 py-3"
     style={{
-      background: "linear-gradient(90deg,#0033cc,#005eff)",
+      background: darkMode
+  ? "linear-gradient(90deg,#1f2937,#374151)"
+  : "linear-gradient(90deg,#0033cc,#005eff)",
       color: "white",
     }}
   >
@@ -304,11 +335,13 @@ onClick={() => navigate("/allteachers")}
 
       <div className="col-md-6 mb-3">
 
-        <h6 className="text-muted">
-
-          👨‍🏫 Teacher
-
-        </h6>
+<h6
+  style={{
+    color: darkMode ? "#d1d5db" : "#6c757d",
+  }}
+>
+  👨‍🏫 Teacher
+</h6>
 
         <h5 className="fw-bold">
 
@@ -320,12 +353,13 @@ onClick={() => navigate("/allteachers")}
 
       <div className="col-md-6 mb-3">
 
-        <h6 className="text-muted">
-
-          📧 Email
-
-        </h6>
-
+<h6
+  style={{
+    color: darkMode ? "#d1d5db" : "#6c757d",
+  }}
+>
+  📧 Email
+</h6>
         <h6>
 
           {course.email}
@@ -355,7 +389,7 @@ onClick={() => navigate("/allteachers")}
   Join Online Class
 </button>
 <button
-  className="btn btn-outline-success rounded-pill px-4"
+  className="btn btn-success rounded-pill px-4"
 onClick={async () => {
 
   try {
