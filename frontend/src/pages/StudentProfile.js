@@ -99,6 +99,7 @@ function StudentProfile() {
   };
 
   const navigate = useNavigate();
+  
 const [student, setStudent] = useState({
   fullName: "",
   profileImage: "",

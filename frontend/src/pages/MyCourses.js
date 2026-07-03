@@ -26,6 +26,7 @@ import StudentProfileDropdown from "../components/StudentProfileDropdown";
 import API from "../services/api";
 
 
+
 function MyCourses() {
 
   
@@ -55,11 +56,17 @@ function MyCourses() {
 
     try {
 
-      const email = localStorage.getItem("email");
+const email = localStorage.getItem("email");
 
-      const response = await axios.get(
-        `http://localhost:5000/api/payment/${email}`
-      );
+console.log("Student Email:", email);
+
+const response = await axios.get(
+  `http://localhost:5000/api/enrollments/${email}`
+);
+
+console.log("Enrollments:", response.data);
+
+
 
       setCourses(response.data);
 
@@ -322,7 +329,7 @@ onClick={() => navigate("/allteachers")}
 
     <span className="badge bg-success px-3 py-2 rounded-pill">
 
-      Paid
+      {course.status}
 
     </span>
 
@@ -363,7 +370,7 @@ onClick={() => navigate("/allteachers")}
 </h6>
         <h6>
 
-          {course.email}
+          {course.studentEmail}
 
         </h6>
 
@@ -375,13 +382,13 @@ onClick={() => navigate("/allteachers")}
 
     <div className="d-flex justify-content-center gap-3 flex-wrap">
 
-<button
-  className="btn btn-outline-primary rounded-pill px-4"
-  onClick={() => navigate("/class-recordings")}
->
-  <PlayCircle className="me-2" />
-  Recording
-</button>
+      <button className="btn btn-outline-primary rounded-pill px-4">
+
+        <PlayCircle className="me-2" />
+
+        Recording
+
+      </button>
 
       <button
   className="btn btn-primary rounded-pill px-4"

@@ -14,6 +14,86 @@ router.get("/", async (req, res) => {
   }
 });
 
+
+
+
+// =========================
+// GET TEACHER BY EMAIL
+// =========================
+router.get("/email/:email", async (req, res) => {
+  try {
+    const teacher = await Teacher.findOne({
+      email: req.params.email,
+    });
+
+    if (!teacher) {
+      return res.status(404).json({
+        message: "Teacher not found",
+      });
+    }
+
+    res.json(teacher);
+  } catch (err) {
+    res.status(500).json({
+      message: err.message,
+    });
+  }
+});
+
+
+
+
+
+// =========================
+// GET TEACHER BY USER ID
+// =========================
+router.get("/user/:userId", async (req, res) => {
+  try {
+    const teacher = await Teacher.findOne({
+      userId: req.params.userId,
+    });
+
+    if (!teacher) {
+      return res.status(404).json({
+        message: "Teacher not found",
+      });
+    }
+
+    res.json(teacher);
+  } catch (err) {
+    res.status(500).json({
+      message: err.message,
+    });
+  }
+});
+
+
+
+
+// =========================
+// GET TEACHERS BY GRADE
+// =========================
+router.get("/grade/:grade", async (req, res) => {
+  try {
+
+    const teachers = await Teacher.find({
+      grades: req.params.grade,
+    });
+
+    res.json(teachers);
+
+  } catch (err) {
+
+    res.status(500).json({
+      message: err.message,
+    });
+
+  }
+});
+
+
+
+
 // =========================
 // GET ONE TEACHER
 // =========================
@@ -53,7 +133,6 @@ router.put("/:id", async (req, res) => {
     teacher.phone = req.body.phone;
     teacher.subject = req.body.subject;
     teacher.bio = req.body.bio;
-
     teacher.grades = req.body.grades;
     teacher.schedule = req.body.schedule;
 

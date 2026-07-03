@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 import {
   Search,
@@ -21,57 +22,117 @@ function AdminPayments() {
 
   const [search, setSearch] = useState("");
 
-  useEffect(() => {
-    const savedTheme = localStorage.getItem("theme");
-    setDarkMode(savedTheme === "dark");
-  }, []);
+const [payments, setPayments] = useState([]);
 
-  // Temporary Payment Data
-  const [payments] = useState([
-    {
-      id: 1,
-      receipt: "REC001",
-      student: "Nethmi Perera",
-      teacher: "Kamal Silva",
-      grade: "Grade 10",
-      subject: "Mathematics",
-      amount: 2500,
-      method: "Bank Deposit",
-      status: "Pending",
-    },
-    {
-      id: 2,
-      receipt: "REC002",
-      student: "Kavindu Silva",
-      teacher: "Kamal Silva",
-      grade: "Grade 8",
-      subject: "Mathematics",
-      amount: 2500,
-      method: "Online Payment",
-      status: "Verified",
-    },
-    {
-      id: 3,
-      receipt: "REC003",
-      student: "Hasini Fernando",
-      teacher: "Nimal Perera",
-      grade: "Grade 11",
-      subject: "ICT",
-      amount: 3000,
-      method: "Bank Deposit",
-      status: "Rejected",
-    },
-  ]);
 
-  const filteredPayments = payments.filter(
-    (payment) =>
-      payment.student
-        .toLowerCase()
-        .includes(search.toLowerCase()) ||
-      payment.receipt
-        .toLowerCase()
-        .includes(search.toLowerCase())
+
+
+
+
+
+
+
+
+
+const loadPayments = async () => {
+  try {
+    const res = await axios.get(
+      "http://localhost:5000/api/payment"
+    );
+
+    setPayments(res.data);
+
+  } catch (err) {
+
+    console.log(err);
+
+  }
+};
+
+
+
+useEffect(() => {
+
+  const savedTheme = localStorage.getItem("theme");
+
+  setDarkMode(savedTheme === "dark");
+
+  loadPayments();
+
+}, []);
+
+
+
+
+
+
+useEffect(() => {
+  const savedTheme = localStorage.getItem("theme");
+  setDarkMode(savedTheme === "dark");
+
+  loadPayments();
+
+}, []);
+
+ const approvePayment = async (id) => {
+  try {
+
+    await axios.put(
+      `http://localhost:5000/api/payment/approve/${id}`
+    );
+
+    alert("Payment Approved Successfully!");
+
+    loadPayments();
+
+  } catch (err) {
+
+    console.log(err);
+
+    alert("Failed to approve payment.");
+
+  }
+};
+
+
+
+
+
+
+const rejectPayment = async (id) => {
+  try {
+
+    await axios.put(
+      `http://localhost:5000/api/payment/reject/${id}`
+    );
+
+    alert("Payment Rejected!");
+
+    loadPayments();
+
+  } catch (err) {
+
+    console.log(err);
+
+    alert("Failed to reject payment.");
+
+  }
+};
+ 
+
+
+
+const filteredPayments = payments.filter((payment) => {
+  const fullName = `${payment.firstName} ${payment.lastName}`.toLowerCase();
+  const email = (payment.email || "").toLowerCase();
+
+  return (
+    fullName.includes(search.toLowerCase()) ||
+    email.includes(search.toLowerCase())
   );
+});
+
+
 
   return (
     <div className="container-fluid p-0">
@@ -222,7 +283,7 @@ function AdminPayments() {
               color: darkMode ? "#d1d5db" : "#6c757d",
             }}
           >
-            Verified Payments
+            Approved Payments
           </h6>
 
           <h2 className="fw-bold">
@@ -396,7 +457,7 @@ function AdminPayments() {
     >
       <option>All Status</option>
       <option>Pending</option>
-      <option>Verified</option>
+      <option>Approved</option>
       <option>Rejected</option>
     </select>
 
@@ -443,7 +504,7 @@ function AdminPayments() {
 {filteredPayments.map((payment) => (
 
 <tr
-  key={payment.id}
+  key={payment._id}
   style={{
     background: darkMode ? "#3a4047" : "#ffffff",
     color: darkMode ? "#ffffff" : "#000000",
@@ -451,11 +512,11 @@ function AdminPayments() {
 >
 
 <td className="ps-4 fw-bold">
-  {payment.receipt}
+  {payment._id.slice(-6).toUpperCase()}
 </td>
 
 <td>
-  {payment.student}
+  {payment.firstName} {payment.lastName}
 </td>
 
 <td>
@@ -482,12 +543,12 @@ function AdminPayments() {
 
 <span
   className={`badge ${
-    payment.method === "Bank Deposit"
+    payment.paymentMethod === "Bank Deposit"
       ? "bg-warning text-dark"
       : "bg-success"
   } px-3 py-2`}
 >
-  {payment.method}
+  {payment.paymentMethod}
 </span>
 
 </td>
@@ -498,7 +559,7 @@ function AdminPayments() {
   className={`badge ${
     payment.status === "Pending"
       ? "bg-warning text-dark"
-      : payment.status === "Verified"
+      : payment.status === "Approved"
       ? "bg-success"
       : "bg-danger"
   } px-3 py-2`}
@@ -508,21 +569,62 @@ function AdminPayments() {
 
 </td>
 
+
+
 <td className="text-center">
 
-<button
-  className="btn btn-outline-primary rounded-circle"
-  title={
-    payment.status === "Pending"
-      ? "Verify Payment"
-      : "View Payment"
-  }
-  onClick={() => navigate("/payment-details")}
->
-  <EyeFill />
-</button>
+  <button
+    className="btn btn-outline-primary btn-sm me-2"
+    onClick={() => navigate("/payment-details")}
+  >
+    <EyeFill />
+  </button>
+
+  {payment.status === "Pending" && (
+    <>
+      <button
+        className="btn btn-success btn-sm me-2"
+        onClick={() => approvePayment(payment._id)}
+      >
+        Approve
+      </button>
+
+      <button
+        className="btn btn-danger btn-sm"
+        onClick={async () => {
+          try {
+
+            await axios.put(
+              `http://localhost:5000/api/payment/reject/${payment._id}`
+            );
+
+            alert("Payment Rejected");
+
+            loadPayments();
+
+          } catch (err) {
+
+            console.log(err);
+
+            alert("Failed");
+
+          }
+        }}
+      >
+        Reject
+      </button>
+    </>
+  )}
 
 </td>
+
+
+
+
+
+
+
+
 
 </tr>
 

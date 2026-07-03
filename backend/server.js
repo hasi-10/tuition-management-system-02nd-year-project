@@ -6,6 +6,11 @@ const submissionRoutes = require("./routes/submissionRoutes");
 
 const teacherRoutes = require("./routes/Teacher/teacher");
 
+const enrollmentRoutes = require("./routes/Enrollment/enrollment");
+const myTimetableRoutes = require("./routes/Student/myTimetable");
+
+const classRoutes = require("./routes/Class/class");
+
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
@@ -29,11 +34,11 @@ app.use("/api/payment", paymentRoutes);
 app.use("/api/quizzes", quizRoutes);
 app.use("/api/submissions", submissionRoutes);
 app.use("/api/teachers", teacherRoutes);
+app.use("/api/classes", classRoutes);
 
 
-
-
-
+app.use("/api/enrollments", enrollmentRoutes);
+app.use("/api/my-timetable", myTimetableRoutes);
 
 // Routes
 const authRoutes = require("./routes/auth");

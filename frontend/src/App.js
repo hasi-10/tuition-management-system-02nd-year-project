@@ -39,6 +39,7 @@ import ClassRecordings from "./pages/ClassRecordings";
 import TeacherStartClass from "./pages/teacher/TeacherStartClass";
 import StudentOnlineClass from "./pages/StudentOnlineClass";
 import TeacherMyProfile from "./pages/teacher/TeacherMyProfile";
+<<<<<<< HEAD
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import AdminTeachers from "./pages/admin/AdminTeachers";
 import AdminAddTeacher from "./pages/admin/AdminAddTeacher";
@@ -59,8 +60,26 @@ import AdminDeliveryTracking from "./pages/admin/AdminDeliveryTracking";
 import DeliveryDetails from "./pages/admin/DeliveryDetails";
 import AdminReports from "./pages/admin/AdminReports";
 import AdminSettings from "./pages/admin/AdminSettings";
+=======
+import Settings from "./pages/Settings";
 
 
+>>>>>>> origin/main
+
+
+import AdminDashboard from "./pages/admin/AdminDashboard";
+import AdminTeachers from "./pages/admin/AdminTeachers";
+import AdminAddTeacher from "./pages/admin/AdminAddTeacher";
+import AdminTeacherProfile from "./pages/admin/AdminTeacherProfile";
+import AdminEditTeacher from "./pages/admin/AdminEditTeacher";
+import AdminStudents from "./pages/admin/AdminStudents";
+import AdminStudentProfile from "./pages/admin/AdminStudentProfile";
+import AdminPayments from "./pages/admin/AdminPayments";
+import PaymentDetails from "./pages/admin/PaymentDetails";
+import AdminQuizzes from "./pages/admin/AdminQuizzes";
+import AdminQuizDetails from "./pages/admin/AdminQuizDetails";
+
+import MyTimetable from "./pages/MyTimetable";
 
 function App() {
   return (
@@ -75,6 +94,7 @@ function App() {
         <Route path="/verify-code" element={<VerifyCode />} />
         <Route path="/reset-password" element={<ResetPassword />} />
         <Route path="/contact" element={<Contact />} />
+<<<<<<< HEAD
 <Route
   path="/studentdashboard"
   element={
@@ -83,6 +103,62 @@ function App() {
     </ProtectedRoute>
   }
 />
+=======
+        <Route path="/studentdashboard" element={<StudentDashboard />} />
+        <Route path="/studentprofile" element={<StudentProfile />} />
+        <Route path="/payment" element={<Payment />} />
+        <Route path="/paymentsuccess" element={<PaymentSuccess />} />
+        <Route path="/mycourses" element={<MyCourses />} />
+        <Route path="/payment-options" element={<PaymentOptions />} />
+        <Route path="/bank-slip-upload" element={<BankSlipUpload />} />
+        <Route path="/allteachers" element={<AllTeachers />} />
+        <Route path="/olteachers" element={<OLTeachers />} />
+        <Route path="/alteachers" element={<ALTeachers />} />
+        <Route path="/teacherprofile" element={<TeacherProfile />} />
+        <Route path="/quiz-instructions" element={<QuizInstructions />} />
+        <Route path="/quiz-start" element={<QuizStart />} />
+        <Route path="/quiz-questions" element={<QuizQuestions />} />
+        <Route path="/quiz-results" element={<QuizResults />} />
+        <Route path="/quiz-review" element={<QuizReview />} />
+        <Route path="/class-recordings" element={<ClassRecordings />}/>
+        <Route path="/student-online-class"element={<StudentOnlineClass />}/>
+        
+
+        <Route path="/teacher-dashboard" element={<TeacherDashboard />} />
+        <Route path="/teacher-quizzes" element={<TeacherQuizzes />} />
+        <Route path="/teacher/create-quiz" element={<CreateQuiz />} />
+        <Route path="/teacher/view-quiz/:id" element={<TeacherViewQuiz />} />
+        <Route path="/teacher/edit-quiz/:id" element={<EditQuiz />} />
+        <Route path="/teacher/submissions/:quizId" element={<TeacherSubmissions />} />
+        <Route path="/teacher/submission/:id" element={<SubmissionDetails />} />
+        <Route path="/teacher-upload-recording" element={<TeacherUploadRecording />}/>
+        <Route path="/teacher-start-class"element={<TeacherStartClass />}/>
+
+        <Route path="/settings" element={<Settings />} />
+
+        <Route path="/admindashboard" element={<AdminDashboard />} />
+        <Route path="/adminteachers" element={<AdminTeachers />} />
+        <Route path="/admin-add-teacher" element={<AdminAddTeacher />} />
+        <Route path="/admin-teacher-profile" element={<AdminTeacherProfile />} />
+        <Route path="/admin-edit-teacher" element={<AdminEditTeacher />} />
+        <Route path="/adminstudents" element={<AdminStudents />} />
+        <Route path="/admin-student-profile" element={<AdminStudentProfile />} />
+        <Route path="/adminpayments" element={<AdminPayments />} />
+        <Route path="/payment-details" element={<PaymentDetails />} />
+        <Route path="/adminquizzes" element={<AdminQuizzes />} />
+        <Route path="/admin-quiz-details" element={<AdminQuizDetails />} />
+
+<Route path="/teacher-my-profile" element={<TeacherMyProfile />} />
+
+<Route path="/teacher-classes" element={<TeacherClasses />} />
+
+
+<Route path="/my-timetable"element={<MyTimetable/>}/>
+
+
+
+
+>>>>>>> origin/main
         <Route
   path="/studentprofile"
   element={

@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { NavLink, useNavigate, useLocation } from "react-router-dom";
-import { olTeachers, alTeachers } from "../data/teachers";
+
 
 import {
   Bell,
@@ -20,48 +20,38 @@ import logo from "../assets/image-removebg-preview.png";
 import profile from "../assets/profile.png";
 import teacher from "../assets/profile.png";
 import StudentProfileDropdown from "../components/StudentProfileDropdown";
+import API from "../services/api";
 
 function Teachers() {
   const navigate = useNavigate();
-  const location = useLocation();
 
-  const teacherData = location.state || {
-    name: "Teacher Name",
-    subject: "Subject",
-    image: teacher,
-  };
 
-  // Combine all teachers from data file
-  const allTeachers = [...olTeachers, ...alTeachers];
-  
-  // Find the full teacher data based on name
-  const selectedTeacher = allTeachers.find(
-    (teacher) => teacher.name === teacherData?.name
-  );
 
-  // Use selectedTeacher data or fallback to teacherData
-  const displayTeacher = selectedTeacher || teacherData;
 
-  const schedules = [
-    {
-      day: "Monday",
-      time: "08:00 - 10:00",
-      grade: "Grade 6",
-      amount: "Rs.1500.00",
-    },
-    {
-      day: "Tuesday",
-      time: "11:00 - 13:00",
-      grade: "Grade 9",
-      amount: "Rs.1500.00",
-    },
-    {
-      day: "Wednesday",
-      time: "14:00 - 16:00",
-      grade: "Grade 10",
-      amount: "Rs.1500.00",
-    },
-  ];
+
+
+ const { state } = useLocation();
+
+const [teacherData, setTeacherData] = useState(null);
+
+const loadTeacher = async () => {
+  try {
+    const res = await API.get(`/teachers/${state.teacherId}`);
+    setTeacherData(res.data);
+  } catch (error) {
+    console.error("Error loading teacher:", error);
+  }
+};
+
+
+useEffect(() => {
+  if (state?.teacherId) {
+    loadTeacher();
+  }
+}, []);
+
+
+ 
 
   return (
     <div
@@ -209,8 +199,8 @@ function Teachers() {
               <div className="card-body">
                 <div className="d-flex align-items-center mb-4">
                   <img
-                    src={displayTeacher.image || teacher}
-                    alt="teacher"
+  src={teacher}
+  alt="teacher"
                     style={{
                       width: "100px",
                       height: "100px",
@@ -218,53 +208,46 @@ function Teachers() {
                     }}
                   />
                   <div className="ms-4">
-                    <h2 className="fw-bold mb-1">
-                      {displayTeacher.name}
-                    </h2>
+                   <h2 className="fw-bold mb-1">
+  {teacherData?.name}
+</h2>
 
                     <h5 className="text-primary mb-2">
-                      {displayTeacher.subject}
-                    </h5>
+  {teacherData?.subject}
+</h5>
 
-                    <h4 className="text-decoration-underline">
-                      {displayTeacher.email}
-                    </h4>
+                   <h4 className="text-decoration-underline">
+  {teacherData?.email}
+</h4>
 
-                    <h3>{displayTeacher.phone}</h3>
+                   <h3>{teacherData?.phone}</h3>
                   </div>
                 </div>
 
                 {/* Grade Buttons */}
 
-                <div className="d-flex flex-wrap gap-3 mb-5">
-                  <button className="btn btn-primary rounded-pill px-4">
-                    Grade 6
-                  </button>
+               
 
-                  <button className="btn btn-primary rounded-pill px-4">
-                    Grade 7
-                  </button>
 
-                  <button className="btn btn-primary rounded-pill px-4">
-                    Grade 8
-                  </button>
+<div className="d-flex flex-wrap gap-3 mb-5">
+  {teacherData?.grades?.map((grade, index) => (
+    <button
+      key={index}
+      className="btn btn-primary rounded-pill px-4"
+    >
+      {grade}
+    </button>
+  ))}
+</div>
 
-                  <button className="btn btn-primary rounded-pill px-4">
-                    Grade 9
-                  </button>
 
-                  <button className="btn btn-primary rounded-pill px-4">
-                    Grade 10
-                  </button>
 
-                  <button className="btn btn-primary rounded-pill px-4">
-                    Grade 11
-                  </button>
-                </div>
+
+
 
                 <h2 className="fw-bold mb-4">Weekly Class Schedule</h2>
 
-                {schedules.map((item, index) => (
+                {teacherData?.schedule?.map((item, index) => (
                   <div
                     key={index}
                     className="card border-0 shadow rounded-4 mb-4"
@@ -282,7 +265,7 @@ function Teachers() {
                         </div>
 
                         <div className="col-lg-2">
-                          <h4>{item.amount}</h4>
+                          <h4>Rs. {item.fee}</h4>
                         </div>
 
                         <div className="col-lg-4 d-flex gap-3 justify-content-lg-end">
@@ -294,10 +277,10 @@ function Teachers() {
                             onClick={() =>
                               navigate("/bank-slip-upload", {
                                 state: {
-                                  teacher: displayTeacher.name,
-                                  subject: displayTeacher.subject,
+                                  teacher: teacherData?.name,
+subject: teacherData?.subject,
                                   grade: item.grade,
-                                  amount: item.amount,
+                                  amount: item.fee,
                                 },
                               })
                             }

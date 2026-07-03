@@ -25,7 +25,8 @@ function TeacherMyProfile() {
   const navigate = useNavigate();
 
   // FIXED: Should use environment variable or actual ID from auth
-  const teacherId = "6a3bdd5b1eff5b3f8c486b38";
+ const teacherEmail = localStorage.getItem("email");
+ const [teacherId, setTeacherId] = useState("");
 
   // ===========================
   // STATES
@@ -60,9 +61,14 @@ function TeacherMyProfile() {
   const loadTeacher = async () => {
     try {
       setError(null); // Clear previous errors
-      const res = await axios.get(
-        `http://localhost:5000/api/teachers/${teacherId}`
-      );
+
+     const res = await axios.get(
+  `http://localhost:5000/api/teachers/email/${teacherEmail}`
+);
+
+setTeacherId(res.data._id);
+
+
 
       // FIXED: Better null/undefined handling
       setTeacherData({
