@@ -22,7 +22,7 @@ import {
 
 import logo from "../assets/image-removebg-preview.png";
 import StudentProfileDropdown from "../components/StudentProfileDropdown";
-import StudentProfileDropdown from "../components/StudentProfileDropdown";
+
 
 function StudentDashboard() {
 

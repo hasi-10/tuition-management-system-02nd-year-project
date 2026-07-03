@@ -31,7 +31,7 @@ if (userRole === "student") {
 } else if (userRole === "teacher") {
   navigate("/teacher-dashboard");
 } else if (userRole === "admin") {
-  navigate("/admin-dashboard");
+  navigate("/admindashboard");
 }
 
 
