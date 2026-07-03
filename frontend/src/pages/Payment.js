@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import API from "../services/api";
 import { olTeachers, alTeachers } from "../data/teachers";
+import axios from "axios";
 
 import {
   Person,
@@ -15,12 +16,16 @@ import {
   ArrowLeft,
   ArrowRight,
   CheckLg,
+  Bank,
+  Globe,
+  Upload,
+  Building,
 } from "react-bootstrap-icons";
 
 function Payment() {
 
   const navigate = useNavigate();
-
+  const [teachers, setTeachers] = useState([]);
   const [formData, setFormData] = useState({
 
     firstName: "",
@@ -37,12 +42,66 @@ function Payment() {
     expiry: "",
     cvv: "",
     amount: "",
+    
+    // Bank Deposit fields
+    bankName: "",
+    accountNumber: "",
+    slipFile: null,
 
   });
 
   const [teacherList, setTeacherList] = useState([]);
   const [selectedTeachers, setSelectedTeachers] = useState([]);
- 
+  const [showPaymentDetails, setShowPaymentDetails] = useState(false);
+
+  // Load student profile data
+
+
+
+
+
+
+
+useEffect(() => {
+  const loadStudentProfile = async () => {
+    try {
+
+      const email = localStorage.getItem("email");
+
+      console.log("Stored Email:", email);
+
+      const res = await API.get(`/profile/${email}`);
+
+      console.log("Profile Response:", res.data);
+
+      const profile = res.data.data;
+
+      console.log("Profile object:", profile);
+
+      setFormData((prev) => ({
+        ...prev,
+        firstName: profile.fullName || "",
+        lastName: "",
+        email: profile.email || "",
+        phone: profile.phone || "",
+      }));
+
+    } catch (error) {
+      console.log("Error loading profile:", error);
+    }
+  };
+
+  loadStudentProfile();
+}, []);
+
+
+
+
+
+
+
+
+
 
   const handleChange = (e) => {
 
@@ -55,46 +114,124 @@ function Payment() {
     });
 
   };
-  
+
+  const loadTeachers = async (grade) => {
+    try {
+      const res = await axios.get(
+        `http://localhost:5000/api/teachers/grade/${grade}`
+      );
+      setTeachers(res.data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const handleFileChange = (e) => {
+    setFormData({
+      ...formData,
+      slipFile: e.target.files[0],
+    });
+  };
+
   const handlePayment = async () => {
 
-  try {
+    try {
+      let paymentData = {
+        firstName: formData.firstName,
+        lastName: formData.lastName,
+        email: formData.email,
+        phone: formData.phone,
+        teacher: formData.teacher,
+        subject: formData.subject,
+        grade: formData.grade,
+        paymentMethod: formData.paymentMethod,
+        amount: formData.amount,
+      };
 
-    const res = await API.post("/payment", {
+      // Add bank details if bank deposit
+      if (formData.paymentMethod === "Bank Deposit") {
+        paymentData = {
+          ...paymentData,
+          bankName: formData.bankName,
+          accountNumber: formData.accountNumber,
+        };
+      }
 
-      firstName: formData.firstName,
+console.log("Payment Data:");
+console.log(paymentData);
 
-      lastName: formData.lastName,
 
-      email: formData.email,
+      const res = await API.post("/payment", paymentData);
 
-      phone: formData.phone,
+      // If there's a slip file, upload it
+      if (formData.slipFile && formData.paymentMethod === "Bank Deposit") {
+        const formDataObj = new FormData();
+        formDataObj.append("slip", formData.slipFile);
+        formDataObj.append("paymentId", res.data.paymentId);
+        await API.post("/payment/upload-slip", formDataObj);
+      }
 
-      teacher: formData.teacher,
+      console.log(res.data);
+      navigate("/paymentsuccess");
 
-      subject: formData.subject,
+    } 
 
-      grade: formData.grade,
 
-      paymentMethod: formData.paymentMethod,
 
-      amount: formData.amount,
+    catch (error) {
 
-    });
+  console.log(error);
 
-    console.log(res.data);
+  console.log(error.response);
 
-    navigate("/paymentsuccess");
+  console.log(error.response?.data);
 
-  } catch (error) {
+  alert("Payment Failed");
 
-    console.log(error);
+}
 
-    alert("Payment Failed");
+  };
 
-  }
+  // Handle class type selection - NOW AUTO-DETECTS FROM GRADE
+  const handleGradeChange = (e) => {
+    const grade = e.target.value;
+    let classType = "";
+    
+    // Auto-detect class type from grade
+    if (grade) {
+      const gradeNum = parseInt(grade);
+      if (gradeNum >= 6 && gradeNum <= 11) {
+        classType = "OL";
+        setTeacherList(olTeachers);
+      } else if (gradeNum >= 12 && gradeNum <= 13) {
+        classType = "AL";
+        setTeacherList(alTeachers);
+      } else {
+        setTeacherList([]);
+      }
+    } else {
+      setTeacherList([]);
+    }
+    
+ 
 
-};
+setFormData((prev) => ({
+  ...prev,
+  grade,
+  classType,
+  teacher: "",
+  subject: "",
+  amount: "",
+}));
+
+
+
+
+    // Load teachers from API
+    if (grade) {
+      loadTeachers(`Grade ${grade}`);
+    }
+  };
 
   return (
 
@@ -137,286 +274,261 @@ function Payment() {
 
         <div className="row justify-content-center g-5">
 
-          {/* Personal Details Card */}
-
+          {/* New Left Card - Grade & Teachers */}
           <div className="col-lg-5">
 
             <div
-
               className="p-4"
-
               style={{
-
-                background: "rgba(255,255,255,0.15)",
-
-                backdropFilter: "blur(18px)",
-
-                WebkitBackdropFilter: "blur(18px)",
-
-                border: "1px solid rgba(255,255,255,0.25)",
-
-                borderRadius: "35px",
-
-                boxShadow: "0 8px 32px rgba(0,0,0,0.25)",
-
+                background:"rgba(255,255,255,0.15)",
+                backdropFilter:"blur(18px)",
+                borderRadius:"35px",
               }}
-
             >
 
-              <h3
-
-                className="text-white fw-bold mb-4"
-
-              >
-
-                Personal Details
-
+              <h3 className="text-white fw-bold mb-4">
+                Select Grade
               </h3>
 
-              <div className="row">
+              <select
+                className="form-select form-select-lg mb-5"
+                name="grade"
+                value={formData.grade}
+                onChange={(e) => {
+                  handleGradeChange(e);
+                }}
+              >
 
-                <div className="col-6 mb-3">
+                <option value="">Choose Grade</option>
 
-                  <div className="input-group">
+                <option value="6">Grade 6</option>
+                <option value="7">Grade 7</option>
+                <option value="8">Grade 8</option>
+                <option value="9">Grade 9</option>
+                <option value="10">Grade 10</option>
+                <option value="11">Grade 11</option>
+                <option value="12">Grade 12</option>
+                <option value="13">Grade 13</option>
 
-                    <span className="input-group-text">
+              </select>
 
-                      <Person />
+              <h3 className="text-white fw-bold mb-4">
+                Available Teachers
+              </h3>
 
-                    </span>
+              <div className="row g-4">
 
- <input
-  type="text"
-  className="form-control"
-  placeholder="First Name"
-  name="firstName"
-  value={formData.firstName}
-  onChange={handleChange}
-/>
-                  </div>
+                {teachers.map((teacher) => {
 
-                </div>
+                 const selectedClass = teacher.schedule?.find(
+  (item) => item.grade === `Grade ${formData.grade}`
+);
 
-                <div className="col-6 mb-3">
+                  return (
 
-                  <div className="input-group">
+                    <div
+                      className="col-md-6"
+                      key={teacher._id}
+                    >
 
-                    <span className="input-group-text">
+                      <div className="card border-0 shadow h-100 rounded-4">
 
-                      <Person />
+                        <div className="card-body text-center">
 
-                    </span>
+                          <div
+                            className="rounded-circle bg-primary text-white d-inline-flex justify-content-center align-items-center mb-3"
+                            style={{
+                              width: "70px",
+                              height: "70px",
+                              fontSize: "28px",
+                            }}
+                          >
+                            <Person />
+                          </div>
 
-                    <input
+                          <h5 className="fw-bold">
+                            {teacher.name}
+                          </h5>
 
-                      type="text"
+                          <p className="text-muted mb-2">
+                            
 
-                      className="form-control"
 
-                      placeholder="Last Name"
+{teacher.schedule
+  .filter(item => item.grade === formData.grade)
+  .map((item,index)=>(
 
-                      name="lastName"
+<div key={index}>
 
-                      value={formData.lastName}
+<p className="mb-1">
 
-                        onChange={handleChange}
+📚 {teacher.subject}
 
-                    />
+</p>
 
-                  </div>
+<p className="mb-1">
 
-                </div>
+📅 {item.day}
 
-              </div>
+</p>
 
-              <div className="input-group mb-3">
+<p className="mb-1">
 
-                <span className="input-group-text">
+🕒 {item.time}
 
-                  <Envelope />
+</p>
 
-                </span>
+<p className="fw-bold text-primary">
 
-                <input
+💰 Rs.{item.fee}
 
-                  type="email"
+</p>
 
-                  className="form-control"
+</div>
 
-                  placeholder="Email"
+))}
 
-                  name="email"
 
-                  value={formData.email}
 
-                    onChange={handleChange}
 
-                />
 
-              </div>
 
-              <div className="input-group mb-3">
+                          </p>
 
-                <span className="input-group-text">
+                          <h4 className="text-primary">
+                            Rs.{selectedClass?.fee || teacher.fee || 2000}
+                          </h4>
 
-                  <Telephone />
+                          <button
+                            className="btn btn-primary rounded-pill mt-3"
+                            onClick={() => {
 
-                </span>
 
-                <input
 
-                  type="text"
 
-                  className="form-control"
+const selectedClass = teacher.schedule.find(
+  item => item.grade === `Grade ${formData.grade}`
+);
 
-                  placeholder="Phone Number"
+setFormData((prev) => ({
+  ...prev,
+  teacher: teacher.name,
+  subject: teacher.subject,
+  grade: prev.grade,
+  amount: selectedClass ? selectedClass.fee : 0,
+}));
 
-                  name="phone"
 
-                  value={formData.phone}
 
-                    onChange={handleChange}
 
-                />
+                            }}
 
-              </div>
 
-              <div className="input-group mb-3">
 
-                <span className="input-group-text">
-                  <Book />
-                </span>
 
-                <select
-                  className="form-select"
-                  value={formData.classType}
-                  onChange={(e) => {
 
-                    const type = e.target.value;
+                          >
+                            Select
+                          </button>
 
-                    setFormData({
-                      ...formData,
-                      classType: type,
-                      teacher: "",
-                      subject: ""
-                    });
+                        </div>
 
-                    setSelectedTeachers([]);
+                      </div>
 
-                    if (type === "OL") {
-                      setTeacherList(olTeachers);
-                    } else {
-                      setTeacherList(alTeachers);
-                    }
+                    </div>
 
-                  }}
-                >
-                  <option value="">Select Class Type</option>
-                  <option value="OL">O/L</option>
-                  <option value="AL">A/L</option>
-                </select>
+                  );
 
-              </div>
-
-              <div className="mb-3">
-
-                <label className="form-label text-white fw-bold">
-                  Select Teachers and Subjects
-                </label>
-
-                {teacherList.map((teacher, index) => (
-
-                  <div
-                    key={index}
-                    className="form-check bg-white rounded p-2 mb-2"
-                  >
-
-                    <input
-                      className="form-check-input"
-                      type="checkbox"
-                      value={teacher.name}
-                      onChange={(e) => {
-
-                        if (e.target.checked) {
-
-                          setSelectedTeachers([
-                            ...selectedTeachers,
-                            teacher
-                          ]);
-
-                        } else {
-
-                          setSelectedTeachers(
-                            selectedTeachers.filter(
-                              (t) => t.name !== teacher.name
-                            )
-                          );
-
-                        }
-
-                      }}
-                    />
-
-                    <label className="form-check-label ms-2">
-
-                      {teacher.name} - {teacher.subject}
-
-                    </label>
-
-                  </div>
-
-                ))}
-
-              </div>
-
-              <div className="input-group mb-5">
-
-                <span className="input-group-text">
-
-                  <Mortarboard />
-
-                </span>
-
-                <input
-
-                  type="text"
-
-                  className="form-control"
-
-                  placeholder="Grade"
-
-                  name="grade"
-
-                  value={formData.grade}
-
-                  onChange={handleChange}
-
-                />
-
-              </div>
-
-              <div className="text-center">
-
-                <button
-
-                  className="btn btn-light fw-bold px-5 py-2 rounded-pill"
-
-                >
-
-                  Next
-
-                  <ArrowRight className="ms-2" />
-
-                </button>
+                })}
 
               </div>
 
             </div>
 
           </div>
-                    {/* Payment Card */}
 
-          <div className="col-lg-5">
+          {/* Selected Course Panel */}
+
+
+          <div className="col-lg-3">
+
+            <div
+              className="card border-0 shadow-lg rounded-4 h-100"
+              style={{
+                background:"#fff",
+              }}
+            >
+
+              <div className="card-body">
+
+                <h3 className="fw-bold mb-4">
+
+                  Selected Course
+
+                </h3>
+
+                <hr/>
+
+                <p>
+
+                  <strong>Teacher</strong>
+
+                  <br/>
+
+                  {formData.teacher || "-"}
+
+                </p>
+
+                <p>
+
+                  <strong>Subject</strong>
+
+                  <br/>
+
+                  {formData.subject || "-"}
+
+                </p>
+
+                <p>
+
+                  <strong>Grade</strong>
+
+                  <br/>
+
+                  {formData.grade || "-"}
+
+                </p>
+
+                <hr/>
+
+                <h5 className="fw-bold">
+
+                  Monthly Fee
+
+                </h5>
+
+                <h2 className="text-primary">
+
+                  Rs. {formData.amount || 0}
+
+                </h2>
+
+              </div>
+
+            </div>
+
+          </div>
+
+
+
+
+
+         
+
+
+          {/* Payment Card */}
+
+          <div className="col-lg-4">
 
             <div
 
@@ -446,207 +558,290 @@ function Payment() {
 
               </h3>
 
-              <div className="input-group mb-5">
+              <div className="row g-3 mb-4">
 
-                <span className="input-group-text">
-
-                  <CreditCard />
-
-                </span>
-
-                <select
-
-                  className="form-select"
-
-                  name="paymentMethod"
-
-                  value={formData.paymentMethod}
-
-                  onChange={handleChange}
-
-                >
-
-                  <option value="">
-
-                    Select Payment Method
-
-                  </option>
-
-                  <option>
-
-                    Credit Card
-
-                  </option>
-
-                  <option>
-
-                    Debit Card
-
-                  </option>
-
-                </select>
-
-              </div>
-
-              <h3 className="text-white fw-bold mb-4">
-
-                Card Details
-
-              </h3>
-
-              <div className="input-group mb-3">
-
-                <span className="input-group-text">
-
-                  <CreditCard />
-
-                </span>
-
-                <input
-  type="text"
-  className="form-control"
-  placeholder="**** **** **** ****"
-  value={formData.cardNumber}
-  onChange={(e) => {
-
-    let value = e.target.value
-      .replace(/\s/g, "")
-      .replace(/[^0-9]/gi, "")
-      .substring(0, 16);
-
-    let formatted = value.match(/.{1,4}/g)?.join(" ") || "";
-
-    setFormData({
-      ...formData,
-      cardNumber: formatted,
-    });
-
-  }}
-/>
-
-              </div>
-
-              <div className="row">
-
-                <div className="col-8 mb-3">
-
-                  <div className="input-group">
-
-                    <span className="input-group-text">
-
-                      <Calendar />
-
-                    </span>
-
-                   <input
-  type="text"
-  className="form-control"
-  placeholder="MM/YY"
-  name="expiry"
-  value={formData.expiry}
-  onChange={(e) => {
-
-    let value = e.target.value
-      .replace(/\D/g, "")
-      .substring(0, 4);
-
-    if (value.length > 2) {
-      value = value.substring(0, 2) + "/" + value.substring(2);
-    }
-
-    setFormData({
-      ...formData,
-      expiry: value,
-    });
-
-  }}
-  maxLength="5"
-/>
-
+                {/* Credit Card */}
+                <div className="col-12">
+                  <div 
+                    className={`card cursor-pointer ${formData.paymentMethod === "Credit Card" ? "border-primary border-3" : ""}`}
+                    style={{ cursor: "pointer" }}
+                    onClick={() => setFormData({...formData, paymentMethod: "Credit Card"})}
+                  >
+                    <div className="card-body d-flex align-items-center gap-3">
+                      <CreditCard size={30} className="text-primary" />
+                      <div>
+                        <h6 className="mb-0 fw-bold">Credit Card</h6>
+                        <small className="text-muted">Pay with credit card</small>
+                      </div>
+                      {formData.paymentMethod === "Credit Card" && (
+                        <CheckLg className="text-primary ms-auto" size={20} />
+                      )}
+                    </div>
                   </div>
-
                 </div>
 
-                <div className="col-4 mb-3">
+                {/* Debit Card */}
+                <div className="col-12">
+                  <div 
+                    className={`card cursor-pointer ${formData.paymentMethod === "Debit Card" ? "border-primary border-3" : ""}`}
+                    style={{ cursor: "pointer" }}
+                    onClick={() => setFormData({...formData, paymentMethod: "Debit Card"})}
+                  >
+                    <div className="card-body d-flex align-items-center gap-3">
+                      <CreditCard size={30} className="text-primary" />
+                      <div>
+                        <h6 className="mb-0 fw-bold">Debit Card</h6>
+                        <small className="text-muted">Pay using Visa / MasterCard debit card</small>
+                      </div>
+                      {formData.paymentMethod === "Debit Card" && (
+                        <CheckLg className="text-primary ms-auto" size={20} />
+                      )}
+                    </div>
+                  </div>
+                </div>
 
-                  <div className="input-group">
+                {/* Bank Deposit */}
+                <div className="col-12">
+                  <div 
+                    className={`card cursor-pointer ${formData.paymentMethod === "Bank Deposit" ? "border-primary border-3" : ""}`}
+                    style={{ cursor: "pointer" }}
+                    onClick={() => setFormData({...formData, paymentMethod: "Bank Deposit"})}
+                  >
+                    <div className="card-body d-flex align-items-center gap-3">
+                      <Bank size={30} className="text-success" />
+                      <div>
+                        <h6 className="mb-0 fw-bold">Bank Deposit</h6>
+                        <small className="text-muted">Pay via bank transfer</small>
+                      </div>
+                      {formData.paymentMethod === "Bank Deposit" && (
+                        <CheckLg className="text-success ms-auto" size={20} />
+                      )}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Online Banking */}
+                <div className="col-12">
+                  <div 
+                    className={`card cursor-pointer ${formData.paymentMethod === "Online Banking" ? "border-primary border-3" : ""}`}
+                    style={{ cursor: "pointer" }}
+                    onClick={() => setFormData({...formData, paymentMethod: "Online Banking"})}
+                  >
+                    <div className="card-body d-flex align-items-center gap-3">
+                      <Globe size={30} className="text-info" />
+                      <div>
+                        <h6 className="mb-0 fw-bold">Online Banking</h6>
+                        <small className="text-muted">Pay via online banking</small>
+                      </div>
+                      {formData.paymentMethod === "Online Banking" && (
+                        <CheckLg className="text-info ms-auto" size={20} />
+                      )}
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+
+              {/* Card Details - Shows for both Credit Card and Debit Card */}
+              {(
+                formData.paymentMethod === "Credit Card" ||
+                formData.paymentMethod === "Debit Card"
+              ) && (
+
+                <div>
+                  <h3 className="text-white fw-bold mb-4">
+                    Card Details
+                  </h3>
+
+                  <div className="input-group mb-3">
 
                     <span className="input-group-text">
 
-                      <Lock />
+                      <CreditCard />
 
                     </span>
 
                     <input
-
-                      type="password"
-
+                      type="text"
                       className="form-control"
+                      placeholder="**** **** **** ****"
+                      value={formData.cardNumber}
+                      onChange={(e) => {
 
-                      placeholder="CVV"
+                        let value = e.target.value
+                          .replace(/\s/g, "")
+                          .replace(/[^0-9]/gi, "")
+                          .substring(0, 16);
 
-                      name="cvv"
+                        let formatted = value.match(/.{1,4}/g)?.join(" ") || "";
 
-                      value={formData.cvv}
+                        setFormData({
+                          ...formData,
+                          cardNumber: formatted,
+                        });
 
-                      onChange={handleChange}
-
+                      }}
                     />
 
                   </div>
 
+                  <div className="row">
+
+                    <div className="col-8 mb-3">
+
+                      <div className="input-group">
+
+                        <span className="input-group-text">
+
+                          <Calendar />
+
+                        </span>
+
+                        <input
+                          type="text"
+                          className="form-control"
+                          placeholder="MM/YY"
+                          name="expiry"
+                          value={formData.expiry}
+                          onChange={(e) => {
+
+                            let value = e.target.value
+                              .replace(/\D/g, "")
+                              .substring(0, 4);
+
+                            if (value.length > 2) {
+                              value = value.substring(0, 2) + "/" + value.substring(2);
+                            }
+
+                            setFormData({
+                              ...formData,
+                              expiry: value,
+                            });
+
+                          }}
+                          maxLength="5"
+                        />
+
+                      </div>
+
+                    </div>
+
+                    <div className="col-4 mb-3">
+
+                      <div className="input-group">
+
+                        <span className="input-group-text">
+
+                          <Lock />
+
+                        </span>
+
+                        <input
+
+                          type="password"
+
+                          className="form-control"
+
+                          placeholder="CVV"
+
+                          name="cvv"
+
+                          value={formData.cvv}
+
+                          onChange={handleChange}
+
+                        />
+
+                      </div>
+
+                    </div>
+
+                  </div>
                 </div>
 
-              </div>
+              )}
 
-              <div className="input-group mb-5">
+              {/* Bank Deposit Details */}
+              {formData.paymentMethod === "Bank Deposit" && (
 
-                <span className="input-group-text">
+                <div>
+                  <h3 className="text-white fw-bold mb-4">
+                    Bank Details
+                  </h3>
 
-                  Rs.
+                  <div className="input-group mb-3">
+                    <span className="input-group-text">
+                      <Building />
+                    </span>
+                    <input
+                      type="text"
+                      className="form-control"
+                      placeholder="Bank Name"
+                      name="bankName"
+                      value={formData.bankName}
+                      onChange={handleChange}
+                    />
+                  </div>
 
-                </span>
+                  <div className="input-group mb-3">
+                    <span className="input-group-text">
+                      <CreditCard />
+                    </span>
+                    <input
+                      type="text"
+                      className="form-control"
+                      placeholder="Account Number"
+                      name="accountNumber"
+                      value={formData.accountNumber}
+                      onChange={handleChange}
+                    />
+                  </div>
 
-                <input
+                  <div className="input-group mb-3">
+                    <span className="input-group-text">
+                      <Upload />
+                    </span>
+                    <input
+                      type="file"
+                      className="form-control"
+                      accept="image/*,.pdf"
+                      onChange={handleFileChange}
+                    />
+                  </div>
+                </div>
 
-                  type="number"
+              )}
 
-                  className="form-control"
+              {/* Online Banking Details */}
+              {formData.paymentMethod === "Online Banking" && (
 
-                  placeholder="Amount"
+                <div>
+                  <h3 className="text-white fw-bold mb-4">
+                    Online Banking
+                  </h3>
+                  <div className="alert alert-info">
+                    You will be redirected to your bank's payment gateway to complete the transaction.
+                  </div>
+                </div>
 
-                  name="amount"
+              )}
 
-                  value={formData.amount}
+              <hr className="my-4" style={{ borderColor: "rgba(255,255,255,0.3)" }} />
 
-                  onChange={handleChange}
+              {/* Total and Pay Button */}
+              <div className="text-white">
+                <div className="d-flex justify-content-between align-items-center mb-3">
+                  <h4 className="fw-bold mb-0">TOTAL</h4>
+                  <h2 className="fw-bold mb-0">Rs. {formData.amount || 0}</h2>
+                </div>
 
-                />
-
-                <span className="input-group-text">
-
-                  .00
-
-                </span>
-
-              </div>
-
-              <div className="text-center">
-
-               <button
-
-className="btn btn-light fw-bold px-5 py-2 rounded-pill"
-
-onClick={handlePayment}
-
->
-
-Done
-
-<CheckLg className="ms-2" />
-
-</button>
-
+                <button
+                  className="btn btn-light fw-bold w-100 py-3 rounded-pill"
+                  onClick={handlePayment}
+                  disabled={!formData.amount || !formData.paymentMethod}
+                >
+                  PAY NOW
+                </button>
               </div>
 
             </div>
@@ -656,14 +851,14 @@ Done
         </div>
 
 
- <div className="d-flex justify-content-end mt-4">
-  <button
-    className="btn btn-outline-secondary rounded-pill px-4"
-    onClick={() => navigate("/payment-options")}
-  >
-    ← Back
-  </button>
-</div>
+        <div className="d-flex justify-content-end mt-4">
+          <button
+            className="btn btn-outline-secondary rounded-pill px-4"
+            onClick={() => navigate("/payment-options")}
+          >
+            ← Back
+          </button>
+        </div>
 
       </div>
 
@@ -671,6 +866,6 @@ Done
 
   );
 
-}
+}     
 
 export default Payment;

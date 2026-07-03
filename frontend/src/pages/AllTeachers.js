@@ -42,63 +42,7 @@ const [formData, setFormData] = useState({
  
 
 
-  const teachers = [
-    {
-      image: maleTeacher,
-      subject: "MATHS",
-      name: "JANITH PANNILA"
-    },
-    {
-      image: maleTeacher,
-      subject: "SCIENCE",
-      name: "UDARA SANDAMAL"
-    },
-    {
-      image: maleTeacher,
-      subject: "GEOGRAPHY",
-      name: "RASHMIKA CHATHURANGA"
-    },
-    {
-      image: femaleTeacher,
-      subject: "JAPANESE LANGUAGE",
-      name: "SAMADHI SATHSARANI"
-    },
-    {
-      image: femaleTeacher,
-      subject: "HOME SCIENCE",
-      name: "NILU MUDIYANSE"
-    },
-    {
-      image: maleTeacher,
-      subject: "CHEMISTRY",
-      name: "DINESH ARUNASHANTHA"
-    },
-    {
-      image: maleTeacher,
-      subject: "BIOLOGY",
-      name: "CHALANKA KARUNANAYAKE"
-    },
-    {
-      image: maleTeacher,
-      subject: "PHYSICS",
-      name: "DILAN MABARANA"
-    },
-    {
-      image: maleTeacher,
-      subject: "ECON",
-      name: "MANOJ DILSHAN"
-    },
-    {
-      image: maleTeacher,
-      subject: "ECON",
-      name: "LAKRUWAN JEEWAKARACHCHI"
-    },
-    {
-      image: femaleTeacher,
-      subject: "POLITICAL SCIENCE",
-      name: "NILU MUDIYANSE"
-    }
-  ];
+ const [teachers, setTeachers] = useState([]);
 
   const loadProfile = async () => {
   try {
@@ -111,13 +55,26 @@ const [formData, setFormData] = useState({
     console.log(error);
   }
 };
+
+const loadTeachers = async () => {
+  try {
+    const res = await API.get("/teachers");
+    setTeachers(res.data);
+  } catch (error) {
+    console.error("Error loading teachers:", error);
+  }
+};
+
 useEffect(() => {
   const email = localStorage.getItem("email");
 
   if (email) {
     loadProfile();
   }
+
+  loadTeachers();
 }, []);
+
 
   return (
 <div
@@ -313,23 +270,28 @@ useEffect(() => {
 <div
   className="card border-0 rounded-4"
   style={{ cursor: "pointer" }}
-  onClick={() =>
-    navigate("/teacherprofile", {
-      state: teacher,
-    })
-  }
+
+
+
+onClick={() =>
+  navigate("/teacherprofile", {
+    state: {
+      teacherId: teacher._id,
+    },
+  })
+}
 >
 
                     <div className="card-body">
 
                       <div className="d-flex align-items-center">
 
-                        <img
-                          src={teacher.image}
-                          alt=""
-                          width="70"
-                          height="70"
-                        />
+                       <img
+  src={maleTeacher}
+  alt="Teacher"
+  width="70"
+  height="70"
+/>
 
                         <div className="ms-4">
 

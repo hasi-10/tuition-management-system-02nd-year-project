@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
+
 import {
   Bell,
   ChevronDown,
@@ -30,47 +31,19 @@ import {
 
 import logo from "../../assets/image-removebg-preview.png";
 import profile from "../../assets/profile.png";
-
+import axios from "axios";
 function TeacherClasses() {
   const navigate = useNavigate();
+  
+const userId = localStorage.getItem("userId");
+
+console.log("Logged User ID:", userId);
+
   const [showForm, setShowForm] = useState(false);
   const [showEditForm, setShowEditForm] = useState(false);
   const [editingClassId, setEditingClassId] = useState(null);
-  const [classes, setClasses] = useState([
-    {
-      id: 1,
-      subject: "Combined Mathematics",
-      grade: "Grade 12",
-      date: "29/03/2026",
-      startTime: "4:00 PM",
-      endTime: "6:00 PM",
-      students: 32,
-      views: 12,
-      status: "upcoming",
-    },
-    {
-      id: 2,
-      subject: "Mathematics",
-      grade: "Grade 10",
-      date: "30/03/2026",
-      startTime: "3:00 PM",
-      endTime: "6:00 PM",
-      students: 250,
-      views: 12,
-      status: "upcoming",
-    },
-    {
-      id: 3,
-      subject: "Combined Mathematics",
-      grade: "Grade 12",
-      date: "28/03/2026",
-      startTime: "6:00 PM",
-      endTime: "8:00 PM",
-      students: 45,
-      views: 12,
-      status: "completed",
-    },
-  ]);
+
+  const [classes, setClasses] = useState([]);
 
   const [formData, setFormData] = useState({
     subject: "",
@@ -102,25 +75,78 @@ function TeacherClasses() {
     });
   };
 
-  const handleSaveClass = () => {
-    if (!formData.subject || !formData.grade || !formData.date || !formData.startTime || !formData.endTime) {
-      alert("Please fill in all fields");
-      return;
-    }
 
-    const newClass = {
-      id: Date.now(),
+const loadClasses = async () => {
+  try {
+    // Get teacher profile using logged-in userId
+    const teacherRes = await axios.get(
+      `http://localhost:5000/api/teachers/user/${userId}`
+    );
+
+    const teacherId = teacherRes.data._id;
+
+    // Get classes of this teacher
+    const classRes = await axios.get(
+      `http://localhost:5000/api/classes/teacher/${teacherId}`
+    );
+
+    setClasses(classRes.data);
+  } catch (err) {
+    console.error("Error loading classes:", err);
+  }
+};
+
+
+
+useEffect(() => {
+  loadClasses();
+}, []);
+
+
+
+const handleSaveClass = async () => {
+  if (
+    !formData.subject ||
+    !formData.grade ||
+    !formData.date ||
+    !formData.startTime ||
+    !formData.endTime
+  ) {
+    alert("Please fill in all fields");
+    return;
+  }
+
+  try {
+    await axios.post("http://localhost:5000/api/classes", {
+      userId,
+
+      className: `${formData.subject} - Grade ${formData.grade}`,
+
       subject: formData.subject,
-      grade: formData.grade,
-      date: formData.date,
-      startTime: formData.startTime,
-      endTime: formData.endTime,
-      students: 0,
-      views: 0,
-      status: "upcoming",
-    };
 
-    setClasses([...classes, newClass]);
+      grade: formData.grade,
+
+      day: new Date(formData.date).toLocaleDateString("en-US", {
+        weekday: "long",
+      }),
+
+      date: formData.date,
+
+      startTime: formData.startTime,
+
+      endTime: formData.endTime,
+
+      monthlyFee: 0,
+
+      mode: "Online",
+
+      meetingLink: "",
+    });
+
+    alert("Class scheduled successfully!");
+
+    loadClasses();
+
     setFormData({
       subject: "",
       grade: "",
@@ -128,12 +154,23 @@ function TeacherClasses() {
       startTime: "",
       endTime: "",
     });
+
     setShowForm(false);
-    alert("Class scheduled successfully!");
-  };
+
+  } catch (err) {
+  console.log(err.response?.data);
+  console.log(err);
+
+  alert("Failed to save class.");
+}
+};
+
+
+
+
 
   const handleEditClass = (classItem) => {
-    setEditingClassId(classItem.id);
+    setEditingClassId(classItem._id);
     setEditFormData({
       subject: classItem.subject,
       grade: classItem.grade,
@@ -144,26 +181,31 @@ function TeacherClasses() {
     setShowEditForm(true);
   };
 
-  const handleUpdateClass = () => {
+ const handleUpdateClass = async () => {
     if (!editFormData.subject || !editFormData.grade || !editFormData.date || !editFormData.startTime || !editFormData.endTime) {
       alert("Please fill in all fields");
       return;
     }
 
-    setClasses(
-      classes.map((classItem) =>
-        classItem.id === editingClassId
-          ? {
-              ...classItem,
-              subject: editFormData.subject,
-              grade: editFormData.grade,
-              date: editFormData.date,
-              startTime: editFormData.startTime,
-              endTime: editFormData.endTime,
-            }
-          : classItem
-      )
-    );
+
+
+
+await axios.put(
+  `http://localhost:5000/api/classes/${editingClassId}`,
+  {
+    subject: editFormData.subject,
+    grade: editFormData.grade,
+    date: editFormData.date,
+    startTime: editFormData.startTime,
+    endTime: editFormData.endTime,
+  }
+);
+
+loadClasses();
+
+
+
+
 
     setEditFormData({
       subject: "",
@@ -200,11 +242,24 @@ function TeacherClasses() {
     setShowForm(false);
   };
 
-  const handleDeleteClass = (id) => {
-    if (window.confirm("Are you sure you want to delete this class?")) {
-      setClasses(classes.filter((classItem) => classItem.id !== id));
+  const handleDeleteClass = async (id) => {
+  if (window.confirm("Are you sure you want to delete this class?")) {
+    try {
+      await axios.delete(
+        `http://localhost:5000/api/classes/${id}`
+      );
+
+      loadClasses();
+
+      alert("Class deleted successfully!");
+
+    } catch (err) {
+      console.log(err);
+
+      alert("Failed to delete class.");
     }
-  };
+  }
+};
 
   return (
     <div
@@ -570,7 +625,7 @@ function TeacherClasses() {
               {classes
                 .filter((classItem) => classItem.status === "upcoming")
                 .map((classItem) => (
-                  <div key={classItem.id} className="card border-0 shadow-sm rounded-4 mb-3">
+                  <div key={classItem._id} className="card border-0 shadow-sm rounded-4 mb-3">
                     <div className="card-body p-4">
                       <div className="row align-items-center">
                         <div className="col-lg-3">
@@ -608,7 +663,7 @@ function TeacherClasses() {
                             </button>
                             <button
                               className="btn btn-danger btn-sm rounded-pill px-3"
-                              onClick={() => handleDeleteClass(classItem.id)}
+                              onClick={() => handleDeleteClass(classItem._id)}
                             >
                               <Trash className="me-1" />
                               Delete
@@ -647,7 +702,7 @@ function TeacherClasses() {
               {classes
                 .filter((classItem) => classItem.status === "completed")
                 .map((classItem) => (
-                  <div key={classItem.id} className="card border-0 shadow-sm rounded-4 mb-3">
+                  <div key={classItem._id} className="card border-0 shadow-sm rounded-4 mb-3">
                     <div className="card-body p-4">
                       <div className="row align-items-center">
                         <div className="col-lg-3">
@@ -685,7 +740,7 @@ function TeacherClasses() {
                             </button>
                             <button
                               className="btn btn-danger btn-sm rounded-pill px-3"
-                              onClick={() => handleDeleteClass(classItem.id)}
+                              onClick={() => handleDeleteClass(classItem._id)}
                             >
                               <Trash className="me-1" />
                               Delete

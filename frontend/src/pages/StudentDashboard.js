@@ -22,7 +22,7 @@ import {
 
 import logo from "../assets/image-removebg-preview.png";
 import StudentProfileDropdown from "../components/StudentProfileDropdown";
-import StudentProfileDropdown from "../components/StudentProfileDropdown";
+
 
 function StudentDashboard() {
 
@@ -121,7 +121,7 @@ const loadProfile = async () => {
 
 <button
   className="btn btn-outline-light border-0 w-100 text-start rounded-4 mb-3 p-3"
-  onClick={() => navigate("/timetable")}
+  onClick={() => navigate("/my-timetable")}
 >
   <Calendar3 className="me-3" />
   Timetable

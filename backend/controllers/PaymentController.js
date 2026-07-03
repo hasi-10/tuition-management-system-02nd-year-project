@@ -1,77 +1,73 @@
 const Payment = require("../models/Payment");
 const PaymentSlip = require("../models/PaymentSlip");
+const Enrollment = require("../models/Enrollment/enrollment");
 
 
-// Save Payment
+// =================================
+// SAVE ONLINE PAYMENT
+// =================================
 const savePayment = async (req, res) => {
-
   try {
+    console.log("====== PAYMENT REQUEST ======");
+    console.log(req.body);
 
-    const payment = new Payment(req.body);
+    const payment = new Payment({
+      ...req.body,
+      status: "Pending",
+    });
 
     await payment.save();
 
-    res.status(201).json({
+    console.log("Payment saved successfully");
 
+    res.status(201).json({
       success: true,
       message: "Payment Saved",
       data: payment,
-
     });
 
   } catch (error) {
 
+    console.log("====== PAYMENT ERROR ======");
     console.log(error);
 
     res.status(500).json({
-
       success: false,
-      message: "Server Error",
-
+      message: error.message,
     });
 
   }
-
 };
 
-// Upload Bank Payment Slip
-
+// =================================
+// UPLOAD BANK PAYMENT SLIP
+// =================================
 const uploadPaymentSlip = async (req, res) => {
 
   try {
+
     console.log("BODY:", req.body);
-console.log("FILE:", req.file);
+    console.log("FILE:", req.file);
 
-const paymentSlip = new PaymentSlip({
+    const paymentSlip = new PaymentSlip({
 
-    studentName: req.body.studentName,
+      studentName: req.body.studentName,
+      email: req.body.email,
+      subject: req.body.subject,
+      teacher: req.body.teacher,
+      grade: req.body.grade,
+      month: req.body.month,
+      fileName: req.file.filename,
+      filePath: req.file.path,
 
-    email: req.body.email,
-
-    subject: req.body.subject,
-
-    teacher: req.body.teacher,
-
-    grade: req.body.grade,
-
-    month: req.body.month,
-
-    fileName: req.file.filename,
-
-    filePath: req.file.path,
-
-});
+    });
 
     await paymentSlip.save();
 
     res.status(201).json({
-
       success: true,
-
       message: "Payment Slip Uploaded Successfully",
-
       data: paymentSlip,
-
     });
 
   } catch (error) {
@@ -79,34 +75,188 @@ const paymentSlip = new PaymentSlip({
     console.log(error);
 
     res.status(500).json({
-
       success: false,
-
-      message: "Server Error",
-
+      message: error.message,
     });
 
   }
 
 };
 
+// =================================
+// GET STUDENT COURSES
+// =================================
 const getStudentCourses = async (req, res) => {
+
   try {
+
     const email = req.params.email;
 
-    const courses = await Payment.find({ email });
+    const courses = await Payment.find({
+      email,
+    });
 
     res.json(courses);
+
   } catch (error) {
+
     console.log(error);
+
     res.status(500).json({
-      message: "Server Error",
+      message: error.message,
     });
+
   }
+
+};
+
+// =================================
+// GET ALL PAYMENTS
+// =================================
+const getAllPayments = async (req, res) => {
+
+  try {
+
+    const payments = await Payment.find().sort({
+      createdAt: -1,
+    });
+
+    res.json(payments);
+
+  } catch (error) {
+
+    console.log(error);
+
+    res.status(500).json({
+      message: error.message,
+    });
+
+  }
+
+};
+
+// =================================
+// APPROVE PAYMENT
+// =================================
+const approvePayment = async (req, res) => {
+
+  try {
+
+    const payment = await Payment.findById(req.params.id);
+
+    if (!payment) {
+      return res.status(404).json({
+        message: "Payment not found",
+      });
+    }
+
+
+
+
+
+
+payment.status = "Approved";
+
+await payment.save();
+
+// Check if enrollment already exists
+const existingEnrollment = await Enrollment.findOne({
+  studentEmail: payment.email,
+  teacher: payment.teacher,
+  subject: payment.subject,
+  grade: payment.grade,
+});
+
+
+
+if (!existingEnrollment) {
+
+  const enrollment = new Enrollment({
+
+    studentName: `${payment.firstName} ${payment.lastName}`,
+
+    studentEmail: payment.email,
+
+    teacher: payment.teacher,
+
+    subject: payment.subject,
+
+    grade: payment.grade,
+
+    paymentId: payment._id,
+
+    status: "Active",
+
+  });
+
+  await enrollment.save();
+
+}
+
+res.json({
+  message: "Payment approved successfully",
+  payment,
+});
+
+
+
+
+
+
+
+
+
+
+  } catch (error) {
+
+    console.log(error);
+
+    res.status(500).json({
+      message: error.message,
+    });
+
+  }
+
+};
+
+// =================================
+// REJECT PAYMENT
+// =================================
+const rejectPayment = async (req, res) => {
+
+  try {
+
+    const payment = await Payment.findById(req.params.id);
+
+    if (!payment) {
+      return res.status(404).json({
+        message: "Payment not found",
+      });
+    }
+
+    payment.status = "Rejected";
+
+    await payment.save();
+
+    res.json(payment);
+
+  } catch (error) {
+
+    console.log(error);
+
+    res.status(500).json({
+      message: error.message,
+    });
+
+  }
+
 };
 
 module.exports = {
   savePayment,
   uploadPaymentSlip,
   getStudentCourses,
+  getAllPayments,
+  approvePayment,
+  rejectPayment,
 };

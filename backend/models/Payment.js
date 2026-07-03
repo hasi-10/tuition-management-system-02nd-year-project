@@ -7,11 +7,10 @@ const paymentSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-
-    lastName: {
-      type: String,
-      required: true,
-    },
+lastName: {
+  type: String,
+  default: "",
+},
 
     email: {
       type: String,
@@ -49,9 +48,10 @@ const paymentSchema = new mongoose.Schema(
     },
 
     status: {
-      type: String,
-      default: "Paid",
-    },
+  type: String,
+  enum: ["Pending", "Approved", "Rejected"],
+  default: "Pending",
+},
 
   },
   {

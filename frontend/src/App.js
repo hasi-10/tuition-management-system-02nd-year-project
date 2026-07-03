@@ -39,10 +39,24 @@ import ClassRecordings from "./pages/ClassRecordings";
 import TeacherStartClass from "./pages/teacher/TeacherStartClass";
 import StudentOnlineClass from "./pages/StudentOnlineClass";
 import TeacherMyProfile from "./pages/teacher/TeacherMyProfile";
+import Settings from "./pages/Settings";
 
 
 
 
+import AdminDashboard from "./pages/admin/AdminDashboard";
+import AdminTeachers from "./pages/admin/AdminTeachers";
+import AdminAddTeacher from "./pages/admin/AdminAddTeacher";
+import AdminTeacherProfile from "./pages/admin/AdminTeacherProfile";
+import AdminEditTeacher from "./pages/admin/AdminEditTeacher";
+import AdminStudents from "./pages/admin/AdminStudents";
+import AdminStudentProfile from "./pages/admin/AdminStudentProfile";
+import AdminPayments from "./pages/admin/AdminPayments";
+import PaymentDetails from "./pages/admin/PaymentDetails";
+import AdminQuizzes from "./pages/admin/AdminQuizzes";
+import AdminQuizDetails from "./pages/admin/AdminQuizDetails";
+
+import MyTimetable from "./pages/MyTimetable";
 
 function App() {
   return (
@@ -73,6 +87,10 @@ function App() {
         <Route path="/quiz-questions" element={<QuizQuestions />} />
         <Route path="/quiz-results" element={<QuizResults />} />
         <Route path="/quiz-review" element={<QuizReview />} />
+        <Route path="/class-recordings" element={<ClassRecordings />}/>
+        <Route path="/student-online-class"element={<StudentOnlineClass />}/>
+        
+
         <Route path="/teacher-dashboard" element={<TeacherDashboard />} />
         <Route path="/teacher-quizzes" element={<TeacherQuizzes />} />
         <Route path="/teacher/create-quiz" element={<CreateQuiz />} />
@@ -80,7 +98,11 @@ function App() {
         <Route path="/teacher/edit-quiz/:id" element={<EditQuiz />} />
         <Route path="/teacher/submissions/:quizId" element={<TeacherSubmissions />} />
         <Route path="/teacher/submission/:id" element={<SubmissionDetails />} />
+        <Route path="/teacher-upload-recording" element={<TeacherUploadRecording />}/>
+        <Route path="/teacher-start-class"element={<TeacherStartClass />}/>
+
         <Route path="/settings" element={<Settings />} />
+
         <Route path="/admindashboard" element={<AdminDashboard />} />
         <Route path="/adminteachers" element={<AdminTeachers />} />
         <Route path="/admin-add-teacher" element={<AdminAddTeacher />} />
@@ -92,6 +114,14 @@ function App() {
         <Route path="/payment-details" element={<PaymentDetails />} />
         <Route path="/adminquizzes" element={<AdminQuizzes />} />
         <Route path="/admin-quiz-details" element={<AdminQuizDetails />} />
+
+<Route path="/teacher-my-profile" element={<TeacherMyProfile />} />
+
+<Route path="/teacher-classes" element={<TeacherClasses />} />
+
+
+<Route path="/my-timetable"element={<MyTimetable/>}/>
+
 
 
 

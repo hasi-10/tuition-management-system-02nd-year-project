@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import API from "../../services/api";
 
 import AdminSidebar from "../../components/admin/AdminSidebar";
 import AdminTopNavbar from "../../components/admin/AdminTopNavbar";
@@ -418,7 +419,7 @@ function AdminAddTeacher() {
   <button
     type="button"
     className="btn btn-primary rounded-pill px-5 fw-bold"
-    onClick={() => {
+    onClick={async () => {
 
       if (!teacher.fullName) {
         alert("Please enter the teacher's full name.");
@@ -445,10 +446,40 @@ function AdminAddTeacher() {
         return;
       }
 
-      alert("Teacher saved successfully!");
 
-      console.log(teacher);
 
+
+
+
+
+      try {
+  await API.post("/auth/create-teacher", {
+    name: teacher.fullName,
+    email: teacher.email,
+    phone: teacher.phone,
+    password: teacher.password,
+  });
+
+  alert("Teacher added successfully!");
+
+  navigate("/adminteachers");
+} catch (err) {
+  alert(err.response?.data?.message || "Failed to create teacher");
+}
+      
+
+
+
+
+
+
+
+
+
+
+
+
+      
       // Later we'll send this data to MongoDB
 
       // navigate("/adminteachers");
