@@ -39,18 +39,9 @@ import ClassRecordings from "./pages/ClassRecordings";
 import TeacherStartClass from "./pages/teacher/TeacherStartClass";
 import StudentOnlineClass from "./pages/StudentOnlineClass";
 import TeacherMyProfile from "./pages/teacher/TeacherMyProfile";
-<<<<<<< HEAD
-import AdminDashboard from "./pages/admin/AdminDashboard";
-import AdminTeachers from "./pages/admin/AdminTeachers";
-import AdminAddTeacher from "./pages/admin/AdminAddTeacher";
-import AdminTeacherProfile from "./pages/admin/AdminTeacherProfile";
-import AdminEditTeacher from "./pages/admin/AdminEditTeacher";
-import AdminStudents from "./pages/admin/AdminStudents";
-import AdminStudentProfile from "./pages/admin/AdminStudentProfile";
-import AdminPayments from "./pages/admin/AdminPayments";
-import PaymentDetails from "./pages/admin/PaymentDetails";
-import AdminQuizzes from "./pages/admin/AdminQuizzes";
-import AdminQuizDetails from "./pages/admin/AdminQuizDetails";
+
+
+
 import Settings from "./pages/Settings";
 import AdminClassAttendance from "./pages/admin/AdminClassAttendance";
 import AdminAttendanceDetails from "./pages/admin/AdminAttendanceDetails";
@@ -60,11 +51,11 @@ import AdminDeliveryTracking from "./pages/admin/AdminDeliveryTracking";
 import DeliveryDetails from "./pages/admin/DeliveryDetails";
 import AdminReports from "./pages/admin/AdminReports";
 import AdminSettings from "./pages/admin/AdminSettings";
-=======
-import Settings from "./pages/Settings";
 
 
->>>>>>> origin/main
+
+
+
 
 
 import AdminDashboard from "./pages/admin/AdminDashboard";
@@ -94,7 +85,7 @@ function App() {
         <Route path="/verify-code" element={<VerifyCode />} />
         <Route path="/reset-password" element={<ResetPassword />} />
         <Route path="/contact" element={<Contact />} />
-<<<<<<< HEAD
+
 <Route
   path="/studentdashboard"
   element={
@@ -103,7 +94,7 @@ function App() {
     </ProtectedRoute>
   }
 />
-=======
+
         <Route path="/studentdashboard" element={<StudentDashboard />} />
         <Route path="/studentprofile" element={<StudentProfile />} />
         <Route path="/payment" element={<Payment />} />
@@ -134,7 +125,7 @@ function App() {
         <Route path="/teacher-upload-recording" element={<TeacherUploadRecording />}/>
         <Route path="/teacher-start-class"element={<TeacherStartClass />}/>
 
-        <Route path="/settings" element={<Settings />} />
+
 
         <Route path="/admindashboard" element={<AdminDashboard />} />
         <Route path="/adminteachers" element={<AdminTeachers />} />
@@ -158,7 +149,7 @@ function App() {
 
 
 
->>>>>>> origin/main
+
         <Route
   path="/studentprofile"
   element={
