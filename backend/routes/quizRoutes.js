@@ -1,11 +1,17 @@
 const express = require("express");
 const router = express.Router();
-const Quiz = require("../models/Quiz");
 
-// CREATE QUIZ
+const Quiz = require("../models/Quiz");
+const Enrollment = require("../models/Enrollment/enrollment");
+
+// ================= CREATE QUIZ =================
 router.post("/", async (req, res) => {
   try {
-    const quiz = new Quiz(req.body);
+    const quiz = new Quiz({
+      ...req.body,
+      subject: req.body.subject?.trim(),
+      grade: req.body.grade?.trim(),
+    });
 
     await quiz.save();
 
@@ -13,133 +19,83 @@ router.post("/", async (req, res) => {
       message: "Quiz created successfully",
       quiz,
     });
+
   } catch (err) {
     console.log(err);
-
-    res.status(500).json({
-      message: "Failed to create quiz",
-    });
+    res.status(500).json({ message: "Failed to create quiz" });
   }
 });
 
-// GET ALL QUIZZES
-router.get("/", async (req, res) => {
+// ================= FILTER QUIZ (MAIN FIX) =================
+router.get("/filter/:subject/:grade/:teacher/:email", async (req, res) => {
   try {
-    const quizzes = await Quiz.find().sort({
-      createdAt: -1,
+
+    const subject = (req.params.subject || "").trim();
+    const grade = (req.params.grade || "").trim();
+    const teacher = req.params.teacher;
+    const email = req.params.email;
+
+    // STEP 1: CHECK ENROLLMENT
+    const enrolled = await Enrollment.findOne({
+      studentEmail: email,
+      subject,
+      grade,
+      teacher,
+      status: "Active",
     });
+
+    if (!enrolled) {
+      return res.json(null);
+    }
+
+    // STEP 2: GET QUIZ
+    const quiz = await Quiz.findOne({
+      subject,
+      grade,
+      teacher,
+      status: "Active",
+    });
+
+    return res.json(quiz);
+
+  } catch (err) {
+    console.log("FILTER ERROR:", err);
+    return res.status(500).json({ message: err.message });
+  }
+});
+
+// ================= GET TEACHER QUIZZES =================
+router.get("/teacher/:teacherId", async (req, res) => {
+  try {
+
+    const quizzes = await Quiz.find({
+      teacher: req.params.teacherId,
+    }).sort({ createdAt: -1 });
 
     res.json(quizzes);
+
   } catch (err) {
     console.log(err);
-
-    res.status(500).json({
-      message: "Failed to fetch quizzes",
-    });
+    res.status(500).json({ message: "Failed to fetch teacher quizzes" });
   }
 });
-router.get(
-  "/course/:subject/:grade/:teacher",
-  async (req, res) => {
-    try {
 
-      const quiz = await Quiz.findOne({
-        subject: req.params.subject,
-        grade: req.params.grade,
-        teacher: req.params.teacher,
-      }).sort({
-        createdAt: -1,
-      });
-
-      res.json(quiz);
-
-    } catch (err) {
-
-      console.log(err);
-
-      res.status(500).json({
-        message: "Server Error",
-      });
-
-    }
-  }
-);
-
-// GET SINGLE QUIZ
+// ================= GET BY ID =================
 router.get("/:id", async (req, res) => {
   try {
 
-    const quiz = await Quiz.findById(
-      req.params.id
-    );
+    const quiz = await Quiz.findById(req.params.id);
 
     if (!quiz) {
-      return res.status(404).json({
-        message: "Quiz not found"
-      });
+      return res.status(404).json({ message: "Quiz not found" });
     }
 
     res.json(quiz);
 
   } catch (err) {
-
     console.log(err);
-
-    res.status(500).json({
-      message: "Server Error"
-    });
-
+    res.status(500).json({ message: "Server Error" });
   }
 });
 
-// UPDATE QUIZ
-router.put("/:id", async (req, res) => {
-
-  try {
-
-    const updatedQuiz =
-      await Quiz.findByIdAndUpdate(
-        req.params.id,
-        req.body,
-        {
-          new: true
-        }
-      );
-
-    res.json(updatedQuiz);
-
-  } catch (err) {
-
-    console.log(err);
-
-    res.status(500).json({
-      message: "Update Failed"
-    });
-
-  }
-
-});
-
-// DELETE QUIZ
-router.delete("/:id", async (req, res) => {
-  try {
-
-    await Quiz.findByIdAndDelete(
-      req.params.id
-    );
-
-    res.json({
-      message: "Quiz deleted successfully"
-    });
-
-  } catch (err) {
-
-    console.log(err);
-
-    res.status(500).json({
-      message: "Delete Failed"
-    });
-
-  }
-});
 module.exports = router;

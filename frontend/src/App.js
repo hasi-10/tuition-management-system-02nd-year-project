@@ -39,7 +39,7 @@ import ClassRecordings from "./pages/ClassRecordings";
 import TeacherStartClass from "./pages/teacher/TeacherStartClass";
 import StudentOnlineClass from "./pages/StudentOnlineClass";
 import TeacherMyProfile from "./pages/teacher/TeacherMyProfile";
-
+import CreateCourse from "./pages/teacher/CreateCourse";
 
 
 import Settings from "./pages/Settings";
@@ -95,7 +95,7 @@ function App() {
   }
 />
 
-        <Route path="/studentdashboard" element={<StudentDashboard />} />
+
         <Route path="/studentprofile" element={<StudentProfile />} />
         <Route path="/payment" element={<Payment />} />
         <Route path="/paymentsuccess" element={<PaymentSuccess />} />
@@ -115,19 +115,11 @@ function App() {
         <Route path="/student-online-class"element={<StudentOnlineClass />}/>
         
 
-        <Route path="/teacher-dashboard" element={<TeacherDashboard />} />
-        <Route path="/teacher-quizzes" element={<TeacherQuizzes />} />
-        <Route path="/teacher/create-quiz" element={<CreateQuiz />} />
-        <Route path="/teacher/view-quiz/:id" element={<TeacherViewQuiz />} />
-        <Route path="/teacher/edit-quiz/:id" element={<EditQuiz />} />
-        <Route path="/teacher/submissions/:quizId" element={<TeacherSubmissions />} />
-        <Route path="/teacher/submission/:id" element={<SubmissionDetails />} />
-        <Route path="/teacher-upload-recording" element={<TeacherUploadRecording />}/>
-        <Route path="/teacher-start-class"element={<TeacherStartClass />}/>
 
 
 
-        <Route path="/admindashboard" element={<AdminDashboard />} />
+
+
         <Route path="/adminteachers" element={<AdminTeachers />} />
         <Route path="/admin-add-teacher" element={<AdminAddTeacher />} />
         <Route path="/admin-teacher-profile" element={<AdminTeacherProfile />} />
@@ -139,9 +131,9 @@ function App() {
         <Route path="/adminquizzes" element={<AdminQuizzes />} />
         <Route path="/admin-quiz-details" element={<AdminQuizDetails />} />
 
-<Route path="/teacher-my-profile" element={<TeacherMyProfile />} />
 
-<Route path="/teacher-classes" element={<TeacherClasses />} />
+
+
 
 
 <Route path="/my-timetable"element={<MyTimetable/>}/>
@@ -530,6 +522,15 @@ function App() {
     </ProtectedRoute>
   }
 />
+
+
+
+<Route
+  path="/teacher/create-course"
+  element={<CreateCourse />}
+/>
+
+
       </Routes>
     </BrowserRouter>
   );

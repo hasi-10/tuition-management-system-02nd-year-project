@@ -34,8 +34,9 @@ function Payment() {
     phone: "",
     classType: "",
     teacher: "",
+    teacherName: "",
     subject: "",
-    grade: "", 
+    grade: "",     
 
     paymentMethod: "",
     cardNumber: "",
@@ -136,18 +137,21 @@ useEffect(() => {
   const handlePayment = async () => {
 
     try {
-      let paymentData = {
-        firstName: formData.firstName,
-        lastName: formData.lastName,
-        email: formData.email,
-        phone: formData.phone,
-        teacher: formData.teacher,
-        subject: formData.subject,
-        grade: formData.grade,
-        paymentMethod: formData.paymentMethod,
-        amount: formData.amount,
-      };
+let paymentData = {
+  firstName: formData.firstName,
+  lastName: formData.lastName,
+  email: formData.email,
+  phone: formData.phone,
 
+  teacher: formData.teacher,
+  teacherName: formData.teacherName,
+
+  subject: formData.subject,
+  grade: formData.grade,
+
+  paymentMethod: formData.paymentMethod,
+  amount: formData.amount,
+};
       // Add bank details if bank deposit
       if (formData.paymentMethod === "Bank Deposit") {
         paymentData = {
@@ -412,9 +416,10 @@ const selectedClass = teacher.schedule.find(
 
 setFormData((prev) => ({
   ...prev,
-  teacher: teacher.name,
-  subject: teacher.subject,
-  grade: prev.grade,
+  teacher: teacher.userId,        // Save ObjectId
+  teacherName: teacher.name,     // Save display name
+  subject: teacher.subject.trim(),
+  grade: `Grade ${prev.grade}`,
   amount: selectedClass ? selectedClass.fee : 0,
 }));
 
@@ -475,7 +480,7 @@ setFormData((prev) => ({
 
                   <br/>
 
-                  {formData.teacher || "-"}
+                  {formData.teacherName || "-"}
 
                 </p>
 

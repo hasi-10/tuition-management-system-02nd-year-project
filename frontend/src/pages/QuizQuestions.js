@@ -40,7 +40,9 @@ console.log("QUESTIONS:", questions);
 
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [answers, setAnswers] = useState({});
-  const [timeLeft, setTimeLeft] = useState(30 * 60);
+ const [timeLeft, setTimeLeft] = useState(
+  (quizData?.duration || 30) * 60
+);
 
    const loadProfile = async () => {
   try {
@@ -67,15 +69,15 @@ useEffect(() => {
 
       setTimeLeft((prev) => {
 
-        if (prev <= 1) {
+if (prev <= 1) {
 
-          clearInterval(timer);
+  clearInterval(timer);
 
-          navigate("/quiz-results");
+  navigate("/quiz-results");
 
-          return 0;
+  return 0;
 
-        }
+}
 
         return prev - 1;
 
@@ -108,7 +110,76 @@ useEffect(() => {
   const progress =
     ((currentQuestion + 1) / questions.length) * 100;
 
-    
+    const handleSubmitQuiz = async (isAutoSubmit = false) => {
+      const check = await API.get(
+  `/submissions/check/${quizData._id}/${localStorage.getItem("email")}`
+);
+
+if (check.data.attempted && !isAutoSubmit) {
+  alert("You already attempted this quiz");
+  navigate("/mycourses");
+  return;
+}
+
+  if (
+    !isAutoSubmit &&
+    Object.keys(answers).length === 0
+  ) {
+    alert("Please answer at least one question.");
+    return;
+  }
+
+  let score = 0;
+
+  questions.forEach((item, index) => {
+    if (answers[index] === item.correctAnswer) {
+      score++;
+    }
+  });
+
+  try {
+
+const quizId = quizData._id || quizData.id;
+
+if (!quizId) {
+  alert("Quiz ID missing");
+  return;
+}
+
+await API.post("/submissions", {
+  studentName: localStorage.getItem("name"),
+  studentEmail: localStorage.getItem("email"),
+  quizId: quizId,
+  teacher: quizData.teacher,
+  subject: quizData.subject,
+  grade: quizData.grade,
+});
+
+  } catch (err) {
+    console.log(err);
+  }
+
+  const reviewQuestions = questions.map((item, index) => ({
+    question: item.question,
+    userAnswer: answers[index] || "Not Answered",
+    correctAnswer: item.correctAnswer,
+  }));
+
+  navigate("/quiz-results", {
+    state: {
+      score,
+      total: questions.length,
+      correct: score,
+      wrong: questions.length - score,
+      subject: quizData.subject,
+      questions: reviewQuestions,
+    },
+  });
+
+};
+
+   
+
 
   return (
 
@@ -174,7 +245,7 @@ useEffect(() => {
             color: darkMode ? "#ffffff" : "#000000",
           }}
         >
-          {quizData?.subject || "Quiz"}
+          {quizData.title}
         </h3>
 
         <div className="d-flex justify-content-between align-items-center mb-3">
@@ -366,58 +437,11 @@ style={{
              <button
   className="btn btn-success rounded-pill px-5 fw-bold"
   onClick={async () => {
-
-    let score = 0;
-
-    questions.forEach((item, index) => {
-
-if (
-  answers[index] === item.correctAnswer
-) {
-  score++;
-}
-
-    });
-
     try {
-
-      await API.post("/submissions", {
-        studentName: localStorage.getItem("name"),
-        quizId: quizData._id,
-
-        score,
-
-answers: questions.map((item, index) => ({
-  question: item.question,
-  selectedAnswer:
-    answers[index] || "Not Answered",
-  correctAnswer: item.correctAnswer,
-}))
-      });
-
+      await handleSubmitQuiz();
     } catch (err) {
-
-      console.log(err);
-
+      alert(err.response?.data?.message || "You already attempted this quiz");
     }
-
-    const reviewQuestions = questions.map((item, index) => ({
-      question: item.question,
-      userAnswer: answers[index] || "Not Answered",
-      correctAnswer: item.correctAnswer,
-    }));
-
-    navigate("/quiz-results", {
-      state: {
-        score,
-        total: questions.length,
-        correct: score,
-        wrong: questions.length - score,
-        subject: quizData?.subject,
-        questions: reviewQuestions,
-      },
-    });
-
   }}
 >
   Submit Quiz

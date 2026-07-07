@@ -5,6 +5,8 @@ import { Bell, PersonCircle } from "react-bootstrap-icons";
 import logo from "../assets/image-removebg-preview.png";
 import API from "../services/api";
 import StudentProfileDropdown from "../components/StudentProfileDropdown";
+import jsPDF from "jspdf";
+
 
 function QuizReview() {
 
@@ -78,9 +80,58 @@ console.log("Questions:", reviewData.questions);
     (reviewData.correct / reviewData.total) * 100
   );
 
+const handleDownloadPDF = () => {
+  const pdf = new jsPDF();
+
+  let y = 10;
+
+  // TITLE
+  pdf.setFontSize(16);
+  pdf.text("Quiz Review Report", 10, y);
+
+  y += 10;
+
+  // SCORE
+  pdf.setFontSize(12);
+  pdf.text(`Score: ${reviewData.score}`, 10, y);
+  y += 8;
+
+  pdf.text(`Accuracy: ${reviewData.accuracy}`, 10, y);
+  y += 12;
+
+  pdf.text("Answers:", 10, y);
+  y += 10;
+
+  // QUESTIONS LOOP
+  reviewData.questions.forEach((q, index) => {
+    pdf.setFontSize(11);
+
+    pdf.text(`Q${index + 1}: ${q.question}`, 10, y);
+    y += 6;
+
+    pdf.setTextColor(0, 150, 0);
+    pdf.text(`Your Answer: ${q.userAnswer}`, 10, y);
+    y += 6;
+
+    pdf.setTextColor(0, 0, 255);
+    pdf.text(`Correct Answer: ${q.correctAnswer}`, 10, y);
+    y += 10;
+
+    pdf.setTextColor(0, 0, 0);
+
+    // PAGE BREAK
+    if (y > 270) {
+      pdf.addPage();
+      y = 10;
+    }
+  });
+
+  pdf.save("quiz-review.pdf");
+};
   return (
 
 <div
+  id="quiz-review-page"
   className="container-fluid p-0"
   style={{
     background: darkMode ? "#2f343a" : "#eef2f7",
@@ -416,24 +467,30 @@ console.log(reviewData.questions);
 
         {/* ================= BUTTONS ================= */}
 
-        <div className="text-center mb-5">
+       <div className="d-flex justify-content-center gap-3 flex-wrap mt-4">
 
-          <button
-            className="btn btn-primary rounded-pill fw-bold px-5 py-2 me-3"
-            onClick={() => navigate("/quiz-results")}
-          >
-            Back to Results
-          </button>
+  <button
+    className="btn btn-warning rounded-pill fw-bold px-5 py-2"
+    onClick={handleDownloadPDF}
+  >
+    Download PDF
+  </button>
 
-          <button
-            className="btn btn-warning rounded-pill fw-bold px-5 py-2"
-            onClick={() => navigate("/mycourses")}
-          >
-            Back to My Courses
-          </button>
+  <button
+    className="btn btn-primary rounded-pill fw-bold px-5 py-2"
+    onClick={() => navigate("/quiz-results")}
+  >
+    Back to Results
+  </button>
 
-        </div>
+  <button
+    className="btn btn-success rounded-pill fw-bold px-5 py-2"
+    onClick={() => navigate("/mycourses")}
+  >
+    Back to My Courses
+  </button>
 
+</div>
         {/* ================= BACK BUTTON ================= */}
 
         <div

@@ -198,7 +198,7 @@ function UploadRecording() {
 
               <button
                 className="btn btn-outline-light border-0 w-100 text-start rounded-4 mb-3 p-3"
-                onClick={() => navigate("/teacher-profile")}
+                onClick={() => navigate("/teacher-my-profile")}
               >
                 <PersonCircle className="me-3" />
                 My Profile

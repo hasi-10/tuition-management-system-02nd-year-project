@@ -205,7 +205,32 @@ router.put("/change-password", async (req, res) => {
   }
 });
 
+router.get("/profile/:email", async (req, res) => {
+  try {
+    const email = req.params.email;
 
+    const user = await User.findOne({
+      email: email.trim(),
+    }).select("-password");
+
+    if (!user) {
+      return res.status(404).json({
+        message: "User not found",
+      });
+    }
+
+    res.json({
+      success: true,
+      data: user,
+    });
+
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({
+      message: "Server Error",
+    });
+  }
+});
 
 
 module.exports = router;

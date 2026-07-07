@@ -16,6 +16,9 @@ const enrollmentSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    teacherName: {
+  type: String,
+},
 
     subject: {
       type: String,

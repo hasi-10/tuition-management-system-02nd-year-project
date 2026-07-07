@@ -141,7 +141,7 @@ const getAllPayments = async (req, res) => {
 const approvePayment = async (req, res) => {
 
   try {
-
+console.log("🔥 APPROVE PAYMENT HIT:", req.params.id);
     const payment = await Payment.findById(req.params.id);
 
     if (!payment) {
@@ -152,12 +152,16 @@ const approvePayment = async (req, res) => {
 
 
 
+console.log("🔥 PAYMENT FOUND:", payment);
 
 
+const updatedPayment = await Payment.findByIdAndUpdate(
+  req.params.id,
+  { status: "Approved" },
+  { new: true }
+);
 
-payment.status = "Approved";
-
-await payment.save();
+console.log("🔥 PAYMENT UPDATED:", updatedPayment.status);
 
 // Check if enrollment already exists
 const existingEnrollment = await Enrollment.findOne({
@@ -170,27 +174,26 @@ const existingEnrollment = await Enrollment.findOne({
 
 
 if (!existingEnrollment) {
+console.log("🔥 PAYMENT APPROVED");
+const enrollment = new Enrollment({
 
-  const enrollment = new Enrollment({
+  studentName: `${payment.firstName} ${payment.lastName}`,
 
-    studentName: `${payment.firstName} ${payment.lastName}`,
+  studentEmail: payment.email,
 
-    studentEmail: payment.email,
+  teacher: payment.teacher,        // ✔ ONLY ID
+  teacherName: payment.teacherName,  // ✔ ONLY NAME (optional display)
 
-    teacher: payment.teacher,
+  subject: payment.subject,
+  grade: payment.grade,
 
-    subject: payment.subject,
+  paymentId: payment._id,
+  status: "Active",
 
-    grade: payment.grade,
-
-    paymentId: payment._id,
-
-    status: "Active",
-
-  });
-
+});
+console.log("🔥 CREATING ENROLLMENT...");
   await enrollment.save();
-
+console.log("🔥 ENROLLMENT SAVED");
 }
 
 res.json({

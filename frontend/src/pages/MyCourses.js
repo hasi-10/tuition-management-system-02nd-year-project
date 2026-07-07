@@ -81,8 +81,7 @@ console.log("Enrollments:", response.data);
   try {
     const email = localStorage.getItem("email");
 
-    const res = await API.get(`/profile/${email}`);
-
+    const res = await API.get(`/auth/profile/${email}`);
     setFormData(res.data.data);
   } catch (error) {
     console.log(error);
@@ -351,11 +350,9 @@ onClick={() => navigate("/allteachers")}
   👨‍🏫 Teacher
 </h6>
 
-        <h5 className="fw-bold">
-
-          {course.teacher}
-
-        </h5>
+<h5 className="fw-bold">
+  {course.teacherName}
+</h5>
 
       </div>
 
@@ -400,33 +397,42 @@ onClick={() => navigate("/allteachers")}
 <button
   className="btn btn-success rounded-pill px-4"
 onClick={async () => {
-
   try {
 
-    const res = await axios.get(
-      `http://localhost:5000/api/quizzes/course/${course.subject}/${course.grade}/${course.teacher}`
-    );
+    const email = localStorage.getItem("email");
 
-    if (!res.data) {
+const res = await axios.get(
+  `http://localhost:5000/api/quizzes/filter/${course.subject.trim()}/${course.grade.trim()}/${course.teacher}/${email}`
+);
 
-      alert("No quiz available yet");
+console.log("QUIZ RESPONSE:", res.data);
 
-      return;
+// 🚨 SAFE CHECK
+if (!res.data || !res.data._id) {
+  alert("No quiz available yet");
+  return;
+}
 
-    }
+const quiz = res.data;
 
-    navigate("/quiz-instructions", {
-      state: res.data,
-    });
+// check attempt
+const check = await axios.get(
+  `http://localhost:5000/api/submissions/check/${quiz._id}/${email}`
+);
+
+if (check.data.attempted) {
+  alert("You already attempted this quiz");
+  return;
+}
+
+navigate("/quiz-instructions", {
+  state: quiz,
+});
 
   } catch (err) {
-
     console.log(err);
-
     alert("No quiz available yet");
-
   }
-
 }}
 >
   <PatchQuestion className="me-2" />
