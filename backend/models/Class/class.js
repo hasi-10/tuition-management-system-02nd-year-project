@@ -64,6 +64,7 @@ date: {
 
 status: {
   type: String,
+  enum: ["upcoming", "live", "ended"],
   default: "upcoming",
 },
 

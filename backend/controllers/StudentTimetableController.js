@@ -1,6 +1,6 @@
 const Enrollment = require("../models/Enrollment/enrollment");
-const Teacher = require("../models/Teacher/teacher");
 
+// GET STUDENT TIMETABLE
 const getStudentTimetable = async (req, res) => {
   try {
     const { email } = req.params;
@@ -12,57 +12,25 @@ const getStudentTimetable = async (req, res) => {
       status: "Active",
     });
 
-    console.log("Enrollments:");
-    console.log(enrollments);
+    console.log("Enrollments:", enrollments);
 
-    let timetable = [];
+    let timetable = enrollments.map((enrollment) => {
+      return {
+        teacher: enrollment.teacher,
+        subject: enrollment.subject,
+        grade: enrollment.grade,
+        day: enrollment.day,
+        date: enrollment.date,
+        startTime: enrollment.startTime,
+        endTime: enrollment.endTime,
+        meetingLink: enrollment.meetingLink,
+        status: enrollment.status,
+      };
+    });
 
-    for (const enrollment of enrollments) {
-
-      console.log("Looking for teacher:", enrollment.teacher);
-
-   const teacher = await Teacher.findOne({
-  name: {
-    $regex: new RegExp("^" + enrollment.teacher + "$", "i"),
-  },
-});
-
-      console.log("Teacher Found:");
-      console.log(teacher);
-
-      if (!teacher) continue;
-
-
-
-const classSchedule = teacher.schedule.filter(
-  (item) =>
-    item.grade.replace("Grade ", "").trim() ===
-    enrollment.grade.trim()
-);
-
-
-
-
-      console.log("Matched Schedule:");
-      console.log(classSchedule);
-
-      classSchedule.forEach((item) => {
-        timetable.push({
-          teacher: teacher.name,
-          subject: teacher.subject,
-          grade: item.grade,
-          day: item.day,
-          time: item.time,
-          fee: item.fee,
-        });
-      });
-    }
-
-    console.log("Final Timetable:");
-    console.log(timetable);
+    console.log("Final Timetable:", timetable);
 
     res.json(timetable);
-
   } catch (error) {
     console.log(error);
 

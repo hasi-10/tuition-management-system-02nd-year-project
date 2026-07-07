@@ -39,7 +39,21 @@ import ClassRecordings from "./pages/ClassRecordings";
 import TeacherStartClass from "./pages/teacher/TeacherStartClass";
 import StudentOnlineClass from "./pages/StudentOnlineClass";
 import TeacherMyProfile from "./pages/teacher/TeacherMyProfile";
+
+
+
 import Settings from "./pages/Settings";
+import AdminClassAttendance from "./pages/admin/AdminClassAttendance";
+import AdminAttendanceDetails from "./pages/admin/AdminAttendanceDetails";
+import AdminStudyMaterials from "./pages/admin/AdminStudyMaterials";
+import StudyMaterialDetails from "./pages/admin/StudyMaterialDetails";
+import AdminDeliveryTracking from "./pages/admin/AdminDeliveryTracking";
+import DeliveryDetails from "./pages/admin/DeliveryDetails";
+import AdminReports from "./pages/admin/AdminReports";
+import AdminSettings from "./pages/admin/AdminSettings";
+
+
+
 
 
 
@@ -71,6 +85,16 @@ function App() {
         <Route path="/verify-code" element={<VerifyCode />} />
         <Route path="/reset-password" element={<ResetPassword />} />
         <Route path="/contact" element={<Contact />} />
+
+<Route
+  path="/studentdashboard"
+  element={
+    <ProtectedRoute allowedRoles={["student"]}>
+      <StudentDashboard />
+    </ProtectedRoute>
+  }
+/>
+
         <Route path="/studentdashboard" element={<StudentDashboard />} />
         <Route path="/studentprofile" element={<StudentProfile />} />
         <Route path="/payment" element={<Payment />} />
@@ -101,7 +125,7 @@ function App() {
         <Route path="/teacher-upload-recording" element={<TeacherUploadRecording />}/>
         <Route path="/teacher-start-class"element={<TeacherStartClass />}/>
 
-        <Route path="/settings" element={<Settings />} />
+
 
         <Route path="/admindashboard" element={<AdminDashboard />} />
         <Route path="/adminteachers" element={<AdminTeachers />} />
@@ -111,7 +135,7 @@ function App() {
         <Route path="/adminstudents" element={<AdminStudents />} />
         <Route path="/admin-student-profile" element={<AdminStudentProfile />} />
         <Route path="/adminpayments" element={<AdminPayments />} />
-        <Route path="/payment-details" element={<PaymentDetails />} />
+        <Route path="/payment-details/:id" element={<PaymentDetails />} />
         <Route path="/adminquizzes" element={<AdminQuizzes />} />
         <Route path="/admin-quiz-details" element={<AdminQuizDetails />} />
 
@@ -125,14 +149,387 @@ function App() {
 
 
 
+
         <Route
-          path="/studentdashboard"
-          element={
-            <ProtectedRoute>
-              <StudentDashboard />
-            </ProtectedRoute>
-          }
-        />
+  path="/studentprofile"
+  element={
+    <ProtectedRoute allowedRoles={["student"]}>
+      <StudentProfile />
+    </ProtectedRoute>
+  }
+/>
+<Route
+  path="/payment"
+  element={
+    <ProtectedRoute allowedRoles={["student"]}>
+      <Payment />
+    </ProtectedRoute>
+  }
+/>
+<Route
+  path="/paymentsuccess"
+  element={
+    <ProtectedRoute allowedRoles={["student"]}>
+      <PaymentSuccess />
+    </ProtectedRoute>
+  }
+/>
+<Route
+  path="/mycourses"
+  element={
+    <ProtectedRoute allowedRoles={["student"]}>
+      <MyCourses />
+    </ProtectedRoute>
+  }
+/>
+<Route
+  path="/payment-options"
+  element={
+    <ProtectedRoute allowedRoles={["student"]}>
+      <PaymentOptions />
+    </ProtectedRoute>
+  }
+/>
+<Route
+  path="/bank-slip-upload"
+  element={
+    <ProtectedRoute allowedRoles={["student"]}>
+      <BankSlipUpload />
+    </ProtectedRoute>
+  }
+/>
+<Route
+  path="/allteachers"
+  element={
+    <ProtectedRoute allowedRoles={["student"]}>
+      <AllTeachers />
+    </ProtectedRoute>
+  }
+/>
+<Route
+  path="/olteachers"
+  element={
+    <ProtectedRoute allowedRoles={["student"]}>
+      <OLTeachers />
+    </ProtectedRoute>
+  }
+/>
+<Route
+  path="/alteachers"
+  element={
+    <ProtectedRoute allowedRoles={["student"]}>
+      <ALTeachers />
+    </ProtectedRoute>
+  }
+/>
+<Route
+  path="/quiz-instructions"
+  element={
+    <ProtectedRoute allowedRoles={["student"]}>
+      <QuizInstructions />
+    </ProtectedRoute>
+  }
+/>
+
+<Route
+  path="/quiz-start"
+  element={
+    <ProtectedRoute allowedRoles={["student"]}>
+      <QuizStart />
+    </ProtectedRoute>
+  }
+/>
+
+<Route
+  path="/quiz-questions"
+  element={
+    <ProtectedRoute allowedRoles={["student"]}>
+      <QuizQuestions />
+    </ProtectedRoute>
+  }
+/>
+
+<Route
+  path="/quiz-results"
+  element={
+    <ProtectedRoute allowedRoles={["student"]}>
+      <QuizResults />
+    </ProtectedRoute>
+  }
+/>
+
+<Route
+  path="/quiz-review"
+  element={
+    <ProtectedRoute allowedRoles={["student"]}>
+      <QuizReview />
+    </ProtectedRoute>
+  }
+/>
+<Route
+  path="/teacher-dashboard"
+  element={
+    <ProtectedRoute allowedRoles={["teacher"]}>
+      <TeacherDashboard />
+    </ProtectedRoute>
+  }
+/>
+<Route
+  path="/teacher-quizzes"
+  element={
+    <ProtectedRoute allowedRoles={["teacher"]}>
+      <TeacherQuizzes />
+    </ProtectedRoute>
+  }
+/>
+<Route
+  path="/teacher/create-quiz"
+  element={
+    <ProtectedRoute allowedRoles={["teacher"]}>
+      <CreateQuiz />
+    </ProtectedRoute>
+  }
+/>
+<Route
+  path="/teacher/view-quiz/:id"
+  element={
+    <ProtectedRoute allowedRoles={["teacher"]}>
+      <TeacherViewQuiz />
+    </ProtectedRoute>
+  }
+/>
+<Route
+  path="/teacher/edit-quiz/:id"
+  element={
+    <ProtectedRoute allowedRoles={["teacher"]}>
+      <EditQuiz />
+    </ProtectedRoute>
+  }
+/>
+<Route
+  path="/teacher/submissions/:quizId"
+  element={
+    <ProtectedRoute allowedRoles={["teacher"]}>
+      <TeacherSubmissions />
+    </ProtectedRoute>
+  }
+/>
+<Route
+  path="/teacher/submission/:id"
+  element={
+    <ProtectedRoute allowedRoles={["teacher"]}>
+      <SubmissionDetails />
+    </ProtectedRoute>
+  }
+/>
+<Route
+  path="/settings"
+  element={
+    <ProtectedRoute allowedRoles={["student"]}>
+      <Settings />
+    </ProtectedRoute>
+  }
+/>
+<Route 
+  path="/admindashboard"
+  element={
+    <ProtectedRoute allowedRoles={["admin"]}> 
+      <AdminDashboard />
+    </ProtectedRoute> 
+  } 
+/>
+<Route
+  path="/adminteachers"
+  element={
+    <ProtectedRoute allowedRoles={["admin"]}>
+      <AdminTeachers />
+    </ProtectedRoute>
+  }
+/>
+<Route
+  path="/admin-add-teacher"
+  element={
+    <ProtectedRoute allowedRoles={["admin"]}>
+      <AdminAddTeacher />
+    </ProtectedRoute>
+  }
+/>
+<Route
+  path="/admin-teacher-profile"
+  element={
+    <ProtectedRoute allowedRoles={["admin"]}>
+      <AdminTeacherProfile />
+    </ProtectedRoute>
+  }
+/>
+<Route
+  path="/admin-edit-teacher"
+  element={
+    <ProtectedRoute allowedRoles={["admin"]}>
+      <AdminEditTeacher />
+    </ProtectedRoute>
+  }
+/>
+<Route
+  path="/adminstudents"
+  element={
+    <ProtectedRoute allowedRoles={["admin"]}>
+      <AdminStudents />
+    </ProtectedRoute>
+  }
+/>
+<Route
+  path="/admin-student-profile"
+  element={
+    <ProtectedRoute allowedRoles={["admin"]}>
+      <AdminStudentProfile />
+    </ProtectedRoute>
+  }
+/>
+<Route
+  path="/adminpayments"
+  element={
+    <ProtectedRoute allowedRoles={["admin"]}>
+      <AdminPayments />
+    </ProtectedRoute>
+  }
+/>
+<Route
+  path="/payment-details"
+  element={
+    <ProtectedRoute allowedRoles={["admin"]}>
+      <PaymentDetails />
+    </ProtectedRoute>
+  }
+/>
+<Route
+  path="/adminquizzes"
+  element={
+    <ProtectedRoute allowedRoles={["admin"]}>
+      <AdminQuizzes />
+    </ProtectedRoute>
+  }
+/>
+<Route
+  path="/admin-quiz-details"
+  element={
+    <ProtectedRoute allowedRoles={["admin"]}>
+      <AdminQuizDetails />
+    </ProtectedRoute>
+  }
+/>
+<Route
+  path="/teacher-classes"
+  element={
+    <ProtectedRoute allowedRoles={["teacher"]}>
+      <TeacherClasses />
+    </ProtectedRoute>
+  }
+/>
+<Route
+  path="/teacher-my-profile"
+  element={
+    <ProtectedRoute allowedRoles={["teacher"]}>
+      <TeacherMyProfile />
+    </ProtectedRoute>
+  }
+/>
+<Route
+  path="/teacher-upload-recording"
+  element={
+    <ProtectedRoute allowedRoles={["teacher"]}>
+      <TeacherUploadRecording />
+    </ProtectedRoute>
+  }
+/>
+<Route
+  path="/teacher-start-class"
+  element={
+    <ProtectedRoute allowedRoles={["teacher"]}>
+      <TeacherStartClass />
+    </ProtectedRoute>
+  }
+/>
+<Route
+  path="/student-online-class"
+  element={
+    <ProtectedRoute allowedRoles={["student"]}>
+      <StudentOnlineClass />
+    </ProtectedRoute>
+  }
+/>
+<Route
+  path="/classrecordings"
+  element={
+    <ProtectedRoute allowedRoles={["student"]}>
+      <ClassRecordings />
+    </ProtectedRoute>
+  }
+/>
+<Route
+  path="/admin-class-attendance"
+  element={
+    <ProtectedRoute allowedRoles={["admin"]}>
+      <AdminClassAttendance />
+    </ProtectedRoute>
+  }
+/>
+<Route
+  path="/admin-attendance-details"
+  element={
+    <ProtectedRoute allowedRoles={["admin"]}>
+      <AdminAttendanceDetails />
+    </ProtectedRoute>
+  }
+/>
+<Route
+  path="/admin-study-materials"
+  element={
+    <ProtectedRoute allowedRoles={["admin"]}>
+      <AdminStudyMaterials />
+    </ProtectedRoute>
+  }
+/>
+<Route
+  path="/study-material-details"
+  element={
+    <ProtectedRoute allowedRoles={["admin"]}>
+      <StudyMaterialDetails />
+    </ProtectedRoute>
+  }
+/>
+<Route
+  path="/admin-delivery-tracking"
+  element={
+    <ProtectedRoute allowedRoles={["admin"]}>
+      <AdminDeliveryTracking />
+    </ProtectedRoute>
+  }
+/>
+<Route
+  path="/delivery-details"
+  element={
+    <ProtectedRoute allowedRoles={["admin"]}>
+      <DeliveryDetails />
+    </ProtectedRoute>
+  }
+/>
+<Route
+  path="/admin-reports"
+  element={
+    <ProtectedRoute allowedRoles={["admin"]}>
+      <AdminReports />
+    </ProtectedRoute>
+  }
+/>
+<Route
+  path="/admin-settings"
+  element={
+    <ProtectedRoute allowedRoles={["admin"]}>
+      <AdminSettings />
+    </ProtectedRoute>
+  }
+/>
       </Routes>
     </BrowserRouter>
   );

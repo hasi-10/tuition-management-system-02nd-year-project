@@ -47,10 +47,31 @@ lastName: {
       required: true,
     },
 
+receiptNumber: {
+    type: String,
+    unique: true,
+},
+
+
     status: {
   type: String,
   enum: ["Pending", "Approved", "Rejected"],
   default: "Pending",
+},
+
+bankName: {
+  type: String,
+  default: "",
+},
+
+accountNumber: {
+  type: String,
+  default: "",
+},
+
+slipImage: {
+  type: String,
+  default: "",
 },
 
   },

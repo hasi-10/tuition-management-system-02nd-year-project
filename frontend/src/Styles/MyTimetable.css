@@ -1,0 +1,9 @@
+.live-blink {
+  animation: blink 1s infinite;
+  color: red;
+  font-weight: bold;
+}
+
+@keyframes blink {
+  50% { opacity: 0.3; }
+}

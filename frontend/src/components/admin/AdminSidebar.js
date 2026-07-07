@@ -1,7 +1,9 @@
 import React from "react";
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink, Link, useNavigate } from "react-router-dom";
 import { CreditCardFill } from "react-bootstrap-icons";
 import { PatchQuestionFill } from "react-bootstrap-icons";
+import { FolderFill } from "react-bootstrap-icons";
+
 
 import {
   HouseDoorFill,
@@ -14,7 +16,9 @@ import {
   CreditCard,
   Folder,
   Truck,
+  CalendarCheckFill,
   BarChartFill,
+  FileBarGraphFill,
   Gear,
   BoxArrowRight,
 } from "react-bootstrap-icons";
@@ -34,15 +38,25 @@ function AdminSidebar() {
     >
       <div>
         {/* Logo */}
-        <div className="text-center py-4">
-          <img
-            src={logo}
-            alt="logo"
-            style={{
-              width: "180px",
-            }}
-          />
-        </div>
+      
+
+
+{/* Logo */}
+<div className="text-center py-4">
+  <Link to="/">
+    <img
+      src={logo}
+      alt="logo"
+      style={{
+        width: "180px",
+        cursor: "pointer",
+      }}
+    />
+  </Link>
+</div>
+
+
+
 
         {/* Menu */}
         <div className="px-3">
@@ -96,10 +110,18 @@ function AdminSidebar() {
             Online Classes
           </button>
 
-          <button className="btn btn-outline-light border-0 w-100 text-start rounded-4 mb-3 p-3">
-            <ClipboardData className="me-3" />
-            Attendance Report
-          </button>
+<NavLink
+  to="/admin-class-attendance"
+  className={({ isActive }) =>
+    isActive
+      ? "btn btn-light w-100 text-start fw-bold rounded-4 mb-3 p-3"
+      : "btn btn-outline-light border-0 w-100 text-start rounded-4 mb-3 p-3"
+  }
+  style={{ textDecoration: "none" }}
+>
+  <CalendarCheckFill className="me-3" />
+  Class Attendance
+</NavLink>
 
 <NavLink
   to="/adminquizzes"
@@ -127,25 +149,56 @@ function AdminSidebar() {
   Payments
 </NavLink>
 
-          <button className="btn btn-outline-light border-0 w-100 text-start rounded-4 mb-3 p-3">
-            <Folder className="me-3" />
-            Study Materials
-          </button>
+<NavLink
+  to="/admin-study-materials"
+  className={({ isActive }) =>
+    isActive
+      ? "btn btn-light w-100 text-start fw-bold rounded-4 mb-3 p-3"
+      : "btn btn-outline-light border-0 w-100 text-start rounded-4 mb-3 p-3"
+  }
+  style={{ textDecoration: "none" }}
+>
+  <FolderFill className="me-3" />
+  Study Materials
+</NavLink>
 
-          <button className="btn btn-outline-light border-0 w-100 text-start rounded-4 mb-3 p-3">
-            <Truck className="me-3" />
-            Delivery Tracking
-          </button>
+<NavLink
+  to="/admin-delivery-tracking"
+  className={({ isActive }) =>
+    isActive
+      ? "btn btn-light w-100 text-start fw-bold rounded-4 mb-3 p-3"
+      : "btn btn-outline-light border-0 w-100 text-start rounded-4 mb-3 p-3"
+  }
+  style={{ textDecoration: "none" }}
+>
+  <Truck className="me-3" />
+  Delivery Tracking
+</NavLink>
+<NavLink
+  to="/admin-reports"
+  className={({ isActive }) =>
+    isActive
+      ? "btn btn-light w-100 text-start fw-bold rounded-4 mb-3 p-3"
+      : "btn btn-outline-light border-0 w-100 text-start rounded-4 mb-3 p-3"
+  }
+  style={{ textDecoration: "none" }}
+>
+  <FileBarGraphFill className="me-3" />
+  Reports
+</NavLink>
 
-          <button className="btn btn-outline-light border-0 w-100 text-start rounded-4 mb-3 p-3">
-            <BarChartFill className="me-3" />
-            Reports
-          </button>
-
-          <button className="btn btn-outline-light border-0 w-100 text-start rounded-4 mb-3 p-3">
-            <Gear className="me-3" />
-            Settings
-          </button>
+<NavLink
+  to="/admin-settings"
+  className={({ isActive }) =>
+    isActive
+      ? "btn btn-light w-100 text-start fw-bold rounded-4 mb-3 p-3"
+      : "btn btn-outline-light border-0 w-100 text-start rounded-4 mb-3 p-3"
+  }
+  style={{ textDecoration: "none" }}
+>
+  <Gear className="me-3" />
+  Settings
+</NavLink>
 
         </div>
       </div>

@@ -8,6 +8,7 @@ const {
   uploadPaymentSlip,
   getStudentCourses,
   getAllPayments,
+  getPaymentById,
   approvePayment,
   rejectPayment,
 } = require("../controllers/PaymentController");
@@ -30,15 +31,19 @@ router.post("/", savePayment);
 // Upload bank payment slip
 router.post(
   "/upload-slip",
-  upload.single("file"),
+ upload.single("slip"),
   uploadPaymentSlip
 );
 
 // =========================
 // ADMIN ROUTES
 // =========================
+
 // Get all payments
 router.get("/", getAllPayments);
+
+// Get one payment by ID
+router.get("/details/:id", getPaymentById);
 
 // Approve payment
 router.put("/approve/:id", approvePayment);
@@ -49,6 +54,7 @@ router.put("/reject/:id", rejectPayment);
 // =========================
 // STUDENT ROUTES
 // =========================
+
 // Get courses by student email
 router.get("/:email", getStudentCourses);
 

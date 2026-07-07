@@ -5,6 +5,27 @@ const Class = require("../../models/Class/class");
 const Teacher = require("../../models/Teacher/teacher");
 
 // =========================
+// AUTO GENERATE GOOGLE MEET LINK
+// =========================
+const generateMeetLink = () => {
+  const chars = "abcdefghijklmnopqrstuvwxyz";
+
+  const part1 = Array.from({ length: 3 }, () =>
+    chars[Math.floor(Math.random() * chars.length)]
+  ).join("");
+
+  const part2 = Array.from({ length: 4 }, () =>
+    chars[Math.floor(Math.random() * chars.length)]
+  ).join("");
+
+  const part3 = Array.from({ length: 3 }, () =>
+    chars[Math.floor(Math.random() * chars.length)]
+  ).join("");
+
+  return `https://meet.google.com/${part1}-${part2}-${part3}`;
+};
+
+// =========================
 // CREATE CLASS
 // =========================
 router.post("/", async (req, res) => {
@@ -23,7 +44,6 @@ router.post("/", async (req, res) => {
       endTime,
       monthlyFee,
       mode,
-      meetingLink,
     } = req.body;
 
     const teacher = await Teacher.findOne({
@@ -38,6 +58,7 @@ router.post("/", async (req, res) => {
       });
     }
 
+    // ✅ CREATE CLASS WITH AUTO GENERATED LINK
     const newClass = new Class({
       teacherId: teacher._id,
       className,
@@ -49,7 +70,9 @@ router.post("/", async (req, res) => {
       endTime,
       monthlyFee,
       mode,
-      meetingLink,
+
+      // 🔥 AUTO GENERATED GOOGLE MEET LINK
+      meetingLink: generateMeetLink(),
     });
 
     await newClass.save();

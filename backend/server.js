@@ -1,3 +1,5 @@
+require("./utils/classStatusUpdater");
+
 const contactRoutes = require("./routes/contact");
 const studentProfileRoutes = require("./routes/studentProfile");
 const paymentRoutes = require("./routes/payment");
@@ -27,6 +29,10 @@ const app = express();
 // Middleware
 app.use(cors());
 app.use(express.json());
+
+
+app.use("/uploads", express.static("uploads"));
+
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 app.use("/api/contact", contactRoutes);
 app.use("/api/profile", studentProfileRoutes);

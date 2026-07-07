@@ -16,7 +16,8 @@ import {
   BoxArrowRight,
   Bell,
   ChevronDown,
-  Upload
+  Upload,
+  PersonVideo
 } from "react-bootstrap-icons";
 
 function BankSlipUpload() {
@@ -189,6 +190,15 @@ navigate("/studentdashboard");
                 <Calendar3 className="me-3" />
                 Timetable
               </button>
+
+              <button
+                className="btn btn-outline-light border-0 w-100 text-start rounded-4 mb-3 p-3"
+              onClick={() => navigate("/allteachers")}
+              >
+                <PersonVideo className="me-3" />
+                Teachers
+              </button>
+              
 
               <button
                 className="btn btn-light w-100 text-start fw-bold rounded-4 mb-3 p-3"

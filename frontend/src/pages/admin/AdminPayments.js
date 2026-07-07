@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { useLocation } from "react-router-dom";
 
 import {
   Search,
@@ -23,6 +24,9 @@ function AdminPayments() {
   const [search, setSearch] = useState("");
 
 const [payments, setPayments] = useState([]);
+
+const location = useLocation();
+const payment = location.state?.payment;
 
 
 
@@ -486,13 +490,13 @@ const filteredPayments = payments.filter((payment) => {
     background: darkMode ? "#495057" : "#f8f9fa",
   }}
 >
-  <th className="ps-4 py-3">Receipt</th>
-  <th>Student</th>
-  <th>Teacher</th>
+  <th className="ps-4 py-3">Receipt No</th>
+  <th>Student Name</th>
+  <th>Teacher Name</th>
   <th>Grade</th>
   <th>Subject</th>
   <th>Amount</th>
-  <th>Method</th>
+  <th>Payment Method</th>
   <th>Status</th>
   <th className="text-center">Actions</th>
 </tr>
@@ -512,7 +516,7 @@ const filteredPayments = payments.filter((payment) => {
 >
 
 <td className="ps-4 fw-bold">
-  {payment._id.slice(-6).toUpperCase()}
+ {payment.receiptNumber}
 </td>
 
 <td>
@@ -573,12 +577,19 @@ const filteredPayments = payments.filter((payment) => {
 
 <td className="text-center">
 
-  <button
-    className="btn btn-outline-primary btn-sm me-2"
-    onClick={() => navigate("/payment-details")}
-  >
-    <EyeFill />
-  </button>
+
+
+<button
+  className="btn btn-outline-primary btn-sm me-2"
+  onClick={() =>
+    navigate(`/payment-details/${payment._id}`)
+  }
+>
+  <EyeFill />
+</button>
+
+
+
 
   {payment.status === "Pending" && (
     <>

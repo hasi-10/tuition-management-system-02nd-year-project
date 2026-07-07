@@ -4,7 +4,6 @@ import axios from "axios";
 
 import {
   Bell,
-  ChevronDown,
   HouseDoorFill,
   Calendar3,
   CreditCard,
@@ -15,441 +14,197 @@ import {
   PlayCircle,
   CameraVideo,
   PatchQuestion,
-  CalendarEvent,
   Book,
   PersonVideo
 } from "react-bootstrap-icons";
 
 import logo from "../assets/image-removebg-preview.png";
-import profile from "../assets/profile.png";
 import StudentProfileDropdown from "../components/StudentProfileDropdown";
 import API from "../services/api";
 
-
 function MyCourses() {
 
-  
   const [formData, setFormData] = useState({
-  fullName: "",
-  profileImage: "",
-});
-
+    fullName: "",
+    profileImage: "",
+  });
 
   const navigate = useNavigate();
-    const [darkMode, setDarkMode] = useState(false);
-  
-    useEffect(() => {
-      const savedTheme = localStorage.getItem("theme");
-      setDarkMode(savedTheme === "dark");
-    }, []);
-
+  const [darkMode, setDarkMode] = useState(false);
   const [courses, setCourses] = useState([]);
 
   useEffect(() => {
+    const savedTheme = localStorage.getItem("theme");
+    setDarkMode(savedTheme === "dark");
+  }, []);
 
+  useEffect(() => {
     loadCourses();
-
+    loadProfile();
   }, []);
 
   const loadCourses = async () => {
-
     try {
+      const email = localStorage.getItem("email");
 
-const email = localStorage.getItem("email");
-
-console.log("Student Email:", email);
-
-const response = await axios.get(
-  `http://localhost:5000/api/enrollments/${email}`
-);
-
-console.log("Enrollments:", response.data);
-
-
+      const response = await axios.get(
+        `http://localhost:5000/api/enrollments/${email}`
+      );
 
       setCourses(response.data);
 
     } catch (error) {
-
       console.log(error);
-
     }
-
   };
+
   const loadProfile = async () => {
-  try {
-    const email = localStorage.getItem("email");
+    try {
+      const email = localStorage.getItem("email");
 
-    const res = await API.get(`/profile/${email}`);
+      const res = await API.get(`/profile/${email}`);
+      setFormData(res.data.data);
 
-    setFormData(res.data.data);
-  } catch (error) {
-    console.log(error);
-  }
-};
-
-useEffect(() => {
-  const email = localStorage.getItem("email");
-
-  if (email) {
-    loadProfile();
-  }
-}, []);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
-
-<div
-  className="container-fluid p-0"
-  style={{
-    background: darkMode ? "#2f343a" : "#eef2f7",
-    minHeight: "100vh",
-  }}
->
+    <div
+      className="container-fluid p-0"
+      style={{
+        background: darkMode ? "#2f343a" : "#eef2f7",
+        minHeight: "100vh",
+      }}
+    >
 
       <div className="row g-0">
 
         {/* Sidebar */}
-
-        <div
-          className="col-lg-3 col-xl-2 d-flex flex-column justify-content-between"
-          style={{
-            background: "linear-gradient(to bottom,#001a70,#0033cc)",
-            minHeight: "100vh",
-          }}
+        <div className="col-lg-3 col-xl-2 d-flex flex-column justify-content-between"
+          style={{ background: "linear-gradient(to bottom,#001a70,#0033cc)", minHeight: "100vh" }}
         >
 
           <div>
-
             <div className="text-center py-4">
-
-              <img
-                src={logo}
-                alt="logo"
-                style={{
-                  width: "180px",
-                }}
-              />
-
+              <img src={logo} alt="logo" style={{ width: "180px" }} />
             </div>
 
             <div className="px-3">
 
-             <button
-  className="btn btn-outline-light border-0 w-100 text-start rounded-4 mb-3 p-3"
-  onClick={() => navigate("/studentdashboard")}
->
-  <HouseDoorFill className="me-3" />
-  Dashboard
-</button>
-
-<button
-  className="btn btn-light w-100 text-start fw-bold rounded-4 mb-3 p-3"
->
-  <Book className="me-3" />
-  My Courses
-</button>
-
-<button
-  className="btn btn-outline-light border-0 w-100 text-start rounded-4 mb-3 p-3"
-  onClick={() => navigate("/my-timetable")}
->
-  <Calendar3 className="me-3" />
-  Timetable
-</button>
-
-<button
-  className="btn btn-outline-light border-0 w-100 text-start rounded-4 mb-3 p-3"
-onClick={() => navigate("/allteachers")}
->
-  <PersonVideo className="me-3" />
-  Teachers
-</button>
-
-              <NavLink
-                to="/payment"
-                className="btn btn-outline-light border-0 w-100 text-start rounded-4 mb-3 p-3"
+              <button className="btn btn-outline-light w-100 mb-3 p-3"
+                onClick={() => navigate("/studentdashboard")}
               >
-                <CreditCard className="me-3" />
-                Payment
-              </NavLink>
+                <HouseDoorFill className="me-2" /> Dashboard
+              </button>
 
-              <NavLink
-                to="/results"
-                className="btn btn-outline-light border-0 w-100 text-start rounded-4 mb-3 p-3"
+              <button className="btn btn-light w-100 mb-3 p-3">
+                <Book className="me-2" /> My Courses
+              </button>
+
+              <button className="btn btn-outline-light w-100 mb-3 p-3"
+                onClick={() => navigate("/my-timetable")}
               >
-                <FileText className="me-3" />
-                Results
-              </NavLink>
-
-              <NavLink
-                to="/materialtracking"
-                className="btn btn-outline-light border-0 w-100 text-start rounded-4 mb-3 p-3"
-              >
-                <Folder className="me-3" />
-                Material Tracking
-              </NavLink>
-
-<button
-  className="btn btn-outline-light border-0 w-100 text-start rounded-4 mb-3 p-3"
-  onClick={() => navigate("/settings")}
->
-  <Gear className="me-3" />
-  Settings
-</button>
+                <Calendar3 className="me-2" /> Timetable
+              </button>
 
             </div>
-
           </div>
-
-           {/* Logout */}
-          
-                    <div className="p-3">
-          
-                      <button className="btn btn-light w-100 rounded-4 fw-bold p-3">
-          
-                        <BoxArrowRight className="me-2" />
-          
-                        Logout
-          
-                      </button>
-          
-                    </div>
 
         </div>
 
-        {/* Main Content */}
-
+        {/* MAIN */}
         <div className="col">
 
-          {/* Top Navbar */}
+          {/* TOP BAR */}
+          <div className="shadow-sm px-5 py-3 d-flex justify-content-between align-items-center"
+            style={{ background: darkMode ? "#3a4047" : "#fff" }}
+          >
+            <h2 className="fw-bold">My Courses</h2>
 
-<div
-  className="shadow-sm px-5 py-3 d-flex justify-content-between align-items-center"
-  style={{
-    background: darkMode ? "#3a4047" : "#ffffff",
-    color: darkMode ? "#ffffff" : "#000000",
-  }}
->
-  <div>
-    <h2
-      className="fw-bold mb-0"
-      style={{
-        color: darkMode ? "#ffffff" : "#000000",
-      }}
-    >
-      My Courses
-    </h2>
-
-    <small
-      style={{
-        color: darkMode ? "#d1d5db" : "#6c757d",
-      }}
-    >
-      Access your enrolled courses and learning materials
-    </small>
-  </div>
-
-  <div className="d-flex align-items-center">
-    <Bell size={28} className="me-4" />
-
-<StudentProfileDropdown
-  fullName={formData.fullName}
-  profileImage={formData.profileImage}
-/>
-  </div>
-</div>
-
-          <div className="text-end p-4">
-
-            <button className="btn btn-light shadow rounded-pill px-4 py-2 fw-bold">
-
-              Upload Pdf
-
-            </button>
-
+            <StudentProfileDropdown
+              fullName={formData.fullName}
+              profileImage={formData.profileImage}
+            />
           </div>
 
-          <div className="container-fluid px-4">
+          {/* CONTENT */}
+          <div className="container-fluid px-4 py-4">
 
             {courses.length === 0 ? (
-
               <div className="text-center py-5">
-
                 <h3>No Registered Courses</h3>
-
-                <p className="text-muted">
-
-                  Complete a payment to see your courses.
-
-                </p>
-
               </div>
-
             ) : (
-
               courses.map((course, index) => (
+                <div key={index} className="card shadow mb-4 rounded-4">
 
-<div
-  key={index}
-  className="card border-0 shadow-lg rounded-4 mb-4 overflow-hidden"
-  style={{
-    background: darkMode ? "#495057" : "#ffffff",
-    color: darkMode ? "#ffffff" : "#000000",
-  }}
->
+                  {/* HEADER */}
+                  <div className="p-3 text-white"
+                    style={{ background: "#005eff" }}
+                  >
+                    <h4>{course.subject}</h4>
+                    <small>Grade {course.grade}</small>
+                  </div>
 
-  {/* Header */}
+                  {/* BODY */}
+                  <div className="p-4">
 
-  <div
-    className="d-flex justify-content-between align-items-center px-4 py-3"
-    style={{
-      background: darkMode
-  ? "linear-gradient(90deg,#1f2937,#374151)"
-  : "linear-gradient(90deg,#0033cc,#005eff)",
-      color: "white",
-    }}
-  >
+                    <p><b>Teacher:</b> {course.teacher}</p>
 
-    <div>
+                    <p><b>Email:</b> {course.studentEmail}</p>
 
-      <h3 className="fw-bold mb-1">
+                    <hr />
 
-        📚 {course.subject}
+                    <div className="d-flex gap-3">
 
-      </h3>
+                      <button className="btn btn-outline-primary">
+                        <PlayCircle className="me-2" />
+                        Recording
+                      </button>
 
-      <small>
+                      {/* ✅ FIXED JOIN BUTTON */}
+                      <button
+                        className="btn btn-primary"
+                        onClick={() => {
+                          if (course.meetingLink) {
+                            window.open(course.meetingLink, "_blank");
+                          } else {
+                            alert("Class link not available yet");
+                          }
+                        }}
+                      >
+                        <CameraVideo className="me-2" />
+                        Join Class
+                      </button>
 
-        Grade {course.grade}
+                      <button className="btn btn-success"
+                        onClick={async () => {
+                          const res = await axios.get(
+                            `http://localhost:5000/api/quizzes/course/${course.subject}/${course.grade}/${course.teacher}`
+                          );
 
-      </small>
+                          if (res.data) {
+                            navigate("/quiz-instructions", {
+                              state: res.data,
+                            });
+                          } else {
+                            alert("No quiz available");
+                          }
+                        }}
+                      >
+                        <PatchQuestion className="me-2" />
+                        Quiz
+                      </button>
 
-    </div>
+                    </div>
 
-    <span className="badge bg-success px-3 py-2 rounded-pill">
+                  </div>
 
-      {course.status}
-
-    </span>
-
-  </div>
-
-  {/* Body */}
-
-  <div className="p-4">
-
-    <div className="row text-center text-md-start">
-
-      <div className="col-md-6 mb-3">
-
-<h6
-  style={{
-    color: darkMode ? "#d1d5db" : "#6c757d",
-  }}
->
-  👨‍🏫 Teacher
-</h6>
-
-        <h5 className="fw-bold">
-
-          {course.teacher}
-
-        </h5>
-
-      </div>
-
-      <div className="col-md-6 mb-3">
-
-<h6
-  style={{
-    color: darkMode ? "#d1d5db" : "#6c757d",
-  }}
->
-  📧 Email
-</h6>
-        <h6>
-
-          {course.studentEmail}
-
-        </h6>
-
-      </div>
-
-    </div>
-
-    <hr />
-
-    <div className="d-flex justify-content-center gap-3 flex-wrap">
-
-      <button
-  className="btn btn-outline-primary rounded-pill px-4"
-  onClick={() => navigate("/class-recordings")}
->
-  <PlayCircle className="me-2" />
-  Recording
-</button>
-
-      <button
-  className="btn btn-primary rounded-pill px-4"
-  onClick={() => navigate("/student-online-class")}
->
-  <CameraVideo className="me-2" />
-  Join Online Class
-</button>
-<button
-  className="btn btn-success rounded-pill px-4"
-onClick={async () => {
-
-  try {
-
-    const res = await axios.get(
-      `http://localhost:5000/api/quizzes/course/${course.subject}/${course.grade}/${course.teacher}`
-    );
-
-    if (!res.data) {
-
-      alert("No quiz available yet");
-
-      return;
-
-    }
-
-    navigate("/quiz-instructions", {
-      state: res.data,
-    });
-
-  } catch (err) {
-
-    console.log(err);
-
-    alert("No quiz available yet");
-
-  }
-
-}}
->
-  <PatchQuestion className="me-2" />
-  Quiz
-</button>
-
-    </div>
-
-  </div>
-
-</div>
-
-
-            
-
+                </div>
               ))
-
             )}
-
-            <div className="text-end py-4">
-
-             
-
-            </div>
 
           </div>
 
@@ -458,10 +213,7 @@ onClick={async () => {
       </div>
 
     </div>
-
   );
-
 }
 
 export default MyCourses;
-                  

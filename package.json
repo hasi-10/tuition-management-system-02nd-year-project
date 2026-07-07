@@ -9,6 +9,7 @@
     "@testing-library/user-event": "^13.5.0",
     "axios": "^1.15.2",
     "bootstrap": "^5.3.8",
+    "node-cron": "^4.6.0",
     "react": "^19.2.5",
     "react-bootstrap-icons": "^1.11.6",
     "react-dom": "^19.2.5",
