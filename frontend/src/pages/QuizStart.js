@@ -48,10 +48,23 @@ useEffect(() => {
 
   const location = useLocation();
 
-  const quizData = location.state || {
-    subject: "Geography",
-    duration: 30,
-  };
+const quizData = location.state;
+
+if (!quizData) {
+  navigate("/mycourses");
+  return null;
+}
+
+const checkAttempt = async () => {
+  const res = await API.get(
+    `/submissions/check/${quizData._id}/${localStorage.getItem("email")}`
+  );
+
+  if (res.data.attempted) {
+    alert("You already attempted this quiz");
+    navigate("/mycourses");
+  }
+};
 
   return (
 <div
@@ -126,15 +139,14 @@ useEffect(() => {
 
 
 
-              <h2
-                className="fw-bold mb-3"
-                style={{
-                  color: darkMode ? "#ffffff" : "#000000",
-                }}
-              >
-                {quizData.subject} Quiz
-              </h2>
-
+<h2
+  className="fw-bold mb-3"
+  style={{
+    color: darkMode ? "#ffffff" : "#000000",
+  }}
+>
+  {quizData.title}
+</h2>
               <p
                 className=" mb-5"
                 style={{
@@ -185,6 +197,9 @@ useEffect(() => {
               </div>
 
             </div>
+            <p className="fw-bold mt-3">
+  Total Questions: {quizData.questions.length}
+</p>
             </div>
 
             {/* ================= SUBJECT CARD ================= */}
@@ -198,44 +213,57 @@ useEffect(() => {
               }}
             >
 
-              <div className="row text-center">
+<div className="row text-center">
 
-                <div className="col-6">
+  <div className="col-md-4">
 
-                  <h6 className=" fw-bold mb-2">
-                    SUBJECT
-                  </h6>
+    <h6 className="fw-bold mb-2">
+      SUBJECT
+    </h6>
 
-                  <h4
-                    className="fw-bold"
-                    style={{
-                      color: "#001a70",
-                    }}
-                  >
-                    {quizData.subject}
-                  </h4>
+    <h4
+      className="fw-bold"
+      style={{ color: "#001a70" }}
+    >
+      {quizData.subject}
+    </h4>
 
-                </div>
+  </div>
 
-                <div className="col-6">
+  <div className="col-md-4">
 
-                  <h6 className=" fw-bold mb-2">
-                    STATUS
-                  </h6>
+    <h6 className="fw-bold mb-2">
+      GRADE
+    </h6>
 
-                  <span
-                    className="badge rounded-pill px-4 py-2"
-                    style={{
-                      background: "#28a745",
-                      fontSize: "15px",
-                    }}
-                  >
-                    Ready to Start
-                  </span>
+    <h4
+      className="fw-bold"
+      style={{ color: "#001a70" }}
+    >
+      {quizData.grade}
+    </h4>
 
-                </div>
+  </div>
 
-              </div>
+  <div className="col-md-4">
+
+    <h6 className="fw-bold mb-2">
+      STATUS
+    </h6>
+
+    <span
+      className="badge rounded-pill px-4 py-2"
+      style={{
+        background: "#28a745",
+        fontSize: "15px",
+      }}
+    >
+      Ready to Start
+    </span>
+
+  </div>
+
+</div>
 
             </div>
                         {/* ================= BUTTONS ================= */}

@@ -110,6 +110,9 @@ const quizData = location.state;
         >
           ONLINE QUIZ
         </h1>
+        <h3 className="text-center fw-bold mb-4">
+  {quizData.title}
+</h3>
 
 <div
  className="card border-0 shadow rounded-4 mx-auto"
@@ -174,7 +177,7 @@ style={{
   fontSize: "15px",
   fontWeight: "500",
 }}>
-                  Total Questions : 10
+                  Total Questions : {quizData.questions.length}
                 </div>
 
               </div>
@@ -199,10 +202,85 @@ style={{
   fontSize: "15px",
   fontWeight: "500",
 }}>
-                  Time Duration : 30 Minutes
+                  Time Duration : {quizData.duration} Minutes
                 </div>
 
               </div>
+
+              <div className="d-flex align-items-center py-2 border-bottom">
+
+  <div
+    className="rounded-circle d-flex justify-content-center align-items-center"
+    style={{
+      width: "36px",
+      height: "36px",
+      background: "#eef3ff",
+    }}
+  >
+    📚
+  </div>
+
+  <div
+    className="ms-3"
+    style={{
+      fontSize: "15px",
+      fontWeight: "500",
+    }}
+  >
+    Subject : {quizData.subject}
+  </div>
+
+</div>
+
+<div className="d-flex align-items-center py-2 border-bottom">
+
+  <div
+    className="rounded-circle d-flex justify-content-center align-items-center"
+    style={{
+      width: "36px",
+      height: "36px",
+      background: "#eef3ff",
+    }}
+  >
+    🎓
+  </div>
+
+  <div
+    className="ms-3"
+    style={{
+      fontSize: "15px",
+      fontWeight: "500",
+    }}
+  >
+    Grade : {quizData.grade}
+  </div>
+
+</div>
+
+<div className="d-flex align-items-center py-2 border-bottom">
+
+  <div
+    className="rounded-circle d-flex justify-content-center align-items-center"
+    style={{
+      width: "36px",
+      height: "36px",
+      background: "#eef3ff",
+    }}
+  >
+    📅
+  </div>
+
+  <div
+    className="ms-3"
+    style={{
+      fontSize: "15px",
+      fontWeight: "500",
+    }}
+  >
+    Due Date : {quizData.dueDate?.split("T")[0]}
+  </div>
+
+</div>
 
               {/* 3 */}
 

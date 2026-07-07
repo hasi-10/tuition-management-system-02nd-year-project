@@ -3,80 +3,60 @@ const router = express.Router();
 
 const Submission = require("../models/Submission");
 
-
-// SAVE SUBMISSION
+// ================= SUBMIT QUIZ (ONE TIME ONLY) =================
 router.post("/", async (req, res) => {
   try {
 
-    const submission = new Submission(
-      req.body
-    );
+    const { quizId, studentEmail } = req.body;
 
-    await submission.save();
+    if (!quizId || !studentEmail) {
+      return res.status(400).json({
+        message: "Missing data",
+      });
+    }
+
+    // CHECK IF ALREADY SUBMITTED
+    const existing = await Submission.findOne({
+      quizId,
+      studentEmail,
+    });
+
+    if (existing) {
+      return res.status(400).json({
+        message: "Already attempted this quiz",
+      });
+    }
+
+    const submission = await Submission.create(req.body);
 
     res.status(201).json({
-      message: "Submission saved",
+      message: "Submitted successfully",
       submission,
     });
 
   } catch (err) {
-
     console.log(err);
-
-    res.status(500).json({
-      message: "Failed to save submission",
-    });
-
+    res.status(500).json({ message: err.message });
   }
 });
 
-
-// GET SUBMISSIONS FOR ONE QUIZ
-router.get("/:quizId", async (req, res) => {
+// ================= CHECK ATTEMPT =================
+router.get("/check/:quizId/:email", async (req, res) => {
   try {
 
-    const submissions =
-      await Submission.find({
-        quizId: req.params.quizId,
-      });
-
-    res.json(submissions);
-
-  } catch (err) {
-
-    console.log(err);
-
-    res.status(500).json({
-      message: "Failed to fetch submissions",
+    const existing = await Submission.findOne({
+      quizId: req.params.quizId,
+      studentEmail: req.params.email,
     });
 
+    res.json({
+      attempted: !!existing,
+    });
+
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ message: err.message });
   }
 });
-
-router.get(
-  "/details/:id",
-  async (req, res) => {
-
-    try {
-
-      const submission =
-        await Submission.findById(
-          req.params.id
-        );
-
-      res.json(submission);
-
-    } catch (err) {
-
-      console.log(err);
-
-      res.status(500).json({
-        message: "Server Error",
-      });
-
-    }
-
-  }
-);
 
 module.exports = router;

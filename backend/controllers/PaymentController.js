@@ -182,29 +182,6 @@ const getAllPayments = async (req, res) => {
 const approvePayment = async (req, res) => {
   try {
 
-
-const enrollment = new Enrollment({
-  studentName: `${payment.firstName} ${payment.lastName}`,
-  studentEmail: payment.email,
-  teacher: payment.teacher,
-  subject: payment.subject,
-  grade: payment.grade,
-
-  // 🔥 IMPORTANT FIX
-  classId: classData?._id,
-  meetingLink: classData?.meetingLink,
-  startTime: classData?.startTime,
-  endTime: classData?.endTime,
-  date: classData?.date,
-  day: classData?.day,
-
-  paymentId: payment._id,
-  status: "Active",
-});
-
-
-
-
     const payment = await Payment.findById(req.params.id);
 
     if (!payment) {
@@ -213,8 +190,14 @@ const enrollment = new Enrollment({
       });
     }
 
-    payment.status = "Approved";
-    await payment.save();
+
+
+
+
+
+payment.status = "Approved";
+
+await payment.save();
 
     const existingEnrollment = await Enrollment.findOne({
       studentEmail: payment.email,
@@ -222,6 +205,8 @@ const enrollment = new Enrollment({
       subject: payment.subject,
       grade: payment.grade,
     });
+
+
 
     if (!existingEnrollment) {
 

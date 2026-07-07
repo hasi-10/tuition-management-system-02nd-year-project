@@ -151,9 +151,44 @@ function MyCourses() {
                   {/* BODY */}
                   <div className="p-4">
 
-                    <p><b>Teacher:</b> {course.teacher}</p>
+    <div className="row text-center text-md-start">
 
-                    <p><b>Email:</b> {course.studentEmail}</p>
+      <div className="col-md-6 mb-3">
+
+<h6
+  style={{
+    color: darkMode ? "#d1d5db" : "#6c757d",
+  }}
+>
+  👨‍🏫 Teacher
+</h6>
+
+        <h5 className="fw-bold">
+
+          {course.teacher}
+
+        </h5>
+
+      </div>
+
+      <div className="col-md-6 mb-3">
+
+<h6
+  style={{
+    color: darkMode ? "#d1d5db" : "#6c757d",
+  }}
+>
+  📧 Email
+</h6>
+        <h6>
+
+          {course.studentEmail}
+
+        </h6>
+
+      </div>
+
+    </div>
 
                     <hr />
 
@@ -164,39 +199,48 @@ function MyCourses() {
                         Recording
                       </button>
 
-                      {/* ✅ FIXED JOIN BUTTON */}
-                      <button
-                        className="btn btn-primary"
-                        onClick={() => {
-                          if (course.meetingLink) {
-                            window.open(course.meetingLink, "_blank");
-                          } else {
-                            alert("Class link not available yet");
-                          }
-                        }}
-                      >
-                        <CameraVideo className="me-2" />
-                        Join Class
-                      </button>
+      <button
+  className="btn btn-primary rounded-pill px-4"
+  onClick={() => navigate("/student-online-class")}
+>
+  <CameraVideo className="me-2" />
+  Join Online Class
+</button>
+<button
+  className="btn btn-success rounded-pill px-4"
+onClick={async () => {
 
-                      <button className="btn btn-success"
-                        onClick={async () => {
-                          const res = await axios.get(
-                            `http://localhost:5000/api/quizzes/course/${course.subject}/${course.grade}/${course.teacher}`
-                          );
+  try {
 
-                          if (res.data) {
-                            navigate("/quiz-instructions", {
-                              state: res.data,
-                            });
-                          } else {
-                            alert("No quiz available");
-                          }
-                        }}
-                      >
-                        <PatchQuestion className="me-2" />
-                        Quiz
-                      </button>
+    const res = await axios.get(
+      `http://localhost:5000/api/quizzes/course/${course.subject}/${course.grade}/${course.teacher}`
+    );
+
+    if (!res.data) {
+
+      alert("No quiz available yet");
+
+      return;
+
+    }
+
+    navigate("/quiz-instructions", {
+      state: res.data,
+    });
+
+  } catch (err) {
+
+    console.log(err);
+
+    alert("No quiz available yet");
+
+  }
+
+}}
+>
+  <PatchQuestion className="me-2" />
+  Quiz
+</button>
 
                     </div>
 

@@ -34,8 +34,9 @@ function Payment() {
     phone: "",
     classType: "",
     teacher: "",
+    teacherName: "",
     subject: "",
-    grade: "", 
+    grade: "",     
 
     paymentMethod: "",
     cardNumber: "",
@@ -295,16 +296,25 @@ function Payment() {
                           <button
                             className="btn btn-primary rounded-pill mt-3"
                             onClick={() => {
-                              const selectedClass = teacher.schedule.find(
-                                item => item.grade === `Grade ${formData.grade}`
-                              );
-                              setFormData((prev) => ({
-                                ...prev,
-                                teacher: teacher.name,
-                                subject: teacher.subject,
-                                grade: prev.grade,
-                                amount: selectedClass ? selectedClass.fee : 0,
-                              }));
+
+
+
+
+const selectedClass = teacher.schedule.find(
+  item => item.grade === `Grade ${formData.grade}`
+);
+
+setFormData((prev) => ({
+  ...prev,
+  teacher: teacher.name,
+  subject: teacher.subject,
+  grade: prev.grade,
+  amount: selectedClass ? selectedClass.fee : 0,
+}));
+
+
+
+
                             }}
                           >
                             Select
@@ -332,7 +342,9 @@ function Payment() {
                 <p>
                   <strong>Teacher</strong>
                   <br/>
+
                   {formData.teacher || "-"}
+
                 </p>
                 <p>
                   <strong>Subject</strong>

@@ -2,13 +2,15 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ArrowLeft, Plus } from "react-bootstrap-icons";
 import API from "../../services/api";
-
+import { useLocation } from "react-router-dom";
 function CreateQuiz() {
+  const location = useLocation();
+
+const selectedGrade = location.state?.grade || "";
+const selectedSubject = location.state?.subject || "";
   const navigate = useNavigate();
   const [quizData, setQuizData] = useState({
   title: "",
-  subject: "",
-  grade: "",
   duration: "",
   dueDate: "",
 });
@@ -51,20 +53,25 @@ function CreateQuiz() {
 };
 const handleSaveQuiz = async () => {
   try {
-    const quiz = {
-      title: quizData.title,
-      subject: quizData.subject,
-      teacher: "kamal silva",
-      grade: quizData.grade,
-      duration: quizData.duration,
-      dueDate: quizData.dueDate,
-      questions: questions,
-    };
+const quiz = {
+  title: quizData.title,
 
-    const res = await API.post(
-      "/quizzes",
-      quiz
-    );
+  teacher: localStorage.getItem("userId"),
+
+  subject: selectedSubject,
+
+  grade: selectedGrade,
+
+  duration: Number(quizData.duration),
+
+  dueDate: quizData.dueDate,
+
+  questions,
+
+  status: "Active",
+};
+
+    const res = await API.post("/quizzes", quiz);
 
     alert("Quiz Saved Successfully!");
 
@@ -75,7 +82,14 @@ const handleSaveQuiz = async () => {
   } catch (err) {
     console.log(err);
 
-    alert("Failed to save quiz");
+    console.log(err.response);
+
+    console.log(err.response?.data);
+
+    alert(
+      err.response?.data?.message ||
+      "Failed to save quiz"
+    );
   }
 };
   return (
@@ -97,16 +111,33 @@ const handleSaveQuiz = async () => {
           Back to Quiz Management
         </button>
 
-        {/* Header */}
-        <div className="mb-4">
-          <h1 className="fw-bold">Create Quiz</h1>
-          <p className="text-muted">
-            Create a new quiz for your students
-          </p>
-        </div>
+{/* Header */}
+<div className="mb-4">
+  <h1 className="fw-bold">Create Quiz</h1>
 
-        {/* Quiz Details */}
-        <div className="card border-0 shadow rounded-5 p-4 mb-4">
+  <p className="text-muted">
+    Create a new quiz for your students
+  </p>
+</div>
+
+{/* Selected Class */}
+
+<div className="alert alert-primary rounded-4 mb-4">
+
+  <h5 className="fw-bold mb-3">
+    Selected Class
+  </h5>
+
+  <strong>Subject :</strong> {selectedSubject}
+
+  <br />
+
+  <strong>Grade :</strong> {selectedGrade}
+
+</div>
+
+{/* Quiz Details */}
+<div className="card border-0 shadow rounded-5 p-4 mb-4">
           <h3 className="fw-bold mb-4">Quiz Details</h3>
 
           <div className="row">
@@ -127,39 +158,11 @@ const handleSaveQuiz = async () => {
 />
             </div>
 
+
+
+
+
             <div className="col-md-6 mb-3">
-              <label className="fw-semibold">Subject</label>
-<input
-  type="text"
-  className="form-control rounded-pill"
-  placeholder="Enter subject"
-  value={quizData.subject}
-  onChange={(e) =>
-    setQuizData({
-      ...quizData,
-      subject: e.target.value,
-    })
-  }
-/>
-            </div>
-
-            <div className="col-md-4 mb-3">
-              <label className="fw-semibold">Grade</label>
-<input
-  type="text"
-  className="form-control rounded-pill"
-  placeholder="Grade"
-  value={quizData.grade}
-  onChange={(e) =>
-    setQuizData({
-      ...quizData,
-      grade: e.target.value,
-    })
-  }
-/>
-            </div>
-
-            <div className="col-md-4 mb-3">
               <label className="fw-semibold">Duration (Minutes)</label>
 <input
   type="number"
@@ -175,7 +178,7 @@ const handleSaveQuiz = async () => {
 />
             </div>
 
-            <div className="col-md-4 mb-3">
+            <div className="col-md-6 mb-3">
               <label className="fw-semibold">Due Date</label>
 <input
   type="date"

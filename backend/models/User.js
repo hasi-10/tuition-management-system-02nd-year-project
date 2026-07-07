@@ -21,6 +21,16 @@ const userSchema = new mongoose.Schema({
     type: String,
     default: "",
   },
+  subject: {
+  type: String,
+  default: "",
+},
+
+grades: [
+  {
+    type: String,
+  },
+],
 
   password: {
     type: String,

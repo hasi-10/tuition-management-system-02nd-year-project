@@ -1,37 +1,23 @@
 const mongoose = require("mongoose");
 
 const submissionSchema = new mongoose.Schema({
-  studentName: {
-    type: String,
-    required: true,
-  },
-
   quizId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Quiz",
-    required: true,
+    type: String,
+    required: true
   },
 
-  answers: [
-    {
-      question: String,
-      selectedAnswer: String,
-      correctAnswer: String,
-    },
-  ],
-
-  score: {
-    type: Number,
-    default: 0,
+  studentEmail: {
+    type: String,
+    required: true   // 🔥 ADD THIS
   },
 
-  submittedAt: {
-    type: Date,
-    default: Date.now,
-  },
+  studentName: String,
+  teacher: String,
+  subject: String,
+  grade: String,
+
+  answers: Array,
+  score: Number
 });
 
-module.exports = mongoose.model(
-  "Submission",
-  submissionSchema
-);
+module.exports = mongoose.model("Submission", submissionSchema);

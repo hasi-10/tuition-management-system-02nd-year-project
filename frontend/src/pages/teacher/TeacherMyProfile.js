@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import axios from "axios";
 
 import {
@@ -155,22 +155,23 @@ catch (err) {
   // GRADE FUNCTIONS
   // ===========================
 
-  const handleAddGrade = () => {
-    if (!newGrade.trim()) {
-      alert("Please enter a grade");
-      return;
-    }
+const handleAddGrade = () => {
+  if (!newGrade) {
+    alert("Please select a grade.");
+    return;
+  }
 
-    // FIXED: Check for duplicates
-    if (grades.includes(newGrade.trim())) {
-      alert("This grade already exists");
-      return;
-    }
+  if (grades.includes(newGrade)) {
+    alert("This grade has already been added.");
+    return;
+  }
 
-    setGrades([...grades, newGrade.trim()]);
-    setNewGrade("");
-    setShowAddGrade(false);
-  };
+  setGrades([...grades, newGrade]);
+
+  setNewGrade("");
+
+  setShowAddGrade(false);
+};
 
   const handleDeleteGrade = (index) => {
     // FIXED: Confirm before deletion
@@ -273,56 +274,124 @@ const handleAddSchedule = () => {
             </div>
 
             <div className="px-3">
-              <button
-                className="btn btn-outline-light border-0 w-100 text-start mb-3 p-3 rounded-4"
-                onClick={() => navigate("/teacher-dashboard")}
-              >
-                <HouseDoorFill className="me-3" />
-                Dashboard
-              </button>
+<NavLink
+  to="/teacher-dashboard"
+  end
+  className={({ isActive }) =>
+    isActive
+      ? "btn btn-light w-100 text-start fw-bold rounded-4 mb-3 p-3"
+      : "btn btn-outline-light border-0 w-100 text-start rounded-4 mb-3 p-3"
+  }
+  style={{ textDecoration: "none" }}
+>
+  <HouseDoorFill className="me-3" />
+  Dashboard
+</NavLink>
 
-              <button
-                className="btn btn-outline-light border-0 w-100 text-start mb-3 p-3 rounded-4"
-                onClick={() => navigate("/teacher-classes")}
-              >
-                <Book className="me-3" />
-                My Classes
-              </button>
+<NavLink
+  to="/teacher-classes"
+  className={({ isActive }) =>
+    isActive
+      ? "btn btn-light w-100 text-start fw-bold rounded-4 mb-3 p-3"
+      : "btn btn-outline-light border-0 w-100 text-start rounded-4 mb-3 p-3"
+  }
+  style={{ textDecoration: "none" }}
+>
+  <Book className="me-3" />
+  My Classes
+</NavLink>
 
-              <button className="btn btn-outline-light border-0 w-100 text-start mb-3 p-3 rounded-4">
-                <People className="me-3" />
-                Students
-              </button>
+<NavLink
+  to="/teacher-students"
+  className={({ isActive }) =>
+    isActive
+      ? "btn btn-light w-100 text-start fw-bold rounded-4 mb-3 p-3"
+      : "btn btn-outline-light border-0 w-100 text-start rounded-4 mb-3 p-3"
+  }
+  style={{ textDecoration: "none" }}
+>
+  <People className="me-3" />
+  Students
+</NavLink>
 
-              <button className="btn btn-outline-light border-0 w-100 text-start mb-3 p-3 rounded-4">
-                <PatchQuestion className="me-3" />
-                Quizzes
-              </button>
+<NavLink
+  to="/teacher-quizzes"
+  className={({ isActive }) =>
+    isActive
+      ? "btn btn-light w-100 text-start fw-bold rounded-4 mb-3 p-3"
+      : "btn btn-outline-light border-0 w-100 text-start rounded-4 mb-3 p-3"
+  }
+  style={{ textDecoration: "none" }}
+>
+  <PatchQuestion className="me-3" />
+  Quizzes
+</NavLink>
 
-              <button className="btn btn-outline-light border-0 w-100 text-start mb-3 p-3 rounded-4">
-                <Folder className="me-3" />
-                Study Materials
-              </button>
 
-              <button className="btn btn-outline-light border-0 w-100 text-start mb-3 p-3 rounded-4">
-                <CreditCard className="me-3" />
-                Payments
-              </button>
+<NavLink
+  to="/teacher-upload-recording"
+  className={({ isActive }) =>
+    isActive
+      ? "btn btn-light w-100 text-start fw-bold rounded-4 mb-3 p-3"
+      : "btn btn-outline-light border-0 w-100 text-start rounded-4 mb-3 p-3"
+  }
+  style={{ textDecoration: "none" }}
+>
+  <Folder className="me-3" />
+  Study Materials
+</NavLink>
 
-              <button className="btn btn-outline-light border-0 w-100 text-start mb-3 p-3 rounded-4">
-                <GraphUp className="me-3" />
-                Results
-              </button>
+<NavLink
+  to="/teacher-payments"
+  className={({ isActive }) =>
+    isActive
+      ? "btn btn-light w-100 text-start fw-bold rounded-4 mb-3 p-3"
+      : "btn btn-outline-light border-0 w-100 text-start rounded-4 mb-3 p-3"
+  }
+  style={{ textDecoration: "none" }}
+>
+  <CreditCard className="me-3" />
+  Payments
+</NavLink>
 
-              <button className="btn btn-light w-100 text-start fw-bold rounded-4 mb-3 p-3">
-                <PersonCircle className="me-3" />
-                My Profile
-              </button>
+<NavLink
+  to="/teacher-submissions"
+  className={({ isActive }) =>
+    isActive
+      ? "btn btn-light w-100 text-start fw-bold rounded-4 mb-3 p-3"
+      : "btn btn-outline-light border-0 w-100 text-start rounded-4 mb-3 p-3"
+  }
+  style={{ textDecoration: "none" }}
+>
+  <GraphUp className="me-3" />
+  Results
+</NavLink>
 
-              <button className="btn btn-outline-light border-0 w-100 text-start mb-3 p-3 rounded-4">
-                <Gear className="me-3" />
-                Settings
-              </button>
+<NavLink
+  to="/teacher-my-profile"
+  className={({ isActive }) =>
+    isActive
+      ? "btn btn-light w-100 text-start fw-bold rounded-4 mb-3 p-3"
+      : "btn btn-outline-light border-0 w-100 text-start rounded-4 mb-3 p-3"
+  }
+  style={{ textDecoration: "none" }}
+>
+  <PersonCircle className="me-3" />
+  My Profile
+</NavLink>
+
+<NavLink
+  to="/teacher-settings"
+  className={({ isActive }) =>
+    isActive
+      ? "btn btn-light w-100 text-start fw-bold rounded-4 mb-3 p-3"
+      : "btn btn-outline-light border-0 w-100 text-start rounded-4 mb-3 p-3"
+  }
+  style={{ textDecoration: "none" }}
+>
+  <Gear className="me-3" />
+  Settings
+</NavLink>
             </div>
           </div>
 
@@ -446,18 +515,38 @@ const handleAddSchedule = () => {
                   </div>
 
                   <div className="col-md-6">
-                    <label className="form-label fw-bold">Subject</label>
-                    <input
-                      type="text"
-                      className="form-control"
-                      value={teacherData.subject}
-                      onChange={(e) =>
-                        setTeacherData({
-                          ...teacherData,
-                          subject: e.target.value,
-                        })
-                      }
-                    />
+<label className="form-label fw-bold">
+  Subject
+</label>
+
+<select
+  className="form-select"
+  value={teacherData.subject}
+  onChange={(e) =>
+    setTeacherData({
+      ...teacherData,
+      subject: e.target.value,
+    })
+  }
+>
+  <option value="">Select Subject</option>
+
+  <option value="Mathematics">Mathematics</option>
+  <option value="Science">Science</option>
+  <option value="English">English</option>
+  <option value="History">History</option>
+  <option value="ICT">ICT</option>
+  <option value="Sinhala">Sinhala</option>
+  <option value="Tamil">Tamil</option>
+  <option value="Commerce">Commerce</option>
+  <option value="Geography">Geography</option>
+  <option value="Buddhism">Buddhism</option>
+  <option value="Japanese">Japanese</option>
+  <option value="Home Science">Home Science</option>
+  <option value="Biology">Biology</option>
+  <option value="Chemistry">Chemistry</option>
+  <option value="Physics">Physics</option>
+</select>
                   </div>
 
                   <div className="col-12">
@@ -566,13 +655,22 @@ const handleAddSchedule = () => {
                   >
                     <div className="card-body">
                       <h5 className="fw-bold mb-3">Add Grade</h5>
-                      <input
-                        type="text"
-                        className="form-control mb-3"
-                        placeholder="Example : Grade 10"
-                        value={newGrade}
-                        onChange={(e) => setNewGrade(e.target.value)}
-                      />
+<select
+  className="form-select mb-3"
+  value={newGrade}
+  onChange={(e) => setNewGrade(e.target.value)}
+>
+  <option value="">Select Grade</option>
+
+  <option value="Grade 6">Grade 6</option>
+  <option value="Grade 7">Grade 7</option>
+  <option value="Grade 8">Grade 8</option>
+  <option value="Grade 9">Grade 9</option>
+  <option value="Grade 10">Grade 10</option>
+  <option value="Grade 11">Grade 11</option>
+  <option value="Grade 12">Grade 12</option>
+  <option value="Grade 13">Grade 13</option>
+</select>
                       <div className="d-flex justify-content-end gap-2">
                         <button
                           type="button"

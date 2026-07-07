@@ -24,6 +24,7 @@ import {
   Link45deg,
   PlayCircle,
   CameraVideo,
+  JournalPlus,
   X,
   Plus,
   Trash,
@@ -41,6 +42,7 @@ console.log("Logged User ID:", userId);
 
   const [showForm, setShowForm] = useState(false);
   const [showEditForm, setShowEditForm] = useState(false);
+  const [formType, setFormType] = useState("");
   const [editingClassId, setEditingClassId] = useState(null);
 
   const [classes, setClasses] = useState([]);
@@ -347,7 +349,7 @@ loadClasses();
 
               <button
                 className="btn btn-outline-light border-0 w-100 text-start rounded-4 mb-3 p-3"
-                onClick={() => navigate("/teacher-profile")}
+                onClick={() => navigate("/teacher-my-profile")}
               >
                 <PersonCircle className="me-3" />
                 My Profile
@@ -412,6 +414,8 @@ loadClasses();
             {/* Schedule New Class Form */}
             {showForm && (
               <div className="card border-0 shadow rounded-4 p-4 mb-4">
+
+                
                 <div className="d-flex justify-content-between align-items-center mb-4">
                   <h3 className="fw-bold mb-0">Schedule New Class</h3>
                   <button
@@ -420,6 +424,7 @@ loadClasses();
                   >
                     <X size={20} />
                   </button>
+                  
                 </div>
 
                 <div className="row g-3">
@@ -786,8 +791,8 @@ loadClasses();
                 </div>
                 <div className="col-md-3">
                   <button className="btn btn-light shadow rounded-4 p-4 w-100">
-                    <PersonPlus size={30} />
-                    <h6 className="mt-3">Add Student</h6>
+                    <JournalPlus size={30} />
+                    <h6 className="mt-3">Create Course</h6>
                   </button>
                 </div>
                 <div className="col-md-3">

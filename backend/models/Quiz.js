@@ -1,47 +1,84 @@
 const mongoose = require("mongoose");
 
 const questionSchema = new mongoose.Schema({
-  question: String,
+  question: {
+    type: String,
+    required: true,
+  },
+
   optionA: String,
+
   optionB: String,
+
   optionC: String,
+
   optionD: String,
-  correctAnswer: String,
-});
 
-const quizSchema = new mongoose.Schema({
-  title: {
+  correctAnswer: {
     type: String,
     required: true,
   },
 
-  subject: {
-    type: String,
-    required: true,
-  },
-
-  teacher: {
-  type: String,
-},
-
-  grade: {
-    type: String,
-  },
-
-  duration: {
+  marks: {
     type: Number,
-  },
-
-  dueDate: {
-    type: Date,
-  },
-
-  questions: [questionSchema],
-
-  createdAt: {
-    type: Date,
-    default: Date.now,
+    default: 1,
   },
 });
+
+const quizSchema = new mongoose.Schema(
+  {
+    title: {
+      type: String,
+      required: true,
+    },
+
+    description: {
+      type: String,
+      default: "",
+    },
+
+    teacher: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
+
+    subject: {
+      type: String,
+      required: true,
+    },
+
+    grade: {
+      type: String,
+      required: true,
+    },
+
+    duration: {
+      type: Number,
+      required: true,
+    },
+
+    dueDate: {
+      type: Date,
+      required: true,
+    },
+
+    status: {
+      type: String,
+      enum: ["Active", "Expired"],
+      default: "Active",
+    },
+
+    totalMarks: {
+      type: Number,
+      default: 0,
+    },
+
+    questions: [questionSchema],
+  },
+  {
+    timestamps: true,
+  }
+);
 
 module.exports = mongoose.model("Quiz", quizSchema);

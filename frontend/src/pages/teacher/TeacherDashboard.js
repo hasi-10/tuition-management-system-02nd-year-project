@@ -57,6 +57,14 @@ const revenueData = [
 
 function TeacherDashboard() {
   const navigate = useNavigate();
+  const handleLogout = () => {
+  localStorage.removeItem("token");
+  localStorage.removeItem("role");
+  localStorage.removeItem("email");
+  localStorage.removeItem("name");
+
+  navigate("/login");
+};
 
   return (
     <div
@@ -70,113 +78,91 @@ function TeacherDashboard() {
 
         {/* Sidebar */}
 
+          {/* Sidebar - Same as before */}
         <div
-          className="col-lg-3 col-xl-2 d-flex flex-column justify-content-between"
+          className="col-lg-2 d-flex flex-column justify-content-between"
           style={{
             background: "linear-gradient(to bottom,#001a70,#0033cc)",
             minHeight: "100vh",
           }}
         >
           <div>
-
-           <div className="text-center py-4">
-  <img
-    src={logo}
-    alt="logo"
-    onClick={() => navigate("/")}
-    style={{
-      width: "180px",
-      cursor: "pointer",
-    }}
-  />
-</div>
+            <div className="text-center py-4">
+              <img
+                src={logo}
+                alt="logo"
+                style={{ width: "180px", cursor: "pointer" }}
+                onClick={() => navigate("/")}
+              />
+            </div>
 
             <div className="px-3">
-
               <button
-                className="btn btn-light w-100 text-start fw-bold rounded-4 mb-3 p-3"
+                className="btn btn-outline-light border-0 w-100 text-start mb-3 p-3 rounded-4"
+                onClick={() => navigate("/teacher-dashboard")}
               >
                 <HouseDoorFill className="me-3" />
                 Dashboard
               </button>
 
               <button
-  className="btn btn-warning w-100 fw-bold"
-  onClick={() => navigate("/teacher-classes")}
->
-  My Classes
-</button>
-
-              <button
-                className="btn btn-outline-light border-0 w-100 text-start rounded-4 mb-3 p-3"
+                className="btn btn-outline-light border-0 w-100 text-start mb-3 p-3 rounded-4"
+                onClick={() => navigate("/teacher-classes")}
               >
+                <Book className="me-3" />
+                My Classes
+              </button>
+
+              <button className="btn btn-outline-light border-0 w-100 text-start mb-3 p-3 rounded-4">
                 <People className="me-3" />
                 Students
               </button>
 
-              <NavLink
-                to="/teacher-quizzes"
-                className="btn btn-outline-light border-0 w-100 text-start rounded-4 mb-3 p-3"
-              >
+              <button className="btn btn-outline-light border-0 w-100 text-start mb-3 p-3 rounded-4">
                 <PatchQuestion className="me-3" />
                 Quizzes
-              </NavLink>
+              </button>
 
-              <button
-                className="btn btn-outline-light border-0 w-100 text-start rounded-4 mb-3 p-3"
-              >
+              <button className="btn btn-outline-light border-0 w-100 text-start mb-3 p-3 rounded-4">
                 <Folder className="me-3" />
                 Study Materials
               </button>
 
-              <button
-                className="btn btn-outline-light border-0 w-100 text-start rounded-4 mb-3 p-3"
-              >
+              <button className="btn btn-outline-light border-0 w-100 text-start mb-3 p-3 rounded-4">
                 <CreditCard className="me-3" />
                 Payments
               </button>
 
-              <button
-                className="btn btn-outline-light border-0 w-100 text-start rounded-4 mb-3 p-3"
-              >
-                <BarChart className="me-3" />
+              <button className="btn btn-outline-light border-0 w-100 text-start mb-3 p-3 rounded-4">
+                <GraphUp className="me-3" />
                 Results
               </button>
 
- <button
-  className="btn btn-outline-light border-0 w-100 text-start rounded-4 mb-3 p-3"
-  onClick={() => navigate("/teacher-my-profile")}
+<button
+  className="btn btn-light w-100 text-start fw-bold rounded-4 mb-3 p-3"
+onClick={() => navigate("/teacher-my-profile")}
 >
   <PersonCircle className="me-3" />
   My Profile
 </button>
 
-              <button
-                className="btn btn-outline-light border-0 w-100 text-start rounded-4 mb-3 p-3"
-              >
+              <button className="btn btn-outline-light border-0 w-100 text-start mb-3 p-3 rounded-4">
                 <Gear className="me-3" />
                 Settings
               </button>
-
             </div>
-
           </div>
-
-          {/* Logout */}
 
           <div className="p-3">
-
-            <button className="btn btn-light w-100 rounded-4 fw-bold p-3">
-
+            <button
+              className="btn btn-light w-100 rounded-4 fw-bold p-3"
+              onClick={handleLogout}
+            >
               <BoxArrowRight className="me-2" />
               Logout
-
             </button>
-
           </div>
-
         </div>
-
         {/* Main Content */}
 
         <div className="col">
