@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import API from "../../services/api";
@@ -284,25 +285,18 @@ function AdminAddTeacher() {
       Subject
     </label>
 
-    <select
-      className="form-select rounded-3"
-      name="subject"
-      value={teacher.subject}
-      onChange={handleChange}
-      style={{
-        background: darkMode ? "#495057" : "#ffffff",
-        color: darkMode ? "#ffffff" : "#000000",
-      }}
-    >
-      <option value="">Select Subject</option>
-      <option>Mathematics</option>
-      <option>Science</option>
-      <option>ICT</option>
-      <option>English</option>
-      <option>Japanese</option>
-      <option>History</option>
-      <option>Geography</option>
-    </select>
+   <input
+  type="text"
+  className="form-control rounded-3"
+  name="subject"
+  value={teacher.subject}
+  onChange={handleChange}
+  placeholder="Enter Subject"
+  style={{
+    background: darkMode ? "#495057" : "#ffffff",
+    color: darkMode ? "#ffffff" : "#000000",
+  }}
+/>
 
   </div>
 
@@ -453,12 +447,25 @@ function AdminAddTeacher() {
 
 
       try {
-  await API.post("/auth/create-teacher", {
-    name: teacher.fullName,
-    email: teacher.email,
-    phone: teacher.phone,
-    password: teacher.password,
-  });
+await API.post("/auth/create-teacher", {
+  name: teacher.fullName,
+  email: teacher.email,
+  phone: teacher.phone,
+  password: teacher.password,
+
+  subject: teacher.subject,
+  grades: teacher.grades,
+
+  dob: teacher.dob,
+  nic: teacher.nic,
+  address: teacher.address,
+});
+
+
+
+
+
+
 
   alert("Teacher added successfully!");
 
@@ -507,4 +514,4 @@ function AdminAddTeacher() {
 }
 
 export default AdminAddTeacher;
-          
+           

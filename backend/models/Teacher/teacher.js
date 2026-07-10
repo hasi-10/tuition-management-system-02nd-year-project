@@ -5,11 +5,16 @@ const teacherSchema = new mongoose.Schema({
   email: String,
 
   userId: {
-  type: mongoose.Schema.Types.ObjectId,
-  ref: "User",
-},
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+  },
 
   phone: String,
+
+  dob: String,
+  nic: String,
+  address: String,
+
   subject: String,
   bio: String,
   grades: [String],
@@ -23,5 +28,4 @@ const teacherSchema = new mongoose.Schema({
     },
   ],
 });
-
 module.exports = mongoose.model("teacher", teacherSchema);

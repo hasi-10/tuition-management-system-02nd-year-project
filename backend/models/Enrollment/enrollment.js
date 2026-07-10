@@ -3,9 +3,10 @@ const mongoose = require("mongoose");
 const enrollmentSchema = new mongoose.Schema(
   {
     classId: {
-      type: String,
-      required: true,
-    },
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Class",
+    default: null,
+},
     studentEmail: {
       type: String,
       required: true,
@@ -14,10 +15,14 @@ const enrollmentSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    teacher: {
-      type: String,
-      required: true,
-    },
+ teacher: {
+    type: String,
+    required: true,
+},
+teacherName: {
+    type: String,
+    required: true,
+},
     subject: {
       type: String,
       required: true,
@@ -26,26 +31,26 @@ const enrollmentSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    meetingLink: {
+        meetingLink: {
       type: String,
-      required: true,
+      default: "", // Removed required: true because physical classes don't need online links
     },
+   
     startTime: {
-      type: String,
-      required: true,
+     type: String,
+     default: "",
     },
+
     endTime: {
-      type: String,
-      required: true,
+     type: String,
+     default: "",
     },
+
     date: {
-      type: String,
-      required: true,
+     type: String,
+     default: "",
     },
-    day: {
-      type: String,
-      required: true,
-    },
+    
     paymentId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Payment",

@@ -76,6 +76,10 @@ slipImage: {
   type: String,
   default: "",
 },
+teacherId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+},
 
   },
   {

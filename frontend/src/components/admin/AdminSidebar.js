@@ -123,18 +123,7 @@ function AdminSidebar() {
   Class Attendance
 </NavLink>
 
-<NavLink
-  to="/adminquizzes"
-  className={({ isActive }) =>
-    isActive
-      ? "btn btn-light w-100 text-start fw-bold rounded-4 mb-3 p-3"
-      : "btn btn-outline-light border-0 w-100 text-start rounded-4 mb-3 p-3"
-  }
-  style={{ textDecoration: "none" }}
->
-  <PatchQuestionFill className="me-3" />
-  Quiz Monitoring
-</NavLink>
+
 
 <NavLink
   to="/adminpayments"

@@ -1,6 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
+
 import commerce from "../assets/eco.jpeg";
 import maths from "../assets/geo.jpeg";
 import science from "../assets/phy.jpeg";

@@ -274,15 +274,31 @@ useEffect(() => {
 
             {/* Teacher Cards */}
 
-            <div className="row">
+           <div className="row justify-content-center g-3">
 
               {teachers.map((teacher, index) => (
 
-                <div className="col-lg-6 mb-4" key={index}>
+                <div className="col-lg-8 mb-3" key={index}>
 
-                  <div
-  className="card border-0 rounded-4"
-  style={{ cursor: "pointer" }}
+
+
+
+
+
+ <div
+  className="card border-0 rounded-4 shadow-sm"
+  style={{
+    cursor: "pointer",
+    background: darkMode ? "#3a4047" : "#ffffff",
+    color: darkMode ? "#ffffff" : "#000000",
+    width: "800px",
+    height: "240px",
+    padding: "20px",
+    transition: "0.3s",
+    margin: "0 auto",
+  }}
+
+
 onClick={() =>
   navigate("/teacherprofile", {
     state: teacher,
@@ -290,33 +306,48 @@ onClick={() =>
 }
 >
 
-                    <div className="card-body">
+                    <div className="card-body p-0">
 
                       <div className="d-flex align-items-center">
 
-                        <img
-                          src={teacher.image}
-                          alt=""
-                          width="70"
-                          height="70"
-                        />
+                       <img
+  src={teacher.image}
+  alt={teacher.name}
+  width="120"
+  height="120"
+  style={{
+    objectFit: "cover",
+    borderRadius: "20px",
+  }}
+/>
 
                         <div className="ms-4">
 
 <span
-  className="badge rounded-pill fs-6 mb-2"
+  className="badge rounded-pill mb-2"
   style={{
     backgroundColor: "#e8f0ff",
     color: "#0033cc",
-    padding: "8px 15px"
+    padding: "6px 12px",
+    fontSize: "29px",
+    fontWeight: "600",
   }}
 >
+
+
+
   {teacher.subject}
 </span>
 
-                          <h6 className="fw-bold mb-0">
-                            {teacher.name}
-                          </h6>
+                          
+                        <h6
+  className="fw-bold mb-0"
+  style={{
+    fontSize: "30px",
+  }}
+>
+  {teacher.name}
+</h6>
 
                         </div>
 

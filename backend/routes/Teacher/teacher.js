@@ -148,3 +148,31 @@ router.put("/:id", async (req, res) => {
 });
 
 module.exports = router;
+
+// =========================
+// DELETE TEACHER
+// =========================
+router.delete("/:id", async (req, res) => {
+  try {
+
+    const teacher = await Teacher.findByIdAndDelete(req.params.id);
+
+    if (!teacher) {
+      return res.status(404).json({
+        message: "Teacher not found",
+      });
+    }
+
+    res.json({
+      success: true,
+      message: "Teacher deleted successfully",
+    });
+
+  } catch (err) {
+    console.log(err);
+
+    res.status(500).json({
+      message: err.message,
+    });
+  }
+});

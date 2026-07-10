@@ -56,11 +56,11 @@ const handleSaveQuiz = async () => {
 const quiz = {
   title: quizData.title,
 
-  teacher: localStorage.getItem("userId"),
+  teacher: localStorage.getItem("name"),
 
   subject: selectedSubject,
 
-  grade: selectedGrade,
+  grade: selectedGrade.replace("Grade ", ""),
 
   duration: Number(quizData.duration),
 
@@ -70,6 +70,11 @@ const quiz = {
 
   status: "Active",
 };
+
+console.log("QUIZ DATA");
+console.log(quiz);
+
+
 
     const res = await API.post("/quizzes", quiz);
 

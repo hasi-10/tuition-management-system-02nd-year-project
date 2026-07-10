@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import axios from "axios";
 
 import AdminSidebar from "../../components/admin/AdminSidebar";
 import AdminTopNavbar from "../../components/admin/AdminTopNavbar";
@@ -8,23 +9,34 @@ function AdminAddTeacher() {
 
   const navigate = useNavigate();
 
+  const { id } = useParams();
+
   const [darkMode, setDarkMode] = useState(false);
 
-  useEffect(() => {
-    const savedTheme = localStorage.getItem("theme");
-    setDarkMode(savedTheme === "dark");
-  }, []);
+
+
+
+ useEffect(() => {
+
+  const savedTheme = localStorage.getItem("theme");
+  setDarkMode(savedTheme === "dark");
+
+  loadTeacher();
+
+}, []);
+
 
 const [teacher, setTeacher] = useState({
-  fullName: "Kamal Silva",
-  dob: "2000-02-10",
-  nic: "200012345678",
-  phone: "0771234567",
-  email: "kamal@gmail.com",
-  address: "Colombo",
-  subject: "Mathematics",
-  grades: ["6", "7", "8"],
-  password: "Teacher123",
+  fullName: "",
+  dob: "",
+  nic: "",
+  phone: "",
+  email: "",
+  address: "",
+  subject: "",
+  grades: [],
+  bio: "",
+  password: "",
   profileImage: null,
 });
 
@@ -35,7 +47,58 @@ const [teacher, setTeacher] = useState({
     });
   };
 
+
+
+
+
+
+
+
+const loadTeacher = async () => {
+  try {
+
+    const res = await axios.get(
+      `http://localhost:5000/api/teachers/${id}`
+    );
+
+    setTeacher({
+      fullName: res.data.name || "",
+      dob: res.data.dob || "",
+      nic: res.data.nic || "",
+      phone: res.data.phone || "",
+      email: res.data.email || "",
+      address: res.data.address || "",
+      subject: res.data.subject || "",
+      grades: res.data.grades || [],
+      bio: res.data.bio || "",
+      password: "",
+      profileImage: null,
+    });
+
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+
+
+
+
+
+
+
+
   const handleGradeChange = (grade) => {
+
+
+
+
+
+
+
+
+
+
     if (teacher.grades.includes(grade)) {
       setTeacher({
         ...teacher,
@@ -283,25 +346,18 @@ const [teacher, setTeacher] = useState({
       Subject
     </label>
 
-    <select
-      className="form-select rounded-3"
-      name="subject"
-      value={teacher.subject}
-      onChange={handleChange}
-      style={{
-        background: darkMode ? "#495057" : "#ffffff",
-        color: darkMode ? "#ffffff" : "#000000",
-      }}
-    >
-      <option value="">Select Subject</option>
-      <option>Mathematics</option>
-      <option>Science</option>
-      <option>ICT</option>
-      <option>English</option>
-      <option>Japanese</option>
-      <option>History</option>
-      <option>Geography</option>
-    </select>
+   <input
+  type="text"
+  className="form-control rounded-3"
+  name="subject"
+  value={teacher.subject}
+  onChange={handleChange}
+  placeholder="Enter Subject"
+  style={{
+    background: darkMode ? "#495057" : "#ffffff",
+    color: darkMode ? "#ffffff" : "#000000",
+  }}
+/>
 
   </div>
 
@@ -418,42 +474,49 @@ const [teacher, setTeacher] = useState({
   <button
     type="button"
     className="btn btn-primary rounded-pill px-5 fw-bold"
-    onClick={() => {
 
-      if (!teacher.fullName) {
-        alert("Please enter the teacher's full name.");
-        return;
+
+
+
+
+
+ onClick={async () => {
+
+  try {
+
+    await axios.put(
+      `http://localhost:5000/api/teachers/${id}`,
+      {
+        name: teacher.fullName,
+        email: teacher.email,
+        phone: teacher.phone,
+        subject: teacher.subject,
+        grades: teacher.grades,
+        bio: teacher.bio,
+        dob: teacher.dob,
+        nic: teacher.nic,
+        address: teacher.address,
       }
+    );
 
-      if (!teacher.email) {
-        alert("Please enter the teacher's email.");
-        return;
-      }
+    alert("Teacher updated successfully!");
 
-      if (!teacher.subject) {
-        alert("Please select a subject.");
-        return;
-      }
+    navigate("/adminteachers");
 
-      if (teacher.grades.length === 0) {
-        alert("Please select at least one grade.");
-        return;
-      }
+  } catch (err) {
 
-      if (!teacher.password) {
-        alert("Please enter a password.");
-        return;
-      }
+    console.log(err);
 
-      alert("Teacher updated successfully!");
+    alert("Update failed");
 
-      console.log(teacher);
+  }
 
-      // Later we'll send this data to MongoDB
+}}
 
-      // navigate("/adminteachers");
 
-    }}
+
+
+
   >
     Update Teacher
   </button>

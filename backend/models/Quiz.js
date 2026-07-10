@@ -37,11 +37,10 @@ const quizSchema = new mongoose.Schema(
       default: "",
     },
 
-    teacher: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
-      required: true,
-    },
+  teacher: {
+  type: String,
+  required: true,
+},
 
     subject: {
       type: String,

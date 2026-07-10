@@ -86,20 +86,14 @@ function App() {
         <Route path="/reset-password" element={<ResetPassword />} />
         <Route path="/contact" element={<Contact />} />
 
-<Route
-  path="/studentdashboard"
-  element={
-    <ProtectedRoute allowedRoles={["student"]}>
-      <StudentDashboard />
-    </ProtectedRoute>
-  }
-/>
+<Route path="/studentdashboard" element={<StudentDashboard />} />
 
+<Route path="/mycourses" element={<MyCourses />} />
 
         <Route path="/studentprofile" element={<StudentProfile />} />
         <Route path="/payment" element={<Payment />} />
         <Route path="/paymentsuccess" element={<PaymentSuccess />} />
-        <Route path="/mycourses" element={<MyCourses />} />
+     
         <Route path="/payment-options" element={<PaymentOptions />} />
         <Route path="/bank-slip-upload" element={<BankSlipUpload />} />
         <Route path="/allteachers" element={<AllTeachers />} />
@@ -120,10 +114,21 @@ function App() {
 
 
 
-        <Route path="/adminteachers" element={<AdminTeachers />} />
+        
+        <Route
+  path="/admin-teacher-profile/:id"
+  element={<AdminTeacherProfile />}
+/>
+
         <Route path="/admin-add-teacher" element={<AdminAddTeacher />} />
         <Route path="/admin-teacher-profile" element={<AdminTeacherProfile />} />
-        <Route path="/admin-edit-teacher" element={<AdminEditTeacher />} />
+        
+<Route
+  path="/admin-edit-teacher/:id"
+  element={<AdminEditTeacher />}
+/>
+
+
         <Route path="/adminstudents" element={<AdminStudents />} />
         <Route path="/admin-student-profile" element={<AdminStudentProfile />} />
         <Route path="/adminpayments" element={<AdminPayments />} />

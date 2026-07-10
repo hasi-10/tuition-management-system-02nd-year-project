@@ -103,7 +103,17 @@ router.post("/login", async (req, res) => {
 // ================= CREATE TEACHER =================
 router.post("/create-teacher", async (req, res) => {
   try {
-    const { name, email, phone, password } = req.body;
+    const {
+  name,
+  email,
+  phone,
+  password,
+  subject,
+  grades,
+  dob,
+  nic,
+  address,
+} = req.body;
 
     // Check if teacher already exists
     const existingTeacher = await User.findOne({
@@ -131,16 +141,23 @@ router.post("/create-teacher", async (req, res) => {
     await teacherUser.save();
 
     // Create teacher profile
-    const teacherProfile = new Teacher({
-      userId: teacherUser._id,
-      name: name.trim(),
-      email: email.trim(),
-      phone: phone.trim(),
-      subject: "",
-      bio: "",
-      grades: [],
-      schedule: [],
-    });
+  const teacherProfile = new Teacher({
+  userId: teacherUser._id,
+
+  name: name.trim(),
+  email: email.trim(),
+  phone: phone.trim(),
+
+  dob,
+  nic,
+  address,
+
+  subject,
+  grades,
+
+  bio: "",
+  schedule: [],
+});
 
     await teacherProfile.save();
 
